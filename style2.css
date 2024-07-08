@@ -71,6 +71,16 @@
     color: #fcfcfcee;   
 }
 
+#touch_work:hover{
+   
+    text-decoration:underline
+}
+#touch_school:hover{
+   
+    text-decoration:underline
+}
+
+
 .colorblock2:hover{
     width: 72%;
     flex-shrink: 0;
@@ -105,6 +115,22 @@ body{
     height: 100%;
     margin: 0;
 
+}
+
+#touch_work{
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #ffffff;
+    text-decoration:none
+}
+
+#touch_school{
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #000000;
+    text-decoration:none
 }
 img {
     height: 72%;
