@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="yang.svg" />
+    <link rel="stylesheet" href="stylesheet.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学校作品集产出</title>
 </head>
 <body>
-    <div style="width: 100%; height: 100%; position: relative; background: white">
-        <div style="width: 203px; height: 81px; left: 88px; top: 22px; position: absolute">
-            <div style="width: 203px; height: 81px; left: 0px; top: 0px; position: absolute; background: #09161E"></div>
+    <div id="biaotilan" >
+        <div id="logo_mark" >
+            <img src="./web_pic/Group 13.svg" alt="logo_mark" height=100% width=100% />
         </div>
-        <div style="width: 964px; height: 265px; padding-top: 16px; padding-bottom: 16px; left: 434px; top: 29px; position: absolute; justify-content: flex-start; align-items: flex-start; gap: 27px; display: inline-flex">
-            <div style="width: 96px; height: 31px; color: black; font-size: 24px; font-family: MiSans; font-weight: 600; word-wrap: break-word">ABOUT<br/>个人相关</div>
-            <div style="width: 11px; height: 31px; color: black; font-size: 24px; font-family: MiSans; font-weight: 600; word-wrap: break-word">|</div>
-            <div style="flex-direction: column; justify-content: flex-start; align-items: center; gap: 106px; display: inline-flex">
-                <div style="width: 128px; height: 31px; color: black; font-size: 24px; font-family: Inter; font-weight: 600; text-decoration: underline; text-transform: uppercase; word-wrap: break-word">artwork<br/>作品产出</div>
-                <div style="width: 371px; justify-content: flex-start; align-items: flex-start; gap: 106px; display: inline-flex">
-                    <div style="width: 128px; height: 68px; color: black; font-size: 24px; font-family: Inter; font-weight: 600; text-transform: uppercase; word-wrap: break-word">工作作品集<br/>work</div>
-                    <div style="width: 128px; height: 68px; color: black; font-size: 24px; font-family: Inter; font-weight: 600; text-decoration: underline; text-transform: uppercase; word-wrap: break-word">学校作品集<br/>study</div>
-                </div>
+        <div id="toplan">  
+            <div ><a class="lian bg" href="personal.html" >ABOUT <br/>个人相关</a></div>
+            <div class="jiange" >|</div>
+            <div class="jie">
+                <div class="bg">ARTWORK <br/>作品产出</div>
+                <div id="zixiang"> 
+                    <a id="workpage" class="bg" onclick="toggleActive(this)" href="work_design.html ">工作作品集<br>work</a>
+                    <script>
+                        function toggleActive(element) {
+                          element.classList.toggle("active");
+                        }
+                     </script>
+                    <a id="studypage" class="alreadyactive" araia-disabled="false" >学校作品集<br>study</a>
+                  
+                </div> 
             </div>
-            <div style="width: 11px; height: 31px; color: black; font-size: 24px; font-family: MiSans; font-weight: 600; word-wrap: break-word">|</div>
-            <div style="width: 131px; height: 31px; color: black; font-size: 24px; font-family: MiSans; font-weight: 600; word-wrap: break-word">CONNECT<br/>联系方式</div>
-        </div>
-        <div style="width: 268px; height: 31px; left: 95px; top: 45px; position: absolute; color: #ECECE9; font-size: 24px; font-family: JetBrains Mono; font-weight: 500; word-wrap: break-word"> CHEN MUYANG</div>
-        <div style="width: 81px; height: 81px; left: 294px; top: 22px; position: absolute">
-            <div style="width: 81px; height: 81.01px; left: 0px; top: 0px; position: absolute; background: #0B0B0F"></div>
-        </div>
-        <div style="width: 1240px; height: 1217px; left: 200px; top: 388px; position: absolute">
-            <div style="width: 375px; height: 375px; left: 865px; top: 0px; position: absolute; background: #D9D9D9"></div>
-            <div style="width: 375px; height: 375px; left: 441px; top: 0px; position: absolute">
-                <div style="width: 375px; height: 375px; left: 0px; top: 0px; position: absolute; background: #D9D9D9"></div>
-                <img style="width: 882px; height: 551px; left: 548px; top: -21px; position: absolute; transform: rotate(180deg); transform-origin: 0 0" src="https://via.placeholder.com/882x551" />
-            </div>
-            <img style="width: 375px; height: 375px; left: 2px; top: 0px; position: absolute; background: linear-gradient(0deg, #D9D9D9 0%, #D9D9D9 100%)" src="https://via.placeholder.com/375x375" />
-            <div style="width: 375px; height: 375px; left: 865px; top: 404px; position: absolute">
-                <div style="width: 375px; height: 375px; left: 0px; top: 0px; position: absolute; background: #D9D9D9"></div>
-                <div style="width: 428px; height: 375px; left: 0px; top: 0px; position: absolute; background: #D3D3D3"></div>
-                <img style="width: 428px; height: 287px; left: 0px; top: 0px; position: absolute" src="https://via.placeholder.com/428x287" />
-            </div>
-            <div style="width: 375px; height: 375px; left: 441px; top: 404px; position: absolute; background: #D9D9D9"></div>
-            <div style="width: 375px; height: 375px; left: 865px; top: 842px; position: absolute; background: #D9D9D9"></div>
-            <img style="width: 375px; height: 375px; left: 2px; top: 842px; position: absolute" src="https://via.placeholder.com/375x375" />
-            <div style="width: 375px; height: 375px; left: 441px; top: 842px; position: absolute; background: #D9D9D9"></div>
-            <div style="width: 375px; height: 375px; left: 2px; top: 404px; position: absolute; background: #D9D9D9"></div>
-            <img style="width: 357px; height: 283px; left: 0px; top: 430px; position: absolute; mix-blend-mode: multiply" src="https://via.placeholder.com/357x283" />
+            <div class="jiange">|</div>
+            <div ><a class="lian bg" href="connect.html">CONNECT <br/>联系方式 </a></div>
         </div>
     </div>
+    <div id="pic_group">
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/0.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/1.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/2.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/3.png" alt=" "></a></div>
+        <div class="artpic"><a class="Intro" href="作品简介页.html"><img class="showpic" src="./web_pic/study/4.png" alt=" "><h6>《乐憩》—环境设施</h6></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/5.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/6.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/7.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/8.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/9.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/10.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/11.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/12.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/13.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/14.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/15.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/16.png" alt=" "></a></div>
+        <!-- <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/0.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/0.png" alt=" "></a></div>
+        <div class="artpic"><a href="作品简介页.html"><img class="showpic" src="./web_pic/study/0.png" alt=" "></a></div> -->
+
+
+        
+
+    </div>
+
+
+         
 </body>
 </html>

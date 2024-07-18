@@ -1,0 +1,21 @@
+.parent{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+    gap: 10px;
+
+}
+.son{
+    width: 200px;
+    height: 100px;
+    background-color: blue;
+    color: brown;
+    text-align: center;
+    
+}
+body{
+    padding:0;
+    margin: 0;
+}

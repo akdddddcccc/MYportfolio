@@ -1,0 +1,125 @@
+.lian{
+    width: 100%;
+    display: block;
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 600;
+    word-wrap: break-word;
+    text-decoration:none;
+
+}
+.jiange{
+    color: rgb(17, 16, 16);
+    font-size: 24px;
+    font-family: MiSans;
+    font-weight: 600;
+    word-wrap: break-word;
+}
+.jie{
+    width: auto;
+    display: flex;
+    flex-direction: column;
+
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 600;
+    word-wrap: break-word;
+    text-decoration:none;
+    gap: 20px;
+    align-items: center;
+}
+#zixiang{
+    display: inline-flex;
+    width: 300px;
+    gap: 50px;
+
+}
+.bg{
+    color: rgb(11, 11, 11);
+    text-decoration: none;
+
+}
+a.bg:hover{
+    background-color: #0b0b0b;
+    color: rgb(240, 236, 236);
+    text-decoration: underline;
+
+}
+
+.alreadyactive {
+   
+    color: #454545;
+    text-decoration: underline;
+  }
+
+.active {
+    background-color: #696969;
+    color: #fff;
+  }
+#toplan{
+    width: 72%;
+    height: 100%; 
+    padding-top: 4%; 
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    gap: 14%; 
+    display: inline-flex;
+    text-decoration: none;
+    /* background-color: #696969; */
+
+}
+#biaotilan{
+    width: 96%;
+    display: flex; 
+    flex-direction: row;
+
+    position: absolute; 
+    left: 4%; 
+    align-items: bottom;  
+
+}
+#logo_mark{
+    width: 20%;
+    height: 100%;
+    margin: 1% 2% 0% 2%;
+    /* background-color: aqua; */
+
+}
+
+body{display: flex;
+    flex-direction: column;
+    height: 100%; 
+    width: 100%;
+}
+
+#pic_group{
+
+    margin-top: 10%;
+    width: 80%;
+    height: auto;
+    display: grid;
+    grid-template-columns: 700px 700px 700px;
+    column-gap: 10px;
+    row-gap: 10px;
+
+
+    /* background-color: aqua; */
+
+
+
+}
+.artpic{
+
+    width: 700px;
+    height: 700px;
+    /* background-color: rgb(15, 122, 87);  */
+}
+.showpic{
+    width: 100%;
+    height: 100%;
+}
+.artpic:hover{
+    opacity: 50%;
+    background-color: #838383;
+}
