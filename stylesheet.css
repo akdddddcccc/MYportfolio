@@ -67,6 +67,7 @@ a.bg:hover{
 }
 
 #toplan{
+    top: 2%;
     width: 80%;
     height: 100%; 
     padding-top: 3%; 
@@ -76,10 +77,9 @@ a.bg:hover{
     gap: 14%; 
     display: inline-flex;
     text-decoration: none;
-    /* background-color: #696969; */
-
 }
 #biaotilan{
+    top: 2%;
     width: 96%;
     display: flex; 
     flex-direction: row;
@@ -89,23 +89,25 @@ a.bg:hover{
     align-items: bottom;  
     background-color: rgba(255, 228, 196, 0.091);
     backdrop-filter: blur(12px);
+    z-index: 2;
 
 }
 #logo_mark{
     width: 20%;
     height: 100%;
     
-    /* background-color: aqua; */
+
 
 }
 
-body{display: flex;
+body{
+    display: flex;
     flex-direction: column;
     height: 100%; 
     width: 100%;
     background-color: rgba(245, 245, 245, 1);
     margin: 0;
-    padding: 0;
+    /* padding: 0; */
 }
 
 #pic_group{
@@ -118,47 +120,65 @@ body{display: flex;
     column-gap: 10px;
     row-gap: 10px;
     place-self: center;
-    /* background-color: aqua; */
     justify-items: center;
 
 
-    /* background-color: aqua; */
-
-
-
 }
+
+
 .artpic{
     transition: 0.3s;
     width: 700px;
     height: 700px;
     
-    
-    
-    
-    /* background-color: rgb(15, 122, 87);  */
+
 }
-.showpic{
+.img-group {
     position: relative;
+    display: inline-block;
+    
+  }
+          
+.img-tip {
+    /* transition: 0.3s; */
+    width: auto;
+    position: absolute;
+    bottom: 42%;
+    opacity: 0.8;
+    display: none;
+    color: rgb(255, 255, 255);
+    background-color: #0b0b0b17;
+    font-size: 48px;
+    font-family: Alibaba PuHuiTi;
+    font-weight: 400;
+    word-wrap: break-word;
+
+  }
+          
+.img-group:hover .img-tip {
+    /* background-color: #0b0b0b62; */
+    display: block;
+    width: 100%;
+    text-align: center;
+    /* mix-blend-mode: difference; */
+
+   
+    
+    
+  }
+
+.showpic{
+    transition: 0.3s;
     width: 100%;
     height: 100%;
-    z-index: -1;
-}
-.intro.jianjie{
-    
-    position: relative;
-    z-index: 0;
 }
 
-.intro{
- 
-    
 
-
-}
-.artpic:hover{
+.artpic:hover .showpic{
     opacity: 50%;
-    background-color: #838383;
-    filter: blur(30px);
+    background-color: #83838300;
+    filter: blur(12px);
+    transform: scale(0.8);
 
     
 }
@@ -168,12 +188,10 @@ body{display: flex;
     height: auto;
     display: flex; 
     flex-direction: row;
-    
     padding-top: 8%;
-    
     gap: 20%;
     justify-content: center;
-    /* background-color: rgba(0, 255, 255, 0.26); */
+
 }
 .left{
     
