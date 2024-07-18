@@ -20,7 +20,6 @@
     width: auto;
     display: flex;
     flex-direction: column;
-
     font-size: 24px;
     font-family: Inter;
     font-weight: 600;
@@ -68,9 +67,10 @@ a.bg:hover{
 }
 
 #toplan{
-    width: 72%;
+    width: 80%;
     height: 100%; 
-    padding-top: 4%; 
+    padding-top: 3%; 
+    padding-left: 4%;
     justify-content: flex-start; 
     align-items: flex-start; 
     gap: 14%; 
@@ -84,8 +84,8 @@ a.bg:hover{
     display: flex; 
     flex-direction: row;
     position: sticky;
-    top: 2%;
-    left: 4%; 
+    padding-top: 2%;
+    padding-left: 4%; 
     align-items: bottom;  
     background-color: rgba(255, 228, 196, 0.091);
     backdrop-filter: blur(12px);
@@ -94,7 +94,7 @@ a.bg:hover{
 #logo_mark{
     width: 20%;
     height: 100%;
-    margin: 1% 2% 0% 2%;
+    
     /* background-color: aqua; */
 
 }
@@ -104,6 +104,8 @@ body{display: flex;
     height: 100%; 
     width: 100%;
     background-color: rgba(245, 245, 245, 1);
+    margin: 0;
+    padding: 0;
 }
 
 #pic_group{
@@ -136,13 +138,19 @@ body{display: flex;
     /* background-color: rgb(15, 122, 87);  */
 }
 .showpic{
+    position: relative;
     width: 100%;
     height: 100%;
+    z-index: -1;
+}
+.intro.jianjie{
+    
+    position: relative;
+    z-index: 0;
 }
 
 .intro{
-    
-    justify-items: center;
+ 
     
 
 
@@ -153,4 +161,59 @@ body{display: flex;
     filter: blur(30px);
 
     
+}
+
+.personal_info{
+    width: 96%;
+    height: auto;
+    display: flex; 
+    flex-direction: row;
+    
+    padding-top: 8%;
+    
+    gap: 20%;
+    justify-content: center;
+    /* background-color: rgba(0, 255, 255, 0.26); */
+}
+.left{
+    
+    display: flex;
+    flex-direction: column;
+    row-gap: 20%;
+    /* background-color: rgba(237, 248, 20, 0.242); */
+    align-content: flex-end;
+}
+.personpic img{
+    width: 200px;
+    height: 200px;
+}
+
+.sayings{
+    display: flex;
+    flex-direction: column;
+    /* background-color: #ff0b0b; */
+    row-gap: 240px;
+    background-color: rgba(0, 255, 255, 0.096);
+    
+}
+
+.name{
+    display: flex;
+    flex-direction: row;
+    column-gap: 15%;
+    /* background-color: #07c72436; */
+}
+.sentence{
+
+}
+
+
+.right{
+    /* background-color: #9325c237; */
+}
+.blackbg{
+    display: flex;
+    flex-direction: column;
+    gap: 360px;
+    background-color: #0b0b0b;
 }
