@@ -231,3 +231,73 @@ body{
     gap: 360px;
     background-color: #0b0b0b;
 }
+/*connect css*/
+#personal_concept{
+    display: block;
+    
+}
+
+#lianxi{
+    
+    color: #7d817e;
+    text-decoration: underline;
+}
+
+.body{
+    padding-top: 1%; 
+    padding-left: 5.6%;
+    width: 80%;
+    display: flex;
+    flex-direction: row ;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* background-color: aquamarine; */
+    
+    
+} 
+.message_large{
+    width: 422px; 
+    height: 47px;
+    color: #09141A; 
+    font-size: 16px; 
+    font-family: MiSans; 
+    font-weight: 400; 
+    word-wrap: break-word"
+}
+    
+.message_small{
+    width: 422px; 
+    height: 47px;
+    color: #09141A; 
+    font-size: 16px; 
+    font-family: MiSans; 
+    font-weight: 300; 
+    word-wrap: break-word"
+}
+
+
+.img{
+    width: 200%;
+    height: 200%;
+    position: relative;
+
+    }
+
+            
+#con{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-self: flex-end;
+    flex-wrap: nowrap;
+    gap: 10%;
+    width: 100%;
+}
+.icon{
+    align-items: center;
+    gap: 10px;
+}
+#qidai{
+    margin-bottom: 4%;
+
+}
