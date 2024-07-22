@@ -1,7 +1,7 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-.lian{
+
+.lian {
     width: 100%;
     display: block;
     color: rgb(0, 0, 0);
@@ -9,17 +9,18 @@
     font-family: Inter;
     font-weight: 600;
     word-wrap: break-word;
-    text-decoration:none;
-
+    text-decoration: none;
 }
-.jiange{
+
+.jiange {
     color: rgb(17, 16, 16);
     font-size: 24px;
     font-family: 'MiSans';
     font-weight: 600;
     word-wrap: break-word;
 }
-.jie{
+
+.jie {
     width: auto;
     display: flex;
     flex-direction: column;
@@ -27,22 +28,24 @@
     font-family: 'Inter';
     font-weight: 600;
     word-wrap: break-word;
-    text-decoration:none;
+    text-decoration: none;
     gap: 20px;
     align-items: center;
 }
-#zixiang{
+
+#zixiang {
     display: inline-flex;
     width: 300px;
     gap: 50px;
-
 }
-.bg{
+
+.bg {
     color: rgb(11, 11, 11);
     text-decoration: none;
 
 }
-a.bg:hover{
+
+a.bg:hover {
     background-color: #0b0b0b;
     color: rgb(240, 236, 236);
     text-decoration: underline;
@@ -50,70 +53,72 @@ a.bg:hover{
 }
 
 .alreadyactive {
-   
+
     color: #454545;
     text-decoration: underline;
-  }
+}
 
 .active {
     background-color: #696969;
     color: #fff;
-  }
+}
 
-
-#zixiang a{
+#zixiang a {
     opacity: 0;
-    transition: .3s;}
+    transition: .3s;
+}
 
-.jie:hover #zixiang a{
+.jie:hover #zixiang a {
     opacity: 100;
 }
 
-#toplan{
+#toplan {
     top: 2%;
     width: 80%;
-    height: 100%; 
-    padding-top: 3%; 
+    height: 100%;
+    padding-top: 3%;
     padding-left: 4%;
-    justify-content: flex-start; 
-    align-items: flex-start; 
-    gap: 14%; 
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 14%;
     display: inline-flex;
     text-decoration: none;
 }
-#biaotilan{
+
+#biaotilan {
     top: 2%;
     width: 96%;
-    display: flex; 
+    display: flex;
     flex-direction: row;
     position: sticky;
     padding-top: 2%;
-    padding-left: 4%; 
-    align-items: bottom;  
+    padding-left: 4%;
+    align-items: bottom;
     background-color: rgba(255, 228, 196, 0.091);
     backdrop-filter: blur(12px);
     z-index: 2;
-
 }
-#logo_mark{
+
+#logo_mark {
     width: 20%;
     height: 100%;
-    
-
-
+}
+#logo_mark_img{
+    height:100%; 
+    width:100%;
 }
 
-body{
+body {
     display: flex;
     flex-direction: column;
-    height: 100%; 
+    height: 100%;
     width: 100%;
     background-color: rgba(245, 245, 245, 1);
     margin: 0;
     /* padding: 0; */
 }
 
-#pic_group{
+#pic_group {
 
     margin-top: 10%;
     width: 80%;
@@ -124,24 +129,19 @@ body{
     row-gap: 10px;
     place-self: center;
     justify-items: center;
-
-
 }
 
-
-.artpic{
+.artpic {
     transition: 0.3s;
     width: 700px;
     height: 700px;
-    
-
 }
+
 .img-group {
     position: relative;
     display: inline-block;
-    
-  }
-          
+}
+
 .img-tip {
     /* transition: 0.3s; */
     width: auto;
@@ -155,80 +155,68 @@ body{
     font-family: 'misans';
     font-weight: 400;
     word-wrap: break-word;
+}
 
-  }
-          
 .img-group:hover .img-tip {
     /* background-color: #0b0b0b62; */
     display: block;
     width: 100%;
     text-align: center;
     /* mix-blend-mode: difference; */
+}
 
-   
-    
-    
-  }
-
-.showpic{
+.showpic {
     transition: 0.3s;
     width: 100%;
     height: 100%;
 }
 
-
-.artpic:hover .showpic{
+.artpic:hover .showpic {
     opacity: 50%;
     background-color: #83838300;
     filter: blur(12px);
     transform: scale(0.8);
-
-    
 }
 
-.personal_info{
+.personal_info {
     width: 96%;
     height: auto;
-    display: flex; 
+    display: flex;
     flex-direction: row;
     padding-top: 8%;
     gap: 20%;
     justify-content: center;
-
 }
-.left{
-    
+
+.left {
     display: flex;
     flex-direction: column;
     row-gap: 20%;
     /* background-color: rgba(237, 248, 20, 0.242); */
     align-content: flex-end;
 }
-.personpic img{
+
+.personpic img {
     width: 200px;
     height: 200px;
 }
 
-.sayings{
+.sayings {
     display: flex;
     flex-direction: column;
     /* background-color: #ff0b0b; */
     row-gap: 240px;
     background-color: rgba(0, 255, 255, 0.096);
-    
 }
 
-.name{
+.name {
     display: flex;
     flex-direction: row;
     column-gap: 15%;
     /* background-color: #07c72436; */
 }
 
-
-
-
-.blackbg{
+.blackbg {
     display: flex;
     flex-direction: column;
     gap: 360px;
@@ -238,60 +226,75 @@ body{
     padding-right: 1%;
     padding-bottom: 4%;
 }
-/*connect css*/
-#personal_concept{
-    display: block;
-    
+
+.personal-text1{
+    color: #09141A; 
+    font-size: 16px; 
+    font-family: 'misans-Medium'; 
+    font-weight: 400; 
+    word-wrap: break-word;
 }
 
-#lianxi{
-    
+.personal-text2{
+    color: #D1D1D1; 
+    font-size: 16px; 
+    font-family: 'misans-Medium'; 
+    font-weight: 400; 
+    word-wrap: break-word;
+}
+
+
+/*connect css*/
+#personal_concept {
+    display: block;
+}
+
+#lianxi {
+
     color: #7d817e;
     text-decoration: underline;
 }
 
-.body{
-    padding-top: 1%; 
+.body {
+    padding-top: 1%;
     padding-left: 4%;
     width: 80%;
     display: flex;
-    flex-direction: row ;
+    flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
     /* background-color: aquamarine; */
-    
-    
-} 
-.message_large{
-    width: 422px; 
-    height: 47px;
-    color: #09141A; 
-    font-size: 16px; 
-    font-family: "misans"; 
-    font-weight: 400; 
-    word-wrap: break-word"
-}
-    
-.message_small{
-    width: 422px; 
-    height: 47px;
-    color: #09141A; 
-    font-size: 16px; 
-    font-family: "misans"; 
-    font-weight: 300; 
-    word-wrap: break-word"
 }
 
+.message_large {
+    width: 422px;
+    height: 47px;
+    color: #09141A;
+    font-size: 16px;
+    font-family: "misans";
+    font-weight: 400;
+    word-wrap: break-word"
 
-.img{
+}
+
+.message_small {
+    width: 422px;
+    height: 47px;
+    color: #09141A;
+    font-size: 16px;
+    font-family: "misans";
+    font-weight: 300;
+    word-wrap: break-word"
+
+}
+
+.img {
     width: 200%;
     height: 200%;
     position: relative;
+}
 
-    }
-
-            
-#con{
+#con {
     display: flex;
     flex-direction: column;
     justify-content: left;
@@ -300,11 +303,617 @@ body{
     gap: 10%;
     width: 100%;
 }
-.icon{
+
+.icon {
     align-items: center;
     gap: 10px;
 }
-#qidai{
+
+#qidai {
     margin-bottom: 4%;
 
+}
+
+
+
+/* 媒体查询：在较小屏幕上进行布局调整 */
+@media screen and (max-width: 1600px) {
+    .lian {
+        width: 100%;
+        display: block;
+        color: rgb(0, 0, 0);
+        font-size: 20px;
+        font-family: Inter;
+        font-weight: 600;
+        word-wrap: break-word;
+        text-decoration: none;
+    }
+    
+    .jiange {
+        color: rgb(17, 16, 16);
+        font-size: 20px;
+        font-family: 'MiSans';
+        font-weight: 600;
+        word-wrap: break-word;
+    }
+    
+    .jie {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 600;
+        word-wrap: break-word;
+        text-decoration: none;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    #zixiang {
+        display: inline-flex;
+        width: 300px;
+        gap: 50px;
+    }
+    
+    .bg {
+        color: rgb(11, 11, 11);
+        text-decoration: none;
+    
+    }
+    
+    a.bg:hover {
+        background-color: #0b0b0b;
+        color: rgb(240, 236, 236);
+        text-decoration: underline;
+    
+    }
+    
+    .alreadyactive {
+    
+        color: #454545;
+        text-decoration: underline;
+    }
+    
+    .active {
+        background-color: #696969;
+        color: #fff;
+    }
+    
+    #zixiang a {
+        opacity: 0;
+        transition: .3s;
+    }
+    
+    .jie:hover #zixiang a {
+        opacity: 100;
+    }
+    
+    #toplan {
+        top: 2%;
+        width: 80%;
+        height: 100%;
+        padding-top: 3%;
+        padding-left: 4%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 10%;
+        display: inline-flex;
+        text-decoration: none;
+    }
+    
+    #biaotilan {
+        top: 2%;
+        width: 96%;
+        display: flex;
+        flex-direction: row;
+        position: sticky;
+        padding-top: 2%;
+        padding-left: 4%;
+        align-items: bottom;
+        background-color: rgba(255, 228, 196, 0.091);
+        backdrop-filter: blur(12px);
+        z-index: 2;
+    }
+    
+    #logo_mark {
+        width: 20%;
+        height: 100%;
+    }
+
+    #logo_mark_img{
+        height:100%; 
+        width:100%;
+    }
+    
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(245, 245, 245, 1);
+        margin: 0;
+        padding: 0;
+    }
+    
+    #pic_group {
+    
+        margin-top: 10%;
+        width: 90%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 10px;
+        place-self: center;
+        justify-items: center;
+    }
+    
+    .artpic {
+        transition: 0.3s;
+        width: 420px;
+        height: 420px;
+    }
+    
+    .img-group {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .img-tip {
+        /* transition: 0.3s; */
+        width: auto;
+        position: absolute;
+        bottom: 42%;
+        opacity: 0.8;
+        display: none;
+        color: rgb(255, 255, 255);
+        background-color: #0b0b0b17;
+        font-size: 32px;
+        font-family: 'misans';
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+    
+    .img-group:hover .img-tip {
+        /* background-color: #0b0b0b62; */
+        display: block;
+        width: 100%;
+        text-align: center;
+        /* mix-blend-mode: difference; */
+    }
+    
+    .showpic {
+        transition: 0.3s;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .artpic:hover .showpic {
+        opacity: 50%;
+        background-color: #83838300;
+        filter: blur(12px);
+        transform: scale(0.8);
+    }
+    
+    .personal_info {
+        width: 96%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        padding-top: 8%;
+        padding-left: 4%;
+        gap: 20%;
+        justify-content: center;
+    }
+    
+    .left {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2%;
+        /* background-color: rgba(237, 248, 20, 0.242); */
+        align-content: flex-end;
+    }
+    
+    .personpic img {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .sayings {
+        display: flex;
+        flex-direction: column;
+        /* background-color: #ff0b0b; */
+        row-gap: 120px;
+        background-color: rgba(0, 255, 255, 0.096);
+    }
+    
+    .name {
+        display: flex;
+        flex-direction: row;
+        column-gap: 15%;
+        /* background-color: #07c72436; */
+    }
+    
+    .blackbg {
+        display: flex;
+        flex-direction: column;
+        gap: 360px;
+        background-color: #0b0b0b;
+        padding-top: 2%;
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-bottom: 4%;
+    }
+
+
+
+    
+    /*connect css*/
+    #personal_concept {
+        display: block;
+    }
+    
+    #lianxi {
+    
+        color: #7d817e;
+        text-decoration: underline;
+    }
+    
+    .body {
+        padding-top: 1%;
+        padding-left: 4%;
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        /* background-color: aquamarine; */
+    }
+    
+    .message_large {
+        width: 422px;
+        height: 47px;
+        color: #09141A;
+        font-size: 16px;
+        font-family: "misans";
+        font-weight: 400;
+        word-wrap: break-word"
+    
+    }
+    
+    .message_small {
+        width: 422px;
+        height: 47px;
+        color: #09141A;
+        font-size: 16px;
+        font-family: "misans";
+        font-weight: 300;
+        word-wrap: break-word"
+    
+    }
+    
+    .img {
+        width: 200%;
+        height: 200%;
+        position: relative;
+    }
+    
+    #con {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-self: flex-end;
+        flex-wrap: nowrap;
+        gap: 10%;
+        width: 100%;
+    }
+    
+    .icon {
+        align-items: center;
+        gap: 10px;
+    }
+    
+    #qidai {
+        margin-bottom: 4%;
+    
+    }
+}
+
+
+/* 媒体查询：在手机屏幕上进行布局调整 */
+@media screen and (max-width: 600px) {
+    .lian {
+        width: 100%;
+        display: block;
+        color: rgb(0, 0, 0);
+        font-size: 12px;
+        font-family: Inter;
+        font-weight: 600;
+        word-wrap: break-word;
+        text-decoration: none;
+    }
+    
+    .jiange {
+        color: rgb(17, 16, 16);
+        font-size: 12px;
+        font-family: 'MiSans';
+        font-weight: 600;
+        word-wrap: break-word;
+    }
+    
+    .jie {
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        font-family: 'Inter';
+        font-weight: 600;
+        word-wrap: break-word;
+        text-decoration: none;
+        gap: 4px;
+        align-items: center;
+    }
+    
+    #zixiang {
+        display: inline-flex;
+        width: auto;
+        gap: 12px;
+    }
+    
+    .bg {
+        color: rgb(11, 11, 11);
+        text-decoration: none;
+    
+    }
+    
+    a.bg:hover {
+        background-color: #0b0b0b;
+        color: rgb(240, 236, 236);
+        text-decoration: underline;
+    
+    }
+    
+    .alreadyactive {
+    
+        color: #454545;
+        text-decoration: underline;
+    }
+    
+    .active {
+        background-color: #696969;
+        color: #fff;
+    }
+    
+    #zixiang a {
+        opacity: 0;
+        transition: .3s;
+    }
+    
+    .jie:hover #zixiang a {
+        opacity: 100;
+    }
+    
+    #toplan {
+       
+        width: 100%;
+        height: 100%;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 2%;
+        display: inline-flex;
+        text-decoration: none;
+    }
+    
+    #biaotilan {
+        
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        position: sticky;
+        
+       
+        align-items: bottom;
+        background-color: rgba(255, 228, 196, 0.091);
+        backdrop-filter: blur(12px);
+        z-index: 2;
+    }
+    
+    #logo_mark {
+        display: none;
+    }
+   
+    
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(245, 245, 245, 1);
+        margin: 0;
+        padding: 0;
+    }
+    
+    #pic_group {
+    
+        margin-top: 10%;
+        width: 100%;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr ;
+        column-gap: 2px;
+        row-gap: 8px;
+        place-self: center;
+        justify-items: center;
+    }
+    
+    .artpic {
+        transition: 0.3s;
+        width: 180px;
+        height: 180px;
+    }
+    
+    .img-group {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .img-tip {
+        /* transition: 0.3s; */
+        width: auto;
+        position: absolute;
+        bottom: 42%;
+        opacity: 0.8;
+        display: none;
+        color: rgb(255, 255, 255);
+        background-color: #0b0b0b17;
+        font-size: 16px;
+        font-family: 'misans';
+        font-weight: 400;
+        word-wrap: break-word;
+    }
+    
+    .img-group:hover .img-tip {
+        /* background-color: #0b0b0b62; */
+        display: block;
+        width: 100%;
+        text-align: center;
+        /* mix-blend-mode: difference; */
+    }
+    
+    .showpic {
+        transition: 0.3s;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .artpic:hover .showpic {
+        opacity: 50%;
+        background-color: #83838300;
+        filter: blur(12px);
+        transform: scale(0.8);
+    }
+    
+    .personal_info {
+        width: 96%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        padding-top: 8%;
+        padding-left: 4%;
+        gap: 20%;
+        justify-content: center;
+    }
+    
+    .left {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2%;
+        /* background-color: rgba(237, 248, 20, 0.242); */
+        align-content: flex-end;
+    }
+    
+    .personpic img {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .sayings {
+        display: flex;
+        flex-direction: column;
+        /* background-color: #ff0b0b; */
+        row-gap: 120px;
+        background-color: rgba(0, 255, 255, 0.096);
+    }
+    
+    .name {
+        display: flex;
+        flex-direction: row;
+        column-gap: 15%;
+        /* background-color: #07c72436; */
+    }
+    
+    .blackbg {
+        display: flex;
+        flex-direction: column;
+        gap: 360px;
+        background-color: #0b0b0b;
+        padding-top: 2%;
+        padding-left: 1%;
+        padding-right: 1%;
+        padding-bottom: 4%;
+    }
+
+
+
+    
+    /*connect css*/
+    #personal_concept {
+        display: block;
+    }
+    
+    #lianxi {
+    
+        color: #7d817e;
+        text-decoration: underline;
+    }
+    
+    .body {
+        padding-top: 1%;
+        padding-left: 4%;
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        /* background-color: aquamarine; */
+    }
+    
+    .message_large {
+        width: 422px;
+        height: 47px;
+        color: #09141A;
+        font-size: 16px;
+        font-family: "misans";
+        font-weight: 400;
+        word-wrap: break-word"
+    
+    }
+    
+    .message_small {
+        width: 422px;
+        height: 47px;
+        color: #09141A;
+        font-size: 16px;
+        font-family: "misans";
+        font-weight: 300;
+        word-wrap: break-word"
+    
+    }
+    
+    .img {
+        width: 200%;
+        height: 200%;
+        position: relative;
+    }
+    
+    #con {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-self: flex-end;
+        flex-wrap: nowrap;
+        gap: 10%;
+        width: 100%;
+    }
+    
+    .icon {
+        align-items: center;
+        gap: 10px;
+    }
+    
+    #qidai {
+        margin-bottom: 4%;
+    
+    }
 }
