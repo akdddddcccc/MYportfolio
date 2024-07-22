@@ -233,6 +233,8 @@ body{
     flex-direction: column;
     gap: 360px;
     background-color: #0b0b0b;
+    padding-top: 2%;
+    padding-bottom: 4%;
 }
 /*connect css*/
 #personal_concept{
