@@ -221,14 +221,10 @@ body{
     column-gap: 15%;
     /* background-color: #07c72436; */
 }
-.sentence{
-
-}
 
 
-.right{
-    /* background-color: #9325c237; */
-}
+
+
 .blackbg{
     display: flex;
     flex-direction: column;
