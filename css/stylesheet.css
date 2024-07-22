@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'Misans';
+    src: url('../assets/fonts/MiSans-Normal.woff2') format('woff2');
+   
+    font-family: 'Alibaba PuHuiTi';
+    src: url('../assets/fonts/AlibabaPuHuiTi-2-55-Regular.ttf') format('ttf');
+    
+    font-family: 'Inter';
+    src: url('../assets/fonts/Inter-Regular.ttf') format('ttf');
+    
+  }
+
+
+
 .lian{
     width: 100%;
     display: block;

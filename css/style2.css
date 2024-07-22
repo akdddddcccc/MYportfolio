@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'JetBrains Mono NL';
+    src: url('../assets/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+    font-weight: 400;
+  }
+
+
 .parentDiv{
     position: relative;
 
