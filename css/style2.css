@@ -1,9 +1,4 @@
-@font-face {
-    font-family: 'JetBrains Mono NL';
-    src: url('../assets/fonts/JetBrainsMono-Medium.woff2') format('woff2');
-    font-weight: 400;
-  }
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 
 .parentDiv{
     position: relative;
@@ -34,7 +29,7 @@
     display: flex;
     width: 100%;
     height: 100%;
-    font-family: JetBrains Mono NL;
+    font-family: 'JetBrains Mono';
     font-size: 24px; 
     font-weight: 400;
     word-wrap: break-word;

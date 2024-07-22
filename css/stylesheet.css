@@ -1,17 +1,6 @@
-@font-face {
-    font-family: 'Misans';
-    src: url('../assets/fonts/MiSans-Normal.woff2') format('woff2');
-   
-    font-family: 'Alibaba PuHuiTi';
-    src: url('../assets/fonts/AlibabaPuHuiTi-2-55-Regular.ttf') format('ttf');
-    
-    font-family: 'Inter';
-    src: url('../assets/fonts/Inter-Regular.ttf') format('ttf');
-    
-  }
 
-
-
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 .lian{
     width: 100%;
     display: block;
@@ -26,7 +15,7 @@
 .jiange{
     color: rgb(17, 16, 16);
     font-size: 24px;
-    font-family: MiSans;
+    font-family: 'MiSans';
     font-weight: 600;
     word-wrap: break-word;
 }
@@ -35,7 +24,7 @@
     display: flex;
     flex-direction: column;
     font-size: 24px;
-    font-family: Inter;
+    font-family: 'Inter';
     font-weight: 600;
     word-wrap: break-word;
     text-decoration:none;
@@ -163,7 +152,7 @@ body{
     color: rgb(255, 255, 255);
     background-color: #0b0b0b17;
     font-size: 48px;
-    font-family: Alibaba PuHuiTi;
+    font-family: 'misans';
     font-weight: 400;
     word-wrap: break-word;
 
@@ -274,7 +263,7 @@ body{
     height: 47px;
     color: #09141A; 
     font-size: 16px; 
-    font-family: MiSans; 
+    font-family: "misans"; 
     font-weight: 400; 
     word-wrap: break-word"
 }
@@ -284,7 +273,7 @@ body{
     height: 47px;
     color: #09141A; 
     font-size: 16px; 
-    font-family: MiSans; 
+    font-family: "misans"; 
     font-weight: 300; 
     word-wrap: break-word"
 }
