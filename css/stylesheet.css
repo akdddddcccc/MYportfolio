@@ -99,14 +99,15 @@ a.bg:hover {
     z-index: 2;
 }
 
-#logo_mark {
+#phone_logo{
+ display: none;
+}
+
+#logo_mark  {
     width: 20%;
     height: 100%;
 }
-#logo_mark_img{
-    height:100%; 
-    width:100%;
-}
+
 
 body {
     display: flex;
@@ -416,15 +417,16 @@ body {
         z-index: 2;
     }
     
+    #phone_logo{
+        display: none;
+       }
+    
     #logo_mark {
-        width: 20%;
-        height: 100%;
+        width: 24%;
+        
     }
 
-    #logo_mark_img{
-        height:100%; 
-        width:100%;
-    }
+
     
     body {
         display: flex;
@@ -451,8 +453,8 @@ body {
     
     .artpic {
         transition: 0.3s;
-        width: 420px;
-        height: 420px;
+        width: 412px;
+        height: 412px;
     }
     
     .img-group {
@@ -695,34 +697,38 @@ body {
     }
     
     #toplan {
-       
-        width: 100%;
+        width: 98%;
         height: 100%;
         justify-content: flex-start;
         align-items: flex-start;
-        gap: 2%;
+        gap: 1.6%;
         display: inline-flex;
         text-decoration: none;
     }
     
     #biaotilan {
-        
         width: 100%;
         display: flex;
         flex-direction: row;
         position: sticky;
         
-       
-        align-items: bottom;
         background-color: rgba(255, 228, 196, 0.091);
         backdrop-filter: blur(12px);
         z-index: 2;
     }
     
+    #phone_logo{
+        display: block;
+        width: 14%;
+        height: 14%;
+        align-items:bottom ;
+       }
+
     #logo_mark {
         display: none;
+        
+        
     }
-   
     
     body {
         display: flex;
