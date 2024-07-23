@@ -985,25 +985,28 @@ background: #992a2a;
         transform: scale(0.8);
     }
     
-    /*personal page*/
 
+
+    /*personal page*/
     .personal_info {
         /* width: 100%; */
         height: auto;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         padding-top: 8%;
         padding-left: 4%;
         /* padding-right: 4%; */
-        justify-content: space-between;
+        
     }
 
     .left {
+        /* width: 240px; */
         display: flex;
         flex-direction: column;
-        row-gap: 20%;
+        /* row-gap: 8%; */
         background-color: rgba(247, 243, 7, 0.852);
-        align-content: flex-end;
+        padding-bottom: 36px;
+        /* align-content: flex-end; */
     }
 
 
@@ -1012,7 +1015,7 @@ background: #992a2a;
         display: flex;
         flex-direction: column;
         row-gap: 50px;
-        width: auto;
+        width: 100%;
         background-color: #0b0b0b;
         padding-top: 2%;
         padding-left: 1%;
@@ -1026,29 +1029,29 @@ background: #992a2a;
 
 
     .personpic img {
-        width: 200px;
-        height: 200px;
+        width: 80px;
+        height: 80px;
     }
 
     .sayings {
         display: flex;
         flex-direction: column;
+        row-gap: 10px;
         /* background-color: #ff0b0b; */
-        row-gap: 240px;
+        
         /* background-color: rgba(0, 255, 255, 0.096); */
     }
 
     .name {
         display: flex;
-        flex-direction: row;
-        column-gap: 15%;
+        flex-direction: column;
         background-color: #15f886d7;
     }
 
 
     #cmy{
         color: black; 
-        font-size: 24px; 
+        font-size: 20px; 
         font-family: 'Inter'; 
         font-weight: 600; 
         word-wrap: break-word;
@@ -1056,7 +1059,7 @@ background: #992a2a;
 
     #cmy-chinese{
         color: black; 
-        font-size: 24px; 
+        font-size: 20px; 
         font-family: 'JetBrains Mono'; 
         font-weight: 500; 
         word-wrap: break-word;
@@ -1066,8 +1069,7 @@ background: #992a2a;
 
 
     .titles{
-        
-        font-size: 56px; 
+        font-size: 42px; 
         font-family: 'Calibri'; 
         font-weight: 400; 
         text-transform: uppercase; 
@@ -1088,31 +1090,32 @@ background: #992a2a;
     .content{
         display: flex;
         flex-direction: column;
-        row-gap: 20px;
+        row-gap: 14px;
         /* background-color: #1eff0ae7; */
 
     }
 
     .p2{
+        width: 100%;
         display: flex;
         flex-direction: column;
-        row-gap: 20px;
+        row-gap: 14px;
         /* background-color: #147d0b17; */
     }
 
     .personal-text1{
         color: #09141A; 
-        font-size: 16px; 
+        font-size: 14px; 
         font-family: 'Misans'; 
         font-weight: 400; 
         word-wrap: break-word;
     }
 
     .personal-text2{
-        width: 80%;
+        width: 100%;
 
         color: #D1D1D1; 
-        font-size: 16px; 
+        font-size: 14px; 
         font-family: 'misans-Medium'; 
         font-weight: 400; 
         word-wrap: break-word;
