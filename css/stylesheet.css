@@ -928,12 +928,12 @@ background: #992a2a;
     #pic_group {
     
         margin-top: 10%;
-        width: 100%;
+        /* width: 100%; */
         height: auto;
         display: grid;
         grid-template-columns: 1fr 1fr ;
-        column-gap: 2px;
-        row-gap: 8px;
+        /* column-gap: 2px;
+        row-gap: 2px; */
         place-self: center;
         justify-items: center;
     }
