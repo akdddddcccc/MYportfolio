@@ -181,23 +181,45 @@ body {
 
 /*个人页css*/
 
+/*personal page*/
+
 .personal_info {
-    width: 96%;
+    /* width: 100%; */
     height: auto;
     display: flex;
     flex-direction: row;
     padding-top: 8%;
-    gap: 20%;
-    justify-content: center;
+    padding-left: 4%;
+    /* padding-right: 4%; */
+    justify-content: space-between;
 }
 
 .left {
     display: flex;
     flex-direction: column;
     row-gap: 20%;
-    /* background-color: rgba(237, 248, 20, 0.242); */
+    background-color: rgba(247, 243, 7, 0.852);
     align-content: flex-end;
 }
+
+
+
+.right{   
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    width: auto;
+    background-color: #0b0b0b;
+    padding-top: 2%;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-bottom: 4%;
+    font-family: 'Misans';
+    color: white;
+
+}
+
+
 
 .personpic img {
     width: 200px;
@@ -209,42 +231,96 @@ body {
     flex-direction: column;
     /* background-color: #ff0b0b; */
     row-gap: 240px;
-    background-color: rgba(0, 255, 255, 0.096);
+    /* background-color: rgba(0, 255, 255, 0.096); */
 }
 
 .name {
     display: flex;
     flex-direction: row;
     column-gap: 15%;
-    /* background-color: #07c72436; */
+    background-color: #15f886d7;
 }
 
-.blackbg {
+
+#cmy{
+    color: black; 
+    font-size: 24px; 
+    font-family: 'Inter'; 
+    font-weight: 600; 
+    word-wrap: break-word;
+}
+
+#cmy-chinese{
+    color: black; 
+    font-size: 24px; 
+    font-family: 'JetBrains Mono'; 
+    font-weight: 500; 
+    word-wrap: break-word;
+}
+
+
+
+
+.titles{
+    
+    font-size: 56px; 
+    font-family: 'Calibri'; 
+    font-weight: 400; 
+    text-transform: uppercase; 
+    word-wrap: break-word"
+
+}
+
+.titles-chinese{
+   
+    font-size: 32px; 
+    font-family: 'Calibri'; 
+    font-weight: 400; 
+    text-transform: uppercase; 
+    word-wrap: break-word"
+
+}
+
+.content{
     display: flex;
     flex-direction: column;
-    gap: 360px;
-    background-color: #0b0b0b;
-    padding-top: 2%;
-    padding-left: 1%;
-    padding-right: 1%;
-    padding-bottom: 4%;
+    row-gap: 20px;
+    /* background-color: #1eff0ae7; */
+
+}
+
+.p2{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    /* background-color: #147d0b17; */
 }
 
 .personal-text1{
     color: #09141A; 
     font-size: 16px; 
-    font-family: 'misans-Medium'; 
+    font-family: 'Misans'; 
     font-weight: 400; 
     word-wrap: break-word;
 }
 
 .personal-text2{
+    width: 80%;
+
     color: #D1D1D1; 
     font-size: 16px; 
     font-family: 'misans-Medium'; 
     font-weight: 400; 
     word-wrap: break-word;
 }
+
+
+/* .title1{
+background: #992a2a;
+} */
+
+
+
 
 
 /*connect css*/
@@ -334,7 +410,7 @@ body {
 
 
 /* 媒体查询：在较小屏幕上进行布局调整 */
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 2000px) {
     .lian {
         width: 100%;
         display: block;
@@ -514,59 +590,140 @@ body {
         transform: scale(0.8);
     }
     
+        /*personal page*/
+
     .personal_info {
-        width: 96%;
+        /* width: 100%; */
         height: auto;
         display: flex;
         flex-direction: row;
         padding-top: 8%;
         padding-left: 4%;
-        gap: 20%;
-        justify-content: center;
+        /* padding-right: 4%; */
+        justify-content: space-between;
     }
-    
+
     .left {
         display: flex;
         flex-direction: column;
-        row-gap: 2%;
-        /* background-color: rgba(237, 248, 20, 0.242); */
+        row-gap: 10%;
+        background-color: rgba(247, 243, 7, 0.852);
         align-content: flex-end;
     }
-    
-    .personpic img {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .sayings {
+
+
+
+    .right{   
         display: flex;
         flex-direction: column;
-        /* background-color: #ff0b0b; */
-        row-gap: 120px;
-        background-color: rgba(0, 255, 255, 0.096);
-    }
-    
-    .name {
-        display: flex;
-        flex-direction: row;
-        column-gap: 15%;
-        /* background-color: #07c72436; */
-    }
-    
-    .blackbg {
-        display: flex;
-        flex-direction: column;
-        gap: 360px;
+        row-gap: 50px;
+        width: auto;
         background-color: #0b0b0b;
         padding-top: 2%;
         padding-left: 1%;
         padding-right: 1%;
         padding-bottom: 4%;
+        font-family: 'Misans';
+        color: white;
+
     }
 
 
 
+    .personpic img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .sayings {
+        display: flex;
+        flex-direction: column;
+        /* background-color: #ff0b0b; */
+        row-gap: 164px;
+        /* background-color: rgba(0, 255, 255, 0.096); */
+    }
+
+    .name {
+        display: flex;
+        flex-direction: row;
+        column-gap: 15%;
+        background-color: #15f886d7;
+    }
+
+
+    #cmy{
+        color: black; 
+        font-size: 24px; 
+        font-family: 'Inter'; 
+        font-weight: 600; 
+        word-wrap: break-word;
+    }
+
+    #cmy-chinese{
+        color: black; 
+        font-size: 24px; 
+        font-family: 'JetBrains Mono'; 
+        font-weight: 500; 
+        word-wrap: break-word;
+    }
+
+    .titles{
+        
+        font-size: 56px; 
+        font-family: 'Calibri'; 
+        font-weight: 400; 
+        text-transform: uppercase; 
+        word-wrap: break-word"
+
+    }
+
+    .titles-chinese{
     
+        font-size: 32px; 
+        font-family: 'Calibri'; 
+        font-weight: 400; 
+        text-transform: uppercase; 
+        word-wrap: break-word"
+
+    }
+
+    .content{
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        /* background-color: #1eff0ae7; */
+
+    }
+
+    .p2{
+        display: flex;
+        flex-direction: column;
+        row-gap: 20px;
+        /* background-color: #147d0b17; */
+    }
+
+    .personal-text1{
+        color: #09141A; 
+        font-size: 16px; 
+        font-family: 'Misans'; 
+        font-weight: 400; 
+        word-wrap: break-word;
+    }
+
+    .personal-text2{
+        width: 80%;
+
+        color: #D1D1D1; 
+        font-size: 16px; 
+        font-family: 'misans-Medium'; 
+        font-weight: 400; 
+        word-wrap: break-word;
+    }
+
+
+    /* .title1{
+    background: #992a2a;
+    } */
     /*connect css*/
     #personal_concept {
         display: block;
@@ -774,12 +931,12 @@ body {
     #pic_group {
     
         margin-top: 10%;
-        width: 100%;
+        /* width: 100%; */
         height: auto;
         display: grid;
         grid-template-columns: 1fr 1fr ;
-        column-gap: 2px;
-        row-gap: 8px;
+        /* column-gap: 2px;
+        row-gap: 2px; */
         place-self: center;
         justify-items: center;
     }
@@ -831,70 +988,157 @@ body {
         transform: scale(0.8);
     }
     
+
+
+    /*personal page*/
     .personal_info {
-        width: 96%;
+        /* width: 100%; */
         height: auto;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         padding-top: 8%;
         padding-left: 4%;
-        gap: 20%;
-        justify-content: center;
+        /* padding-right: 4%; */
+        
     }
-    
+
     .left {
+        /* width: 240px; */
         display: flex;
         flex-direction: column;
-        row-gap: 2%;
-        /* background-color: rgba(237, 248, 20, 0.242); */
-        align-content: flex-end;
+        /* row-gap: 8%; */
+        background-color: rgba(247, 243, 7, 0.852);
+        padding-bottom: 36px;
+        /* align-content: flex-end; */
     }
-    
-    .personpic img {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .sayings {
+
+
+
+    .right{   
         display: flex;
         flex-direction: column;
-        /* background-color: #ff0b0b; */
-        row-gap: 120px;
-        background-color: rgba(0, 255, 255, 0.096);
-    }
-    
-    .name {
-        display: flex;
-        flex-direction: row;
-        column-gap: 15%;
-        /* background-color: #07c72436; */
-    }
-    
-    .blackbg {
-        display: flex;
-        flex-direction: column;
-        gap: 360px;
+        row-gap: 50px;
+        width: 100%;
         background-color: #0b0b0b;
         padding-top: 2%;
         padding-left: 1%;
         padding-right: 1%;
         padding-bottom: 4%;
+        font-family: 'Misans';
+        color: white;
+
     }
 
 
 
+    .personpic img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .sayings {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        /* background-color: #ff0b0b; */
+        
+        /* background-color: rgba(0, 255, 255, 0.096); */
+    }
+
+    .name {
+        display: flex;
+        flex-direction: column;
+        background-color: #15f886d7;
+    }
+
+
+    #cmy{
+        color: black; 
+        font-size: 20px; 
+        font-family: 'Inter'; 
+        font-weight: 600; 
+        word-wrap: break-word;
+    }
+
+    #cmy-chinese{
+        color: black; 
+        font-size: 20px; 
+        font-family: 'JetBrains Mono'; 
+        font-weight: 500; 
+        word-wrap: break-word;
+    }
+
+
+
+
+    .titles{
+        font-size: 42px; 
+        font-family: 'Calibri'; 
+        font-weight: 400; 
+        text-transform: uppercase; 
+        word-wrap: break-word"
+
+    }
+
+    .titles-chinese{
     
+        font-size: 32px; 
+        font-family: 'Calibri'; 
+        font-weight: 400; 
+        text-transform: uppercase; 
+        word-wrap: break-word"
+
+    }
+
+    .content{
+        display: flex;
+        flex-direction: column;
+        row-gap: 14px;
+        /* background-color: #1eff0ae7; */
+
+    }
+
+    .p2{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        row-gap: 14px;
+        /* background-color: #147d0b17; */
+    }
+
+    .personal-text1{
+        color: #09141A; 
+        font-size: 14px; 
+        font-family: 'Misans'; 
+        font-weight: 400; 
+        word-wrap: break-word;
+    }
+
+    .personal-text2{
+        width: 100%;
+
+        color: #D1D1D1; 
+        font-size: 14px; 
+        font-family: 'misans-Medium'; 
+        font-weight: 400; 
+        word-wrap: break-word;
+    }
+
+
+    /* .title1{
+    background: #992a2a;
+    } */
     /*connect css*/
     #personal_concept {
         display: block;
     }
-    
+
     #lianxi {
-    
+
         color: #7d817e;
         text-decoration: underline;
     }
-    
+
     .body {
         padding-top: 4%;
 
@@ -908,7 +1152,7 @@ body {
         align-items: flex-end; */
         /* background-color: aquamarine; */
     }
-    
+
     .product{
         display: block;
         flex-direction: column;
@@ -923,11 +1167,11 @@ body {
 
     }
 
-    #connect_info{
+    /* #connect_info{
 
 
 
-    }
+    } */
 
     .message_large {
         width: 422px;
@@ -937,9 +1181,9 @@ body {
         font-family: "misans";
         font-weight: 400;
         word-wrap: break-word"
-    
+
     }
-    
+
     .message_small {
         width: 422px;
         height: 47px;
@@ -948,15 +1192,15 @@ body {
         font-family: "misans";
         font-weight: 300;
         word-wrap: break-word"
-    
+
     }
-    
+
     .img {
         width: 200%;
         height: 200%;
         position: relative;
     }
-    
+
     #con {
         display: flex;
         flex-direction: column;
@@ -966,14 +1210,13 @@ body {
         gap: 10%;
         width: 100%;
     }
-    
+
     .icon {
         align-items: center;
         gap: 10px;
     }
-    
+
     #qidai {
         margin-bottom: 4%;
-    
     }
 }
