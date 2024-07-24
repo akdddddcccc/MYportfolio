@@ -86,7 +86,7 @@ a.bg:hover {
 }
 
 #biaotilan {
-    top: 2%;
+    top: 0%;
     width: 96%;
     display: flex;
     flex-direction: row;
@@ -420,7 +420,7 @@ body {
     }
     
     #biaotilan {
-        top: 2%;
+        top: 0%;
         width: 96%;
         display: flex;
         flex-direction: row;
@@ -737,6 +737,7 @@ body {
     }
     
     #biaotilan {
+        top: 0;
         width: 100%;
         display: flex;
         flex-direction: row;
