@@ -7,7 +7,7 @@
     <link rel="icon" href="favicon.svg" type="svg"/>
     <link rel="stylesheet" href="./css/stylesheet.css" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>作品简介页</title>
 </head>
 <body>
@@ -16,31 +16,17 @@
             <img src="./images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
         </div>
         <div id="logo_mark" >
-            <img src="./images/Group 13.svg" alt="logo_mark" height=100% width=100% />
+            <img src="./images/Group 13.svg" alt="logo_mark" height=100% width="100%" />
         </div>
-        <div id="toplan">  
-            <div ><a class="lian bg" href="personal.html" >ABOUT <br/>个人相关</a></div>
-            <div class="jiange" >|</div>
-            <div class="jie">
-                <div class="bg">ARTWORK <br/>作品产出</div>
-                <div id="zixiang"> 
-                    <a id="workpage" class="alreadyactive " araia-disabled="false">工作作品集<br>work</a>
-                    <a id="studypage" class="bg" onclick="toggleActive(this)" href="school_design.html">学校作品集<br>study</a>
-                    <script>
-                        function toggleActive(element) {
-                          element.classList.toggle("active");
-                        }
-                     </script>
-                </div> 
-            </div>
-            <div class="jiange">|</div>
-            <div ><a class="lian bg" href="connect.html">CONNECT <br/>联系方式 </a></div>
+        <div id="return_button">
+            <a class="return" href="work_design.html">
+                <img id="bu" src="./images/return.svg" alt="return" height=100% width=100% />
+            </a>
         </div>
     </div>
     <div class="product_content">
-        <a>back</a>
         <div class="product_introduce">
-            <img src="" alt="">
+            <img id="render_pic1" src="./images/work/1_1.png" alt="render_pic">
             <div class="word_describe">
                 <h3>name</h3>
                 <div>
@@ -49,10 +35,23 @@
                 </div>
             </div>
         </div>
-        <h3>设计过程</h3>
-        <img src="" alt="">
-        <img src="" alt="">
-        <img src="" alt="">
+        <div>
+            <h3>设计过程</h3>
+            <div>
+                <img src="./images/work/1-1_connet.png" alt="">
+                <img src="./images/work/1_1_refer.png" alt="">
+                <img src="" alt="">
+            </div>
+        </div>
+        <div>
+            <h3>设计过程</h3>
+            <div>
+                <img src="./images/work/1-1_connet.png" alt="">
+                <img src="./images/work/1_1_refer.png" alt="">
+                <img src="" alt="">
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

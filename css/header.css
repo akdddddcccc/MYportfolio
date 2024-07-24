@@ -106,6 +106,15 @@ a.bg:hover {
 }
 
 
+#return_button {
+    padding-left: 4%;
+    width: 20%;
+    height:auto;
+
+}
+
+
+
 /* 媒体查询：在较小屏幕上进行布局调整 */
 @media screen and (max-width: 2000px) {
     .lian {
@@ -171,6 +180,13 @@ a.bg:hover {
         display: none;
         
         
+    }
+
+    #return_button {
+        padding-left: 4%;
+        width: 50%;
+        height:auto;
+    
     }
     
 }
