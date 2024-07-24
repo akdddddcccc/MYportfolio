@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-
+@font-face {
+    font-family: "Misans";
+    src: url(../assets/fonts/MiSans-Light.ttf);
+}
 .lian {
     width: 100%;
     display: block;
