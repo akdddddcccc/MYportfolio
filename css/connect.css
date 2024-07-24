@@ -1,0 +1,124 @@
+@font-face {
+    font-family: "Misans";
+    src: url(../assets/fonts/MiSans-Light.ttf);
+}
+@font-face {
+    font-family: "Misans-M";
+    src: url(../assets/fonts/MiSans-Medium.ttf);
+}
+
+#lianxi {
+
+    color: #7d817e;
+    text-decoration: underline;
+}
+
+.body {
+    /* padding-top: 1%; */
+    padding-left: 4%;
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* background-color: aquamarine; */
+}
+
+.product{
+    justify-content: flex-start; 
+    align-items: flex-end; 
+    gap: 5%; 
+    display: inline-flex;
+
+}
+
+
+#personal_concept{
+    display: block;
+    width: 44vw;
+
+}
+
+.message_large {
+    width: 422px;
+    height: 47px;
+    color: #09141A;
+    font-size: 16px;
+    font-family: "Misans-M";
+    font-weight: 400;
+    word-wrap: break-word"
+
+}
+
+.message_small {
+    width: 422px;
+    height: 47px;
+    color: #09141A;
+    font-size: 16px;
+    font-family: "Misans";
+    font-weight: 300;
+    word-wrap: break-word"
+
+}
+
+.img {
+    width: 200%;
+    height: 200%;
+    position: relative;
+}
+
+#con {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-self: flex-end;
+    flex-wrap: nowrap;
+    gap: 10%;
+    width: 100%;
+}
+
+.icon {
+    align-items: center;
+    gap: 10px;
+}
+
+#qidai {
+    margin-bottom: 4%;
+
+}
+
+/* 媒体查询：在较小屏幕上进行布局调整 */
+/* @media screen and (max-width: 2000px) {
+
+} */
+
+
+
+
+/* 媒体查询：在手机屏幕上进行布局调整 */
+@media screen and (max-width: 600px) {
+        /*connect css*/   
+        .body {
+            padding-top: 4%;
+            
+        }
+    
+        .product{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:baseline;
+        }
+    
+        #personal_concept{
+            width: 80vw;
+            justify-self: center;
+    
+        }
+    
+        /* #connect_info{
+    
+    
+    
+        } */
+}

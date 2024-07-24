@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.svg" type="svg"/>
+    <link rel="stylesheet" href="./css/stylesheet.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品简介页</title>
+</head>
+<body>
+    <div id="biaotilan" >
+        <div id="phone_logo">
+            <img src="./images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
+        </div>
+        <div id="logo_mark" >
+            <img src="./images/Group 13.svg" alt="logo_mark" height=100% width=100% />
+        </div>
+        <div id="toplan">  
+            <div ><a class="lian bg" href="personal.html" >ABOUT <br/>个人相关</a></div>
+            <div class="jiange" >|</div>
+            <div class="jie">
+                <div class="bg">ARTWORK <br/>作品产出</div>
+                <div id="zixiang"> 
+                    <a id="workpage" class="alreadyactive " araia-disabled="false">工作作品集<br>work</a>
+                    <a id="studypage" class="bg" onclick="toggleActive(this)" href="school_design.html">学校作品集<br>study</a>
+                    <script>
+                        function toggleActive(element) {
+                          element.classList.toggle("active");
+                        }
+                     </script>
+                </div> 
+            </div>
+            <div class="jiange">|</div>
+            <div ><a class="lian bg" href="connect.html">CONNECT <br/>联系方式 </a></div>
+        </div>
+    </div>
+    <div class="product_content">
+        <a>back</a>
+        <div class="product_introduce">
+            <img src="" alt="">
+            <div class="word_describe">
+                <h3>name</h3>
+                <div>
+                    <h4>subtitle</h4>
+                    <h5>text</h5>
+                </div>
+            </div>
+        </div>
+        <h3>设计过程</h3>
+        <img src="" alt="">
+        <img src="" alt="">
+        <img src="" alt="">
+    </div>
+</body>
+</html>

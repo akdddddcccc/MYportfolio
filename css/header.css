@@ -1,4 +1,4 @@
-.lian{
+.lian {
     width: 100%;
     display: block;
     color: rgb(0, 0, 0);
@@ -6,90 +6,171 @@
     font-family: Inter;
     font-weight: 600;
     word-wrap: break-word;
-    text-decoration:none;
-
+    text-decoration: none;
 }
-.jiange{
+
+.jiange {
     color: rgb(17, 16, 16);
     font-size: 24px;
-    font-family: MiSans;
+    font-family: 'MiSans';
     font-weight: 600;
     word-wrap: break-word;
 }
-.jie{
+
+.jie {
     width: auto;
     display: flex;
     flex-direction: column;
-    color: rgb(33, 28, 28);
     font-size: 24px;
-    font-family: Inter;
+    font-family: 'Inter';
     font-weight: 600;
     word-wrap: break-word;
-    text-decoration:none;
+    text-decoration: none;
     gap: 20px;
     align-items: center;
 }
-#zixiang{
+
+#zixiang {
     display: inline-flex;
     width: 300px;
     gap: 50px;
-
 }
-a.bg{
+
+.bg {
     color: rgb(11, 11, 11);
     text-decoration: none;
 
 }
-a.bg:hover{
+
+a.bg:hover {
     background-color: #0b0b0b;
     color: rgb(240, 236, 236);
     text-decoration: underline;
 
 }
 
-#workpage.alreadyactive {
-   
+.alreadyactive {
+
     color: #454545;
     text-decoration: underline;
-  }
+}
 
-#zixiang a #studypage.active {
+.active {
     background-color: #696969;
     color: #fff;
-  }
-#toplan{
-    width: 72%;
-    height: 100%; 
-    padding-top: 4%; 
-    justify-content: flex-start; 
-    align-items: flex-start; 
-    gap: 14%; 
+}
+
+#zixiang a {
+    opacity: 0;
+    transition: .3s;
+}
+
+.jie:hover #zixiang a {
+    opacity: 100;
+}
+
+#toplan {
+    top: 2%;
+    width: 80%;
+    height: 100%;
+    padding-top: 3%;
+    padding-left: 4%;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 14%;
     display: inline-flex;
     text-decoration: none;
-    /* background-color: bisque; */
-
 }
-#biaotilan{
+
+#biaotilan {
+    top: 0%;
     width: 96%;
-    display: flex; 
+    display: flex;
     flex-direction: row;
-
-    position: absolute; 
-    left: 4%; 
-    align-items: bottom;  
-    gap: 2%;
-
+    position: sticky;
+    padding-top: 2%;
+    padding-left: 4%;
+    align-items: bottom;
+    background-color: rgba(255, 228, 196, 0.091);
+    backdrop-filter: blur(12px);
+    z-index: 2;
 }
-#logo_mark{
+
+#phone_logo{
+ display: none;
+}
+
+#logo_mark  {
     width: 20%;
     height: 100%;
-    margin: 1% 0% 0% 2%;
-    /* background-color: aqua; */
+}
+
+
+/* 媒体查询：在较小屏幕上进行布局调整 */
+@media screen and (max-width: 2000px) {
+    .lian {
+        font-size: 20px;
+    }
+    
+    .jiange {
+        font-size: 20px;
+    }
+    
+    .jie {
+        font-size: 20px;
+        gap: 20px;
+
+    }
+    
+    #toplan {
+        gap: 10%;
+    }
+    
+    #logo_mark {
+        width: 24%; 
+    }
 
 
 }
-body{display: flex;
-    flex-direction: column;
-    height: 100%; 
-    width: 100%;
+
+
+/* 媒体查询：在手机屏幕上进行布局调整 */
+@media screen and (max-width: 600px) {
+    .lian {
+        font-size: 12px;
+    }
+    
+    .jiange {
+        font-size: 12px;
+    }
+    
+    .jie {
+        font-size: 12px;
+        gap: 4px;
+    }
+    
+    #zixiang {
+        width: auto;
+        gap: 12px;
+    }
+    
+    #toplan {
+        width: 98%;
+        gap: 1.6%;
+    }
+    
+    
+    #phone_logo{
+        display: block;
+        width: 14%;
+        height: 14%;
+        align-items:bottom ;
+       }
+
+    #logo_mark {
+        display: none;
+        
+        
+    }
+    
 }
