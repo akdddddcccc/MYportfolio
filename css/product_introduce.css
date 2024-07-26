@@ -1,3 +1,13 @@
+@font-face {
+    font-family: "Misans";
+    src: url(../assets/fonts/MiSans-Light.ttf);
+}
+@font-face {
+    font-family: "Misans-M";
+    src: url(../assets/fonts/MiSans-Medium.ttf);
+}
+
+
 .product_content{
     padding-left: 4%;
     padding-top: 2.4%;
@@ -18,23 +28,65 @@
 
 
 .word_describe{
-    width: 40%;
-    padding-left: 16%;
+    width: 24%;
+    padding-left: 10%;
+    gap: 10%;
     /* justify-self: center; */
     align-content: center;
 
 }
 
+.textblock{
+    display: flex;
+    flex-direction: column;
+    /* flex-shrink: unset;
+    
+    row-gap: 10px; */
+}
+
 h3{
     color: #09141A;
-    font-family: MiSans;
-    font-size: 64px;
+    font-family: 'MiSans-M';
+    font-size: 54px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+h4{
+    color: #09141A;
+    font-family: 'MiSans-M';
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h5{
+    color: #09141A;
+    font-family: 'MiSans';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.design_process{
+    height: 100%;
+    padding-bottom: 0%;
+}
+
+.design_process_pic{
+    display: flex;
     
 }
 
+.design_output_pic{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
 
 
 @media screen and (max-width:600px){
@@ -68,11 +120,28 @@ h3{
     
     h3{
         color: #09141A;
-        font-family: MiSans;
+        font-family: 'MiSans-M';
         font-size: 24px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
-        
+    }
+    
+    h4{
+        color: #09141A;
+        font-family: 'MiSans-M';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    
+    h5{
+        color: #09141A;
+        font-family: 'MiSans';
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
     }
 }
