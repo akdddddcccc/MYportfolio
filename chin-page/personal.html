@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+
+    <link rel="icon" href="../favicon.svg" type="svg"/>
+    <link rel="stylesheet" href="../css/stylesheet.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人简介</title>
+</head>
+<body>
+    <div id="biaotilan" >
+        <div id="phone_logo">
+            <img src="../images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
+        </div>
+        <div id="logo_mark" >
+            <img src="../images/Group 13.svg" alt="logo_mark" height=100% width=100% />
+        </div>
+        <div id="toplan">  
+            <div ><a class="lian  alreadyactive"  araia-disabled="false">个人相关</a></div>
+            <div class="jiange" >|</div>
+            <div class="jie">
+                <div class="bg">作品产出</div>
+                <div id="zixiang"> 
+                    <a id="workpage" class="bg" onclick="toggleActive(this)" href="work_design.html ">工作作品</a>
+                    <a id="studypage"  class="bg" onclick="toggleActive(this)" href="school_design.html">个人作品</a>
+                    <script>
+                        function toggleActive(element) {    
+                          element.classList.toggle("active");
+                        }
+                     </script>
+                  
+                </div> 
+            </div>
+            <div class="jiange">|</div>
+            <div ><a class="lian bg" href="connect.html">联系方式 </a></div>
+        </div>
+    </div>
+    <div class="personal_info">
+        <div class="left">
+            <div class="personpic"><img src="../images/Mask Group.webp " alt="个人形象"/></div>
+            <div class="sayings">
+                <div class="name">
+                    <div id="cmy" >陈沐阳</div>
+                    <div id="cmy-chinese" > CHEN MUYANG</div>
+                </div>
+                <div class="sentence"  >
+                    
+                    <div class="personal-text1" >-很感激对设计的学习让我得以欣赏如此多的艺术形式作品</div>
+                </div>     
+            </div>
+        </div>
+        <div class="right">
+            <div class="content">
+                <div class="title2">
+                        
+                        <div class="titles-chinese"  >经历</div>
+                </div>
+                <div class="p2">
+                        
+                        <div class="personal-text2" >高中毕业于天津南开中学，接触设计于江南大学就读其间</div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="title2">
+                    
+                    <div class="titles-chinese" >技能工具</div>
+                </div>
+                <div class="p2">
+                    <div class="personal-text2" >-Figma , AI ,PS    -arduino , touchdesigner<br/>-PR , AE   -Rhino , keyshot <br/>-procreate</div>
+                    <div class="personal-text2" >-rap , basketball , photography<br/>-唱跳，rap篮球，产品摄影</div>                        
+                </div>
+            </div>
+                
+            
+        </div>
+    </div>
+    
+</body>
+</html>
