@@ -1,0 +1,19 @@
+<svg width="900" height="900" viewBox="0 0 900 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="900" fill="#F5F5F5"/>
+  <rect x="70" y="70" width="760" height="760" fill="white" stroke="#111111" stroke-width="14"/>
+  <path d="M128 163H772" stroke="#111111" stroke-width="10" stroke-dasharray="18 18"/>
+  <text x="128" y="248" fill="#111111" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="700">TASK DIVIDE</text>
+  <text x="128" y="310" fill="#111111" font-family="monospace" font-size="26">LOCAL / STATIC / UI SYSTEM</text>
+  <rect x="128" y="374" width="200" height="72" fill="#111111"/>
+  <rect x="376" y="374" width="360" height="72" fill="#F5F5F5" stroke="#111111" stroke-width="8"/>
+  <path d="M174 408L198 432L252 386" stroke="white" stroke-width="12" stroke-linecap="square"/>
+  <path d="M416 410H692" stroke="#111111" stroke-width="10"/>
+  <rect x="128" y="510" width="200" height="72" fill="#F5F5F5" stroke="#111111" stroke-width="8"/>
+  <rect x="376" y="510" width="360" height="72" fill="#111111"/>
+  <path d="M174 546H282" stroke="#111111" stroke-width="10"/>
+  <path d="M416 546H692" stroke="white" stroke-width="10"/>
+  <rect x="128" y="646" width="488" height="72" fill="#F5F5F5" stroke="#111111" stroke-width="8"/>
+  <path d="M172 682H566" stroke="#111111" stroke-width="10"/>
+  <circle cx="713" cy="682" r="38" fill="#111111"/>
+  <text x="686" y="697" fill="white" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">%</text>
+</svg>
