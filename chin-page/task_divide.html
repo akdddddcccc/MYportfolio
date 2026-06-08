@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="../favicon.svg" type="svg"/>
+    <link rel="stylesheet" href="../css/stylesheet.css" />
+    <link rel="stylesheet" href="../css/task_divide.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务拆分工具 | muyang23333.top</title>
+</head>
+<body>
+    <div id="biaotilan" >
+        <div id="phone_logo">
+            <img src="../images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
+        </div>
+        <div id="logo_mark" >
+            <img src="../images/Group 13.svg" alt="logo_mark" height=100% width=100% />
+        </div>
+        <div id="return_button">
+            <a class="return" href="work_design.html">
+                <img id="bu" src="../images/return.svg" alt="return" height=100% width=100% />
+            </a>
+        </div>
+    </div>
+
+    <main class="task-shell" data-page="task-divide">
+        <section class="task-hero" aria-labelledby="task-title">
+            <div class="task-hero__copy">
+                <p class="task-kicker">LOCAL TASK DIVIDE / 任务管理应用再设计</p>
+                <h1 id="task-title">把一个模糊目标拆成可以马上开始的小步骤。</h1>
+                <p class="task-lead">参考 task-divide.vercel.app 的核心逻辑：创建任务、拆分步骤、追踪完成度。这里改写为符合 muyang23333.top 的黑白、高对比、字体与作品集边框语言的静态网页应用，可直接随本站部署。</p>
+            </div>
+            <div class="task-hero__panel" aria-label="功能结构概览">
+                <span>输入目标</span>
+                <span>AI-like 规则拆分</span>
+                <span>勾选推进</span>
+                <span>本地保存</span>
+            </div>
+        </section>
+
+        <section class="task-board" aria-label="任务拆分工作台">
+            <form class="task-form" id="taskForm">
+                <div class="task-form__header">
+                    <h2>新建任务</h2>
+                    <p>填写目标后，系统会按调研 / 设计 / 执行 / 复盘生成默认拆分项。</p>
+                </div>
+                <label>
+                    <span>任务标题</span>
+                    <input id="taskTitleInput" name="title" maxlength="80" placeholder="例如：重做作品集首页" required>
+                </label>
+                <label>
+                    <span>补充描述</span>
+                    <textarea id="taskDescriptionInput" name="description" rows="4" maxlength="240" placeholder="说明背景、限制、交付物或想要达成的体验"></textarea>
+                </label>
+                <div class="task-form__grid">
+                    <label>
+                        <span>优先级</span>
+                        <select id="taskPriorityInput" name="priority">
+                            <option value="high">高</option>
+                            <option value="medium" selected>中</option>
+                            <option value="low">低</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>预计耗时</span>
+                        <select id="taskEstimateInput" name="estimate">
+                            <option value="1">1 小时</option>
+                            <option value="3" selected>3 小时</option>
+                            <option value="6">6 小时</option>
+                            <option value="12">12 小时+</option>
+                        </select>
+                    </label>
+                </div>
+                <button class="task-button" type="submit">拆分并加入任务墙</button>
+            </form>
+
+            <aside class="task-summary" aria-label="任务概览">
+                <h2>当前进度</h2>
+                <div class="task-summary__number" id="completionRate">0%</div>
+                <p id="summaryText">还没有任务。先把脑子里的目标丢进来。</p>
+                <div class="task-progress" aria-hidden="true"><span id="progressBar"></span></div>
+                <button class="task-button task-button--ghost" id="clearDoneButton" type="button">清理已完成</button>
+            </aside>
+        </section>
+
+        <section class="task-list-section" aria-labelledby="list-title">
+            <div class="task-list-section__header">
+                <h2 id="list-title">任务墙</h2>
+                <p>所有数据保存在浏览器 localStorage，不依赖后端，适合轻量部署。</p>
+            </div>
+            <div class="task-list" id="taskList" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <template id="taskCardTemplate">
+        <article class="task-card">
+            <div class="task-card__top">
+                <div>
+                    <p class="task-card__meta"></p>
+                    <h3></h3>
+                </div>
+                <button class="task-card__delete" type="button" aria-label="删除任务">×</button>
+            </div>
+            <p class="task-card__desc"></p>
+            <ol class="subtask-list"></ol>
+        </article>
+    </template>
+
+    <script src="../js/task_divide.js" defer></script>
+</body>
+</html>

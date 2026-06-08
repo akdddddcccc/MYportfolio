@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="../favicon.svg" type="svg"/>
+    <link rel="stylesheet" href="../css/stylesheet.css" />
+    <link rel="stylesheet" href="../css/task_divide.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Divide Tool | muyang23333.top</title>
+</head>
+<body>
+    <div id="biaotilan" >
+        <div id="phone_logo">
+            <img src="../images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
+        </div>
+        <div id="logo_mark" >
+            <img src="../images/Group 13.svg" alt="logo_mark" height=100% width=100% />
+        </div>
+        <div id="return_button">
+            <a class="return" href="work_design.html">
+                <img id="bu" src="../images/return.svg" alt="return" height=100% width=100% />
+            </a>
+        </div>
+    </div>
+
+    <main class="task-shell" data-page="task-divide">
+        <section class="task-hero" aria-labelledby="task-title">
+            <div class="task-hero__copy">
+                <p class="task-kicker">LOCAL TASK DIVIDE / PORTFOLIO ADAPTATION</p>
+                <h1 id="task-title">Break a fuzzy goal into steps you can start now.</h1>
+                <p class="task-lead">This page translates the task-divide.vercel.app logic into the black-and-white, high-contrast, portfolio-border language of muyang23333.top. It creates tasks, divides them into steps, tracks completion, and ships as a static web app.</p>
+            </div>
+            <div class="task-hero__panel" aria-label="Feature architecture overview">
+                <span>Capture goal</span>
+                <span>Rule-based split</span>
+                <span>Check progress</span>
+                <span>Local save</span>
+            </div>
+        </section>
+
+        <section class="task-board" aria-label="Task divide workspace">
+            <form class="task-form" id="taskForm">
+                <div class="task-form__header">
+                    <h2>New task</h2>
+                    <p>The app generates default subtasks around research, design, execution, and review.</p>
+                </div>
+                <label>
+                    <span>Task title</span>
+                    <input id="taskTitleInput" name="title" maxlength="80" placeholder="Example: redesign portfolio homepage" required>
+                </label>
+                <label>
+                    <span>Description</span>
+                    <textarea id="taskDescriptionInput" name="description" rows="4" maxlength="240" placeholder="Context, constraints, deliverables, or desired experience"></textarea>
+                </label>
+                <div class="task-form__grid">
+                    <label>
+                        <span>Priority</span>
+                        <select id="taskPriorityInput" name="priority">
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Estimate</span>
+                        <select id="taskEstimateInput" name="estimate">
+                            <option value="1">1 hour</option>
+                            <option value="3" selected>3 hours</option>
+                            <option value="6">6 hours</option>
+                            <option value="12">12+ hours</option>
+                        </select>
+                    </label>
+                </div>
+                <button class="task-button" type="submit">Divide and add to wall</button>
+            </form>
+
+            <aside class="task-summary" aria-label="Task overview">
+                <h2>Progress</h2>
+                <div class="task-summary__number" id="completionRate">0%</div>
+                <p id="summaryText">No tasks yet. Drop the goal from your head into the form.</p>
+                <div class="task-progress" aria-hidden="true"><span id="progressBar"></span></div>
+                <button class="task-button task-button--ghost" id="clearDoneButton" type="button">Clear completed</button>
+            </aside>
+        </section>
+
+        <section class="task-list-section" aria-labelledby="list-title">
+            <div class="task-list-section__header">
+                <h2 id="list-title">Task wall</h2>
+                <p>Data is stored in browser localStorage, so the tool stays lightweight and deployable without a backend.</p>
+            </div>
+            <div class="task-list" id="taskList" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <template id="taskCardTemplate">
+        <article class="task-card">
+            <div class="task-card__top">
+                <div>
+                    <p class="task-card__meta"></p>
+                    <h3></h3>
+                </div>
+                <button class="task-card__delete" type="button" aria-label="Delete task">×</button>
+            </div>
+            <p class="task-card__desc"></p>
+            <ol class="subtask-list"></ol>
+        </article>
+    </template>
+
+    <script src="../js/task_divide.js" defer></script>
+</body>
+</html>
