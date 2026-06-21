@@ -1,0 +1,42 @@
+.parent{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: aqua;
+    gap: 10px;
+
+}
+.son{
+    width: 200px;
+    height: 100px;
+    background-color: blue;
+    color: brown;
+    text-align: center;
+    
+}
+body{
+    padding:0;
+    margin: 0;
+}
+
+.img-group {
+    position: relative;
+    display: inline-block;
+  }
+          
+  .img-tip {
+    position: absolute;
+    bottom: 0;
+    background: #333;
+    color: #fff;
+    opacity: 0.6;
+    display: none;
+  }
+          
+  .img-group:hover .img-tip {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <link href="../prism.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.svg" type="svg"/>
+    <link rel="stylesheet" href="../css/stylesheet.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <title>作品简介页</title>
+</head>
+<body>
+    <div id="biaotilan" >
+        <div id="phone_logo">
+            <img src="../images/yang_min.png" alt="logo_mark" height=100% width=100% /> 
+        </div>
+        <div id="logo_mark" >
+            <img src="../images/Group 13.svg" alt="logo_mark" height=100% width="100%" />
+        </div>
+        <div id="return_button">
+            <a class="return" href="school_design.html">
+                <img id="bu" src="../images/return.svg" alt="return" height=100% width=100% />
+            </a>
+        </div>
+    </div>
+    <div class="product_content">
+        <div class="product_introduce">
+            <img id="render_pic1" src="../images/study/信息可视化/1.png" alt="render_pic" >
+            <div class="word_describe">
+                <h3>Beauty industry - information visualisation</h3>
+                <div class="textblock">
+                    
+                    <h5>Information source from the Internet, the use of r language writing, adobe illustrate post-production to beautify the production of</h5>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="design_process">
+            <h3>设计需求</h3>
+            <div class="design_process_pic" style=" column-gap: 10%;">
+                <img src="../images/work/1-1_connet.webp" alt="" height=500px width=304px>
+                <img src="../images/work/1_1_refer.webp" alt="" height=500px width=726px>
+                <img src="" alt="">
+            </div>
+        </div> -->
+        
+
+        <div>
+            <h3>Design Output</h3>
+            <div class="design_output_pic">
+                <h4>Corresponding environment source code</h4>
+                <pre>
+                    <code class="language-R">
+                    # libraries
+                    library(ggraph)
+                    library(igraph)
+                    library(tidyverse)
+                    
+                    # create an edge list data frame giving the hierarchical structure of your individuals
+                    d1 <- data.frame(from="origin", to=paste("group", seq(1,5), sep=""))
+                    d2 <- data.frame(from=rep(d1$to, each=5), to=paste("subgroup", seq(1,30), sep=""))
+                    edges <- rbind(d1, d2)
+                    
+                    # Create a graph object 
+                    mygraph <- graph_from_data_frame( edges )
+                    
+                    # Basic tree
+                    ggraph(mygraph, layout = 'dendrogram', circular = TRUE       ##�Ƿ�Բ��##
+                    ) + 
+                      geom_edge_diagonal() +
+                      geom_node_point() +
+                      theme_void()
+                    
+                    ##��״ͼ
+                    
+                    my<-fenbu
+                    order<-sort(my$sum,index.return=TRUE,decreasing = FALSE)
+                    
+                    ggplot(data = my,aes(x=job,y=value))+
+                      geom_bar(stat="identity",fill="#69B3A2")+
+                      coord_flip()#####ˮƽ��תͼ��+
+                    
+                    my<-cont
+                    order<-sort(my$sum,index.return=TRUE,decreasing = FALSE)
+                    
+                    ggplot(data = my,aes(x=job,y=value))+
+                      geom_bar(stat="identity",fill="#69B3A2")
+                    
+                    ###���ͼ
+                    # library
+                    library(treemap)
+                    library(d3treeR)
+                    
+                    # dataset
+                    group <- c(rep("cover",2),rep("psychological",2),rep("best outlook",2),rep("other cause",1))
+                    subgroup <- paste("subgroup" , c(1,2,1,2,1,2,1), sep="-")
+                    value <- c(6.2,3.5,67.9,9.4,44.1,42.5,1.2)
+                    data <- data.frame(group,subgroup,value)
+                    
+                    # basic treemap
+                    p <- treemap(data,
+                                 index=c("group","subgroup"),
+                                 vSize="value",
+                                 type="index",
+                                 palette = "Set2",
+                                 bg.labels=c("white"),
+                                 align.labels=list(
+                                   c("center", "center"), 
+                                   c("right", "bottom")
+                                 )  
+                    )            
+                    
+                    # make it interactive ("rootname" becomes the title of the plot):
+                    inter <- d3tree2( p ,  rootname = "General" )
+                    
+                    # save the widget
+                    # library(htmlwidgets)
+                    # saveWidget(inter, file=paste0( getwd(), "/HtmlWidget/interactiveTreemap.html"))
+                    
+                    
+                    
+                    
+                    group <- c(rep("attitude",4))
+                    subgroup <- paste("subgroup" , c(1,2,3,4), sep="-")
+                    value <- c(5.6,21.6,40.5,32.3)
+                    data <- data.frame(group,subgroup,value)
+                    
+                    # basic treemap
+                    p <- treemap(data,
+                                 index=c("group","subgroup"),
+                                 vSize="value",
+                                 type="index",
+                                 palette = "Set2",
+                                 bg.labels=c("white"),
+                                 align.labels=list(
+                                   c("center", "center"), 
+                                   c("right", "bottom")
+                                 )  
+                    )            
+                    
+                    # make it interactive ("rootname" becomes the title of the plot):
+                    inter <- d3tree2( p ,  rootname = "General" )
+                    
+                    ##ԲԲͼ
+                    
+                    # Libraries
+                    library(tidyverse)
+                    library(hrbrthemes)
+                    library(circlepackeR)  
+                    
+                    # Load dataset from github
+                    data <- read.table("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/11_SevCatOneNumNestedOneObsPerGroup.csv", header=T, sep=";")
+                    data[ which(data$value==-1),"value"] <- 1
+                    colnames(data) <- c("Continent", "Region", "Country", "Pop")
+                    
+                    # Remove a few problematic lines
+                    data <- data %>% filter(Continent!="") %>% droplevels()
+                    
+                    # Change the format. This use the data.tree library. This library needs a column that looks like root/group/subgroup/..., so I build it
+                    library(data.tree)
+                    data$pathString <- paste("world", data$Continent, data$Region, data$Country, sep = "/")
+                    population <- as.Node(data)
+                    
+                    # You can custom the minimum and maximum value of the color range.
+                    circlepackeR(population, size = "Pop", color_min = "hsl(56,80%,80%)", color_max = "hsl(341,30%,40%)")##r�汾��ƥ��
+                    
+                    ##�ѵ�ͼ
+                    library(ggplot2)
+                    library(RColorBrewer)
+                    library(reshape2)
+                    
+                    
+                    
+                    mydata<-���λ���Ӫҵ��
+                    
+                    
+                    ggplot(data=mydata,aes(x=���λ���,y=Ӫҵ��.����.))+
+                      geom_bar(stat="identity",position="stack",color="black",
+                               width=0.7,size=0.25)+
+                      scale_fill_manual(values=brewer.pal(9,"YlOrRd")[c(3:7)])+
+                      ylim(0,12000)
+                    </code>
+                    </pre>
+                    <script>
+                        window.Prism = window.Prism || {};
+                        window.Prism.manual = false;
+                        </script>
+                    <script  src="../prism.js"></script>
+                
+                    
+    
+                <!-- <img src="../images/study/日晷/日晷渲染带环境.34.webp" alt="" width=80% > -->
+               
+                <!-- <br>
+                <h7>ctrl+mouse wheel to zoom in, left mouse button to drag and move</h7>
+                <br>
+                <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="80%" height="1250" src="https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1780-1341&embed-host=share" allowfullscreen></iframe> -->
+                <!-- <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="80%" height="1250" src="https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1667-827&embed-host=share" allowfullscreen></iframe> -->
+                <!-- <a href="../pdf/边几.pdf" ><h4>project pdf download</h4></a> -->
+                
+                <!-- <h4>原型实机功能演示（需vpn）</h4>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/3Z3pq_Rg00E?si=-CWsmOmNlEIHRwa4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

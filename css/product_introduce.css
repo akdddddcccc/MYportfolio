@@ -1,0 +1,242 @@
+@font-face {
+    font-family: "Misans";
+    src: url(../assets/fonts/MiSans-Light.ttf);
+}
+@font-face {
+    font-family: "Misans-M";
+    src: url(../assets/fonts/MiSans-Medium.ttf);
+}
+
+
+.product_content{
+    padding-left: 4%;
+    padding-top: 2.4%;
+}
+
+.product_introduce{
+    display: flex;
+    flex-direction: row;
+    /* background-color: rgb(62, 197, 85); */
+}
+
+
+#render_pic1{
+    width: 60%;
+    height: auto;
+}
+
+
+
+.word_describe{
+    width: 24%;
+    padding-left: 10%;
+    gap: 10%;
+    /* justify-self: center; */
+    align-content: center;
+
+}
+
+.textblock{
+    display: flex;
+    flex-direction: column;
+    /* flex-shrink: unset;
+    
+    row-gap: 10px; */
+}
+
+h3{
+    color: #09141A;
+    font-family: 'MiSans-M';
+    font-size: 54px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h4{
+    color: #09141A;
+    font-family: 'MiSans-M';
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h5{
+    color: #09141A;
+    font-family: 'MiSans';
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.design_process{
+    height: 100%;
+    padding-bottom: 0%;
+}
+
+.design_process_pic{
+    display: flex;
+    
+}
+
+.design_output_pic{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+/* ===== Code Card (Portfolio Style) ===== */
+.code-card{
+  --card-bg: #0b1220;
+  --card-border: rgba(255,255,255,.10);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.65);
+
+  border: 1px solid var(--card-border);
+  background: radial-gradient(1200px 400px at 20% 0%, rgba(99,102,241,.18), transparent 55%),
+              radial-gradient(800px 320px at 80% 20%, rgba(16,185,129,.12), transparent 60%),
+              var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(0,0,0,.35);
+}
+
+.code-card__header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.code-card__title{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--text);
+  letter-spacing: .2px;
+}
+
+.code-card__actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-btn{
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.code-btn:hover{
+  background: rgba(255,255,255,.10);
+  border-color: rgba(255,255,255,.22);
+}
+.code-btn:active{
+  transform: scale(.98);
+}
+
+.code-card__body{
+  padding: 12px;
+}
+
+/* 让代码块在小屏更“弹性” */
+.code-pre{
+  margin: 0;
+  border-radius: 12px;
+  overflow: auto;                 /* 横向滚动而不是撑破布局 */
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  background: rgba(0,0,0,.35);
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+/* Prism 通常会给 code 加背景色，我们这里统一控 */
+.code-pre > code{
+  display: block;
+  padding: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  tab-size: 2;
+  color: var(--text);
+  white-space: pre;               /* 保持原格式（推荐） */
+}
+
+/* 手机端：字体略小、padding 更紧凑 */
+@media (max-width: 520px){
+  .code-card__header{ padding: 12px; }
+  .code-card__body{ padding: 10px; }
+  .code-pre > code{
+    font-size: 11.5px;
+    padding: 12px;
+  }
+}
+@media screen and (max-width:600px){
+
+    .product_content{
+        padding-left: 4%;
+        padding-top: 1.6%;
+    }
+    
+    .product_content .product_introduce{
+        flex-direction: column;
+        /* background-color: aqua; */
+    }
+    
+    
+    #render_pic1{
+        width: 90%;
+        height: auto;
+        /* justify-self: center; */
+        
+    }
+    
+    
+    
+    .word_describe{
+        width: 96%;
+        padding-left: 0%;
+        justify-items: center;
+        align-content: center;
+    
+    }
+    
+    h3{
+        color: #09141A;
+        font-family: 'MiSans-M';
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    
+    h4{
+        color: #09141A;
+        font-family: 'MiSans-M';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+    
+    h5{
+        color: #09141A;
+        font-family: 'MiSans';
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+}
