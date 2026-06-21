@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#f4f4f1"/>
+  <rect x="116" y="128" width="968" height="944" fill="#111114"/>
+  <rect x="172" y="188" width="856" height="824" fill="#f4f4f1"/>
+  <g fill="none" stroke="#111114" stroke-width="4">
+    <path d="M282 334h148"/>
+    <path d="M356 334v138"/>
+    <path d="M356 472h116"/>
+    <path d="M356 582h116"/>
+    <path d="M356 692h116"/>
+  </g>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#111114">
+    <text x="226" y="268" font-size="42" font-weight="700">TASK MAP</text>
+    <text x="226" y="306" font-size="20" letter-spacing="3">STRUCTURE FIRST / SCHEDULE LATER</text>
+  </g>
+  <g>
+    <rect x="226" y="304" width="118" height="60" fill="#111114"/>
+    <rect x="474" y="442" width="230" height="60" fill="#111114"/>
+    <rect x="474" y="552" width="282" height="60" fill="#111114"/>
+    <rect x="474" y="662" width="204" height="60" fill="#111114"/>
+    <rect x="742" y="442" width="188" height="60" fill="#d9d9d6"/>
+    <rect x="806" y="552" width="126" height="60" fill="#d9d9d6"/>
+    <rect x="726" y="662" width="210" height="60" fill="#d9d9d6"/>
+  </g>
+  <g fill="#f4f4f1" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">
+    <text x="250" y="343">ROOT</text>
+    <text x="500" y="481">OUTLINE</text>
+    <text x="500" y="591">TIME RANGE</text>
+    <text x="500" y="701">EXPORT</text>
+  </g>
+  <g fill="#111114" font-family="Arial, Helvetica, sans-serif" font-size="18">
+    <text x="768" y="479">auto range</text>
+    <text x="832" y="589">locked</text>
+    <text x="752" y="699">html / pdf</text>
+  </g>
+  <g transform="translate(226 828)">
+    <rect width="704" height="16" fill="#d9d9d6"/>
+    <rect width="188" height="16" fill="#111114"/>
+    <rect x="220" width="184" height="16" fill="#111114"/>
+    <rect x="438" width="166" height="16" fill="#111114"/>
+    <g fill="#111114" font-family="Arial, Helvetica, sans-serif" font-size="18">
+      <text x="0" y="54">06/09</text>
+      <text x="208" y="54">06/12</text>
+      <text x="428" y="54">06/16</text>
+    </g>
+  </g>
+</svg>
