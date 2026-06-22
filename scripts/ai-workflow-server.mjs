@@ -328,6 +328,10 @@ async function parseOpenAIImageResponse(response, requestedFormat) {
   return `data:${contentType};base64,${imageBase64}`;
 }
 
+function isImageBillingLimitError(error) {
+  return /spending limit|monthly limit|insufficient[_ ]quota|billing|额度|余额不足/i.test(String(error?.message || ""));
+}
+
 async function imageUrlToDataUrl(imageUrl) {
   if (!imageUrl || imageUrl.startsWith("data:")) return imageUrl;
   const response = await fetch(imageUrl);
@@ -496,6 +500,10 @@ async function requestStickerImage(kind, prompt, referenceImage) {
         );
       } catch (error) {
         if (error?.isTimeout) throw error;
+        if (isImageBillingLimitError(error)) {
+          error.metrics = metrics;
+          throw error;
+        }
         failedAttempts.push(`${label} ${outputFormat}: ${error.message || "failed"}`);
       }
     }
@@ -1163,6 +1171,7 @@ async function handleTextLayer(body) {
           outputFormat: "png"
         });
       } catch (error) {
+        if (isImageBillingLimitError(error)) throw error;
         failedAttempts.push(`${label}: ${error.message || "failed"}`);
         return "";
       }
