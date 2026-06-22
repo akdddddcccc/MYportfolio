@@ -57,12 +57,15 @@ export default {
       topPathPoints: [],
       bottomPathPoints: [],
       isDrawing: false,
+      fadeLockedY: null,
       referenceObjectUrl: "",
       fontReferenceObjectUrl: "",
       liveRoomObjectUrl: "",
       textInteraction: null,
       textLayerVisible: true,
+      textBoxPlaced: false,
       selectedFontStyle: "clean",
+      textColorMode: "auto",
       extractTextStyleFromReference: false,
       textLayerVerified: false,
       stickerOutputs: {
@@ -171,6 +174,12 @@ export default {
           fontRounded: "圆润可爱体",
           fontReferenceMode: "字体参考",
           learnReference: "学习参考图",
+          textColorAuto: "自动",
+          textColorDark: "深色字",
+          textColorLight: "浅色字",
+          redoFade: "重做渐隐",
+          resetTextBox: "重置文字框",
+          resetSide: "重置侧贴",
           waitingUpload: "等待上传截图",
           manualCheckTitle: "文字核对",
           manualCheckBody: "生成图可能改字。请逐字对照目标文案，确认品牌名、数字、符号、换行和复杂汉字都正确后再进入融合。",
@@ -232,6 +241,12 @@ export default {
           fontRounded: "Rounded cute",
           fontReferenceMode: "Font reference",
           learnReference: "Learn reference",
+          textColorAuto: "Auto",
+          textColorDark: "Dark text",
+          textColorLight: "Light text",
+          redoFade: "Redo fade",
+          resetTextBox: "Reset text box",
+          resetSide: "Reset side sticker",
           waitingUpload: "Waiting for screenshot",
           manualCheckTitle: "Text check",
           manualCheckBody: "Generated lettering can alter copy. Compare every character, number, symbol, line break, and complex glyph before fusion.",
@@ -347,6 +362,18 @@ export default {
     },
     loadingMessage() {
       return this.loadingWords[this.loadingWordIndex % this.loadingWords.length];
+    },
+    fadeHasPath() {
+      return this.topPathPoints.length > 1 || this.bottomPathPoints.length > 1;
+    },
+    fadeButtonLabel() {
+      return this.fadeHasPath ? this.labels.redoFade : this.labels.fadeBrush;
+    },
+    placeTextButtonLabel() {
+      return this.textBoxPlaced ? this.labels.resetTextBox : this.labels.placeText;
+    },
+    placeSideButtonLabel() {
+      return this.sideLayerVisible ? this.labels.resetSide : this.labels.placeSide;
     }
   },
   watch: {
@@ -733,6 +760,7 @@ export default {
           lang: this.lang,
           copyText: this.copyText,
           promptText: this.textLayerPrompt,
+          textColorMode: this.textColorMode,
           styleKey: ["reference", "rounded"].includes(this.selectedFontStyle) ? "clean" : this.selectedFontStyle,
           fontPresetKey: this.fontPresetKeyForRun(),
           fontReferenceSource: this.selectedFontStyle === "reference" ? "upload" : "preset",
@@ -852,11 +880,21 @@ export default {
         : (this.lang === "zh" ? "正在绘制下贴渐隐线：线以下保留" : "Drawing bottom fade line: keep below the line");
     },
     startFadeMode() {
+      const redoing = this.fadeHasPath;
       this.activeFusionMode = "fade";
       this.previewPeekTarget = "";
-      this.statusText = this.lang === "zh"
-        ? "移动到上贴或下贴区域后直接拖动画线，系统会自动判断渐隐对象。"
-        : "Move over the top or bottom sticker and drag to draw; the target is detected automatically.";
+      if (redoing) {
+        this.topPathPoints = [];
+        this.bottomPathPoints = [];
+        this.redrawPath();
+      }
+      this.statusText = redoing
+        ? (this.lang === "zh"
+          ? "已清除现有渐隐线，重新拖动上贴或下贴区域画线。"
+          : "Existing fade lines cleared. Drag over the top or bottom sticker to draw again.")
+        : (this.lang === "zh"
+          ? "移动到上贴或下贴区域后直接拖动画线，系统会自动判断渐隐对象。"
+          : "Move over the top or bottom sticker and drag to draw; the target is detected automatically.");
     },
     resizeCompositionForDisplay() {
       const board = this.$refs.compositionBoard;
@@ -920,10 +958,12 @@ export default {
       this.activeFadeTarget = target;
       this.previewPeekTarget = target;
       this.isDrawing = true;
+      const startPoint = this.getPoint(event, target);
+      this.fadeLockedY = event.shiftKey ? startPoint.y : null;
       if (target === "top") {
-        this.topPathPoints = [this.getPoint(event, target)];
+        this.topPathPoints = [startPoint];
       } else {
-        this.bottomPathPoints = [this.getPoint(event, target)];
+        this.bottomPathPoints = [startPoint];
       }
       this.$refs.pathCanvas.setPointerCapture(event.pointerId);
       this.redrawPath();
@@ -934,6 +974,7 @@ export default {
         return;
       }
       const point = this.getPoint(event);
+      if (this.fadeLockedY !== null) point.y = this.fadeLockedY;
       const pathPoints = this.activeFadeTarget === "top" ? this.topPathPoints : this.bottomPathPoints;
       const last = pathPoints[pathPoints.length - 1];
       if (Math.hypot(point.x - last.x, point.y - last.y) > 10) {
@@ -952,6 +993,7 @@ export default {
         return;
       }
       this.isDrawing = false;
+      this.fadeLockedY = null;
       this.previewPeekTarget = "";
       if (event.pointerId !== undefined) this.$refs.pathCanvas.releasePointerCapture(event.pointerId);
       this.redrawPath();
@@ -1052,11 +1094,12 @@ export default {
     placeTextLayer(runStatus = true) {
       if (runStatus) this.activeFusionMode = "text";
       this.textLayerVisible = true;
+      this.textBoxPlaced = true;
       this.centerTextLayer();
       if (runStatus) this.simulateRun("place-text");
     },
     centerTextLayer() {
-      this.textLayer.width = Math.round(this.compositionSize.width * 0.68);
+      this.textLayer.width = Math.min(Math.max(800, Math.round(this.compositionSize.width * 0.68)), this.compositionSize.width);
       this.textLayer.height = Math.round(this.textLayer.width * 0.28);
       this.textLayer.x = (this.compositionSize.width - this.textLayer.width) / 2;
       this.textLayer.y = Math.max(24, (this.topStickerHeight - this.textLayer.height) / 2);
@@ -1539,6 +1582,11 @@ export default {
               <button type="button" :class="{ active: selectedFontStyle === 'rounded' }" @click="selectFontStyle('rounded')">{{ labels.fontRounded }}</button>
               <button type="button" :class="{ active: selectedFontStyle === 'reference' }" @click="selectFontStyle('reference')">{{ labels.fontReferenceMode }}</button>
             </div>
+            <div class="ai-workflow-toolrow ai-workflow-toolrow--compact">
+              <button type="button" :class="{ active: textColorMode === 'auto' }" @click="textColorMode = 'auto'">{{ labels.textColorAuto }}</button>
+              <button type="button" :class="{ active: textColorMode === 'dark' }" @click="textColorMode = 'dark'">{{ labels.textColorDark }}</button>
+              <button type="button" :class="{ active: textColorMode === 'light' }" @click="textColorMode = 'light'">{{ labels.textColorLight }}</button>
+            </div>
             <label
               v-if="selectedFontStyle === 'reference'"
               class="ai-workflow-upload ai-workflow-upload--short"
@@ -1653,9 +1701,9 @@ export default {
                 </div>
               </div>
               <div class="ai-workflow-toolrow">
-                <button type="button" :class="{ active: activeFusionMode === 'fade' }" @click="startFadeMode">{{ labels.fadeBrush }}</button>
-                <button type="button" :class="{ active: activeFusionMode === 'text' }" @click="placeTextLayer">{{ labels.placeText }}</button>
-                <button type="button" :class="{ active: activeFusionMode === 'side' }" @click="placeSideSticker">{{ labels.placeSide }}</button>
+                <button type="button" :class="{ active: activeFusionMode === 'fade' }" @click="startFadeMode">{{ fadeButtonLabel }}</button>
+                <button type="button" :class="{ active: activeFusionMode === 'text' }" @click="placeTextLayer">{{ placeTextButtonLabel }}</button>
+                <button type="button" :class="{ active: activeFusionMode === 'side' }" @click="placeSideSticker">{{ placeSideButtonLabel }}</button>
               </div>
             </div>
             <div

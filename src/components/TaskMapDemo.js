@@ -16,6 +16,9 @@
       hoverId: "",
       draggingMapId: "",
       dropTargetId: "",
+      mindDragGhost: null,
+      selectedMindTaskIds: [],
+      mindBoxSelect: null,
       timelineDrag: null,
       overviewDrag: null,
       timelineExpandedIds: ["task-1"],
@@ -183,6 +186,7 @@
             addSiblingInline: "添加同级任务",
             promoteInline: "升级层级",
             deleteTask: "删除节点",
+            deleteSelected: "删除已选",
             keyboardHint: "键盘：Tab 添加子任务，Enter 新增同级，Shift+Tab 升级，Delete 删除。",
             ddl: "DDL",
             ddlHint: "DDL 可精确到日期与小时；持续时间请在右侧甘特图中拖动确定。",
@@ -271,6 +275,7 @@
             addSiblingInline: "Add sibling task",
             promoteInline: "Promote level",
             deleteTask: "Delete node",
+            deleteSelected: "Delete selected",
             keyboardHint: "Keyboard: Tab adds a child, Enter adds a sibling, Shift+Tab promotes, Delete removes.",
             ddl: "DDL",
             ddlHint: "DDL can be precise to date and hour. Drag Gantt bars to define duration ranges.",
@@ -497,6 +502,12 @@
     aiQuotaLabel() {
       return `${this.labels.aiQuota} ${this.aiBreakdownUsed}/${this.aiBreakdownLimit}`;
     },
+    hasDeletableMindSelection() {
+      return this.selectedMindTaskIds.some((id) => {
+        const task = this.tasks.find((item) => item.id === id);
+        return !!task && !this.isRootTask(task);
+      });
+    },
     mindMapNodes() {
       return this.flatTasks.map(({ task, depth }, index) => ({
         task,
@@ -579,6 +590,7 @@
     },
     selectTask(id) {
       this.activeId = id;
+      this.selectedMindTaskIds = [];
     },
     openTimelineEditor(task, event) {
       if (!task) return;
@@ -759,7 +771,11 @@
 
       if ((event.key === "Delete" || event.key === "Backspace") && !isTitleInput) {
         event.preventDefault();
-        this.deleteTask(this.activeTask);
+        if (this.selectedMindTaskIds.length) {
+          this.deleteSelectedMindTasks();
+        } else {
+          this.deleteTask(this.activeTask);
+        }
       }
     },
     promoteTask(task) {
@@ -824,6 +840,26 @@
       if (ids.includes(this.detailTaskId)) this.closeTimelineEditor();
       this.timelineExpandedIds = this.timelineExpandedIds.filter((id) => !ids.includes(id));
     },
+    deleteSelectedMindTasks() {
+      const ids = new Set();
+      this.selectedMindTaskIds.forEach((id) => {
+        const task = this.tasks.find((item) => item.id === id);
+        if (!task || this.isRootTask(task)) return;
+        ids.add(task.id);
+        this.descendantIds(task.id).forEach((childId) => ids.add(childId));
+      });
+      this.selectedMindTaskIds = [];
+      if (!ids.size) return;
+      this.tasks = this.tasks.filter((item) => !ids.has(item.id));
+      if (!this.tasks.length) {
+        this.addRoot();
+        return;
+      }
+      if (ids.has(this.activeId)) this.activeId = this.tasks[0].id;
+      if (ids.has(this.hoverId)) this.hoverId = "";
+      if (ids.has(this.detailTaskId)) this.closeTimelineEditor();
+      this.timelineExpandedIds = this.timelineExpandedIds.filter((id) => !ids.has(id));
+    },
     parentPathFor(task) {
       const path = [];
       let cursor = task;
@@ -883,19 +919,47 @@
         }
 
         const parentRange = this.rangeFor(parent);
-        const timestamp = Date.now();
-        const generatedTasks = data.tasks.slice(0, 6).map((item, index) => ({
-          id: `task-ai-${timestamp}-${index}`,
-          parentId: parent.id,
-          title: item.title || (this.lang === "zh" ? "新的子任务" : "New child task"),
-          note: item.note || "",
-          mode: parent.mode,
+        const fullRange = {
           start: parentRange.start || parent.start || "",
-          end: parentRange.end || parent.end || "",
-          ddl: parent.ddl || "",
-          done: false,
-          timelineLane: this.childrenOf(parent.id).length + index
-        }));
+          end: parentRange.end || parent.end || ""
+        };
+        const timestamp = Date.now();
+        const items = data.tasks.slice(0, 6);
+        const generatedTasks = items.map((item, index) => {
+          const span = this.ratioRange(fullRange, item.startRatio, item.endRatio);
+          return {
+            id: `task-ai-${timestamp}-${index}`,
+            parentId: parent.id,
+            title: item.title || (this.lang === "zh" ? "新的子任务" : "New child task"),
+            note: item.note || "",
+            mode: parent.mode,
+            start: span.start,
+            end: span.end,
+            ddl: parent.ddl || "",
+            done: false,
+            timelineLane: this.childrenOf(parent.id).length + index,
+            dependencyIds: []
+          };
+        });
+
+        generatedTasks.forEach((genTask, index) => {
+          const raw = items[index] && items[index].dependsOn;
+          const deps = Array.isArray(raw) ? raw : [];
+          const ids = [];
+          deps.forEach((value) => {
+            const depIndex = Number(value);
+            if (
+              Number.isInteger(depIndex) &&
+              depIndex >= 0 &&
+              depIndex < generatedTasks.length &&
+              depIndex !== index &&
+              !ids.includes(generatedTasks[depIndex].id)
+            ) {
+              ids.push(generatedTasks[depIndex].id);
+            }
+          });
+          genTask.dependencyIds = ids;
+        });
 
         this.tasks.push(...generatedTasks);
         this.aiBreakdownUsed += 1;
@@ -921,6 +985,29 @@
       const month = `${date.getMonth() + 1}`.padStart(2, "0");
       const day = `${date.getDate()}`.padStart(2, "0");
       return `${year}-${month}-${day}`;
+    },
+    ratioRange(fullRange, startRatio, endRatio) {
+      const fallback = { start: fullRange.start, end: fullRange.end };
+      if (!fullRange.start || !fullRange.end) return fallback;
+      const start = Number(startRatio);
+      const end = Number(endRatio);
+      if (
+        !Number.isFinite(start) ||
+        !Number.isFinite(end) ||
+        start < 0 ||
+        end > 1 ||
+        start >= end
+      ) {
+        return fallback;
+      }
+      const totalDays = this.dayDiff(fullRange.start, fullRange.end);
+      if (totalDays <= 0) return fallback;
+      const startOffset = Math.round(totalDays * start);
+      const endOffset = Math.round(totalDays * end);
+      return {
+        start: this.addDays(fullRange.start, startOffset),
+        end: this.addDays(fullRange.start, Math.max(endOffset, startOffset))
+      };
     },
     rangeFor(task) {
       if (!task) return { start: "", end: "" };
@@ -1027,7 +1114,28 @@
       this.draggingMapId = task.id;
       this.dropTargetId = "";
       this.setHoverTask(task.id);
+      const svg = event.currentTarget?.ownerSVGElement || null;
+      if (svg) {
+        const point = this.clientToSvgPoint(svg, event.clientX, event.clientY);
+        this.mindDragGhost = { svg, title: this.shortTitle(task.title), x: point.x, y: point.y };
+        window.addEventListener("mousemove", this.handleMindDragMove);
+        window.addEventListener("mouseup", this.finishMindDragFromWindow);
+      }
       event.preventDefault();
+    },
+    handleMindDragMove(event) {
+      if (!this.mindDragGhost) return;
+      const point = this.clientToSvgPoint(this.mindDragGhost.svg, event.clientX, event.clientY);
+      this.mindDragGhost.x = point.x;
+      this.mindDragGhost.y = point.y;
+    },
+    finishMindDragFromWindow() {
+      this.finishMindDrag();
+    },
+    teardownMindDrag() {
+      window.removeEventListener("mousemove", this.handleMindDragMove);
+      window.removeEventListener("mouseup", this.finishMindDragFromWindow);
+      this.mindDragGhost = null;
     },
     setMindDropTarget(task) {
       if (!this.draggingMapId || task.id === this.draggingMapId || this.isDescendant(task.id, this.draggingMapId)) {
@@ -1037,12 +1145,16 @@
       this.dropTargetId = task.id;
     },
     finishMindDrag(task) {
-      if (!this.draggingMapId) return;
+      if (!this.draggingMapId) {
+        this.teardownMindDrag();
+        return;
+      }
       const dragged = this.tasks.find((item) => item.id === this.draggingMapId);
       const targetId = this.dropTargetId || task?.id || "";
       if (dragged && this.isRootTask(dragged)) {
         this.draggingMapId = "";
         this.dropTargetId = "";
+        this.teardownMindDrag();
         return;
       }
       if (dragged && targetId && targetId !== dragged.id && !this.isDescendant(targetId, dragged.id)) {
@@ -1051,13 +1163,56 @@
       }
       this.draggingMapId = "";
       this.dropTargetId = "";
+      this.teardownMindDrag();
     },
     cancelMindDrag() {
       this.draggingMapId = "";
       this.dropTargetId = "";
+      this.teardownMindDrag();
     },
     isMindDropTarget(taskId) {
       return this.dropTargetId === taskId;
+    },
+    clientToSvgPoint(svg, clientX, clientY) {
+      const point = svg.createSVGPoint();
+      point.x = clientX;
+      point.y = clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return { x: clientX, y: clientY };
+      const mapped = point.matrixTransform(ctm.inverse());
+      return { x: mapped.x, y: mapped.y };
+    },
+    startMindBoxSelect(event) {
+      if (this.draggingMapId) return;
+      const svg = event.currentTarget;
+      const origin = this.clientToSvgPoint(svg, event.clientX, event.clientY);
+      this.mindBoxSelect = { svg, originX: origin.x, originY: origin.y, x: origin.x, y: origin.y };
+      this.selectedMindTaskIds = [];
+      window.addEventListener("mousemove", this.handleMindBoxSelectMove);
+      window.addEventListener("mouseup", this.finishMindBoxSelect);
+      event.preventDefault();
+    },
+    handleMindBoxSelectMove(event) {
+      if (!this.mindBoxSelect) return;
+      const point = this.clientToSvgPoint(this.mindBoxSelect.svg, event.clientX, event.clientY);
+      this.mindBoxSelect.x = point.x;
+      this.mindBoxSelect.y = point.y;
+      const left = Math.min(this.mindBoxSelect.originX, point.x);
+      const right = Math.max(this.mindBoxSelect.originX, point.x);
+      const top = Math.min(this.mindBoxSelect.originY, point.y);
+      const bottom = Math.max(this.mindBoxSelect.originY, point.y);
+      this.selectedMindTaskIds = this.mindMapNodes
+        .filter((node) =>
+          node.x < right
+          && node.x + node.width > left
+          && node.y < bottom
+          && node.y + node.height > top)
+        .map((node) => node.task.id);
+    },
+    finishMindBoxSelect() {
+      window.removeEventListener("mousemove", this.handleMindBoxSelectMove);
+      window.removeEventListener("mouseup", this.finishMindBoxSelect);
+      this.mindBoxSelect = null;
     },
     laneFor(task, fallback = 0) {
       return Number.isFinite(task?.timelineLane) ? task.timelineLane : fallback;
@@ -1088,6 +1243,28 @@
     },
     canMoveTaskBar(task) {
       return this.taskBarSpan(task) >= 4;
+    },
+    rowDependencies(row) {
+      const tasks = row?.tasks || [];
+      const hasDependencyData = tasks.some((task) => Array.isArray(task.dependencyIds));
+      if (!hasDependencyData) {
+        return tasks.slice(0, -1).map((task, index) => ({
+          key: `${task.id}->${tasks[index + 1].id}`,
+          before: task,
+          after: tasks[index + 1]
+        }));
+      }
+      const links = [];
+      tasks.forEach((task) => {
+        if (!Array.isArray(task.dependencyIds)) return;
+        task.dependencyIds.forEach((depId) => {
+          const before = tasks.find((item) => item.id === depId);
+          if (before && before.id !== task.id) {
+            links.push({ key: `${before.id}->${task.id}`, before, after: task });
+          }
+        });
+      });
+      return links;
     },
     dependencyStyle(before, after) {
       const startBound = this.toDateInput(this.timelineBounds.start);
@@ -1338,7 +1515,7 @@ render();
 
           <div class="mind-map-canvas">
             <p>{{ labels.canvasHint }}</p>
-            <svg :viewBox="mindMapViewBox" role="img" aria-label="Mind map canvas" @mouseup="finishMindDrag()" @mouseleave="cancelMindDrag">
+            <svg :viewBox="mindMapViewBox" role="img" aria-label="Mind map canvas" @mousedown.self="startMindBoxSelect($event)" @mouseup="finishMindDrag()" @mouseleave="cancelMindDrag">
               <path
                 v-for="link in mindMapLinks"
                 :key="link.key"
@@ -1346,11 +1523,19 @@ render();
                 :class="{ active: isLinkInHoverPath(link) }"
                 :d="'M ' + link.x1 + ' ' + link.y1 + ' C ' + (link.x1 + 58) + ' ' + link.y1 + ', ' + (link.x2 - 58) + ' ' + link.y2 + ', ' + link.x2 + ' ' + link.y2"
               />
+              <rect
+                v-if="mindBoxSelect"
+                class="mind-map-marquee"
+                :x="Math.min(mindBoxSelect.originX, mindBoxSelect.x)"
+                :y="Math.min(mindBoxSelect.originY, mindBoxSelect.y)"
+                :width="Math.abs(mindBoxSelect.x - mindBoxSelect.originX)"
+                :height="Math.abs(mindBoxSelect.y - mindBoxSelect.originY)"
+              />
               <g
                 v-for="node in mindMapNodes"
                 :key="node.task.id"
                 class="mind-map-node"
-                :class="{ active: activeId === node.task.id, done: node.task.done, conflict: taskConflict(node.task), 'hover-related': isTaskInHoverPath(node.task.id), dragging: draggingMapId === node.task.id, 'drop-target': isMindDropTarget(node.task.id) }"
+                :class="{ active: activeId === node.task.id, done: node.task.done, conflict: taskConflict(node.task), 'hover-related': isTaskInHoverPath(node.task.id), dragging: draggingMapId === node.task.id, 'drop-target': isMindDropTarget(node.task.id), selected: selectedMindTaskIds.includes(node.task.id) }"
                 :transform="'translate(' + node.x + ' ' + node.y + ')'"
                 @click="selectTask(node.task.id); focusWorkspace()"
                 @mousedown.stop="startMindDrag($event, node.task)"
@@ -1375,6 +1560,14 @@ render();
                   </button>
                 </foreignObject>
               </g>
+              <g
+                v-if="mindDragGhost"
+                class="mind-map-drag-ghost"
+                :transform="'translate(' + (mindDragGhost.x + 14) + ' ' + (mindDragGhost.y + 10) + ')'"
+              >
+                <rect width="138" height="38" rx="4" />
+                <text x="12" y="24">{{ mindDragGhost.title }}</text>
+              </g>
             </svg>
             <div class="task-child-preview">
               <span>{{ labels.childPreview }} · {{ focusTask?.title }}</span>
@@ -1394,6 +1587,9 @@ render();
                 <button type="button" :disabled="!canDeleteTask(focusTask)" @click="deleteTask(focusTask)">
                   × {{ labels.deleteTask }}
                   <kbd class="task-shortcut">Del</kbd>
+                </button>
+                <button type="button" :disabled="!hasDeletableMindSelection" @click="deleteSelectedMindTasks">
+                  × {{ labels.deleteSelected }}
                 </button>
               </div>
               <div v-if="focusChildren.length">
@@ -1479,10 +1675,10 @@ render();
               >
                 <div class="task-timeline__track" :data-timeline-id="row.key" :data-timeline-parent="row.parentId || 'root'" :data-timeline-lane="row.lane" :style="timelineGridStyle">
                   <span
-                    v-for="(task, index) in row.tasks.slice(0, -1)"
-                    :key="task.id + '-dependency'"
+                    v-for="link in rowDependencies(row)"
+                    :key="link.key + '-dependency'"
                     class="task-timeline__dependency"
-                    :style="dependencyStyle(task, row.tasks[index + 1])"
+                    :style="dependencyStyle(link.before, link.after)"
                     aria-hidden="true"
                   ></span>
                   <div

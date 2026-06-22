@@ -2318,6 +2318,50 @@ a {
   fill: #fff;
 }
 
+.mind-map-marquee {
+  fill: rgba(79, 140, 255, 0.12);
+  stroke: #4f8cff;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+  pointer-events: none;
+}
+
+.mind-map-drag-ghost {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.mind-map-drag-ghost rect {
+  fill: rgba(11, 11, 15, 0.85);
+  stroke: #0b0b0f;
+  stroke-width: 1.5;
+}
+
+.mind-map-drag-ghost text {
+  fill: #fff;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 12px;
+}
+
+.mind-map-node.selected rect {
+  fill: #eef4ff;
+  stroke: #4f8cff;
+  stroke-width: 2.4;
+}
+
+.mind-map-node.selected.active rect {
+  fill: #0b0b0f;
+  stroke: #4f8cff;
+}
+
+.mind-map-node.selected text {
+  fill: #1b3a78;
+}
+
+.mind-map-node.selected.active text {
+  fill: #fff;
+}
+
 .task-map-demo .mind-map-ai-button {
   appearance: none;
   display: inline-flex;

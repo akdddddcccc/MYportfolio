@@ -98,6 +98,13 @@ function elapsedMs(startedAt) {
   return Math.max(0, Date.now() - startedAt);
 }
 
+function mimeForFormat(format) {
+  const normalized = String(format || "").trim().toLowerCase();
+  if (normalized === "jpeg" || normalized === "jpg") return "image/jpeg";
+  if (normalized === "webp") return "image/webp";
+  return "image/png";
+}
+
 const stickerSpecs = {
   top: {
     zhName: "上贴背景",
@@ -199,7 +206,7 @@ function dataUrlToUploadFile(dataUrl, index) {
   return blob;
 }
 
-async function requestOpenAIImage({ prompt, size, referenceImage, referenceImages, editSize, metrics, attemptLabel }) {
+async function requestOpenAIImage({ prompt, size, referenceImage, referenceImages, editSize, outputFormat = "png", metrics, attemptLabel }) {
   const headers = { Authorization: `Bearer ${API_KEY}` };
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), IMAGE_TIMEOUT_MS);
@@ -224,10 +231,10 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
         body.append("model", IMAGE_MODEL);
         body.append("prompt", prompt);
         body.append("size", editSize || IMAGE_EDIT_SIZE || size);
-        if (IMAGE_EDIT_INCLUDE_EXTRAS) {
+        if (IMAGE_EDIT_INCLUDE_EXTRAS || IMAGE_PROVIDER.id === "openai") {
           body.append("quality", IMAGE_QUALITY);
-          body.append("output_format", "png");
         }
+        body.append("output_format", outputFormat);
         imageFiles.forEach((imageFile, index) => {
           body.append(IMAGE_EDIT_FIELD, imageFile, imageFile.name || `reference-${index + 1}.png`);
         });
@@ -238,7 +245,7 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
           signal: controller.signal
         });
         metric.status = response.status;
-        const image = await parseOpenAIImageResponse(response);
+        const image = await parseOpenAIImageResponse(response, outputFormat);
         metric.ok = true;
         return image;
       }
@@ -262,18 +269,20 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
         prompt,
         size,
         quality: IMAGE_QUALITY,
-        output_format: "png"
+        output_format: outputFormat
       }),
       signal: controller.signal
     });
     metric.status = response.status;
-    const image = await parseOpenAIImageResponse(response);
+    const image = await parseOpenAIImageResponse(response, outputFormat);
     metric.ok = true;
     return image;
   } catch (error) {
     metric.error = error?.message || "Image request failed";
     if (error?.name === "AbortError") {
-      throw new Error(`Image request timed out after ${Math.round(IMAGE_TIMEOUT_MS / 1000)}s`);
+      const timeoutError = new Error(`Image request timed out after ${Math.round(IMAGE_TIMEOUT_MS / 1000)}s`);
+      timeoutError.isTimeout = true;
+      throw timeoutError;
     }
     throw error;
   } finally {
@@ -283,7 +292,7 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
   }
 }
 
-async function parseOpenAIImageResponse(response) {
+async function parseOpenAIImageResponse(response, requestedFormat) {
   const text = await response.text();
   let data = {};
   try {
@@ -300,7 +309,9 @@ async function parseOpenAIImageResponse(response) {
   const imageUrl = data?.data?.[0]?.url;
   if (imageUrl) return imageUrl;
   if (!imageBase64) throw new Error("OpenAI did not return image data.");
-  return `data:image/png;base64,${imageBase64}`;
+  const buffer = Buffer.from(imageBase64, "base64");
+  const contentType = sniffImageMime(buffer) || mimeForFormat(requestedFormat);
+  return `data:${contentType};base64,${imageBase64}`;
 }
 
 async function imageUrlToDataUrl(imageUrl) {
@@ -420,12 +431,13 @@ function normalizeStickerImageSize(dataUrl, kind) {
   return `data:image/png;base64,${encodeRgbaToPng(normalized).toString("base64")}`;
 }
 
-async function requestCheckedStickerImage(kind, prompt, referenceImage, editSize, metrics, attemptLabel) {
+async function requestCheckedStickerImage(kind, prompt, referenceImage, editSize, metrics, attemptLabel, outputFormat = "jpeg") {
   const image = await requestOpenAIImage({
     prompt,
     size: stickerSpecs[kind].size,
     referenceImage,
     editSize,
+    outputFormat,
     metrics,
     attemptLabel
   });
@@ -456,19 +468,24 @@ async function requestStickerImage(kind, prompt, referenceImage) {
   const failedAttempts = [];
   const metrics = [];
   const tryAttempt = async (label, options = {}) => {
-    try {
-      return await requestCheckedStickerImage(
-        kind,
-        options.prompt || prompt,
-        options.referenceImage ?? referenceImage,
-        options.editSize,
-        metrics,
-        label
-      );
-    } catch (error) {
-      failedAttempts.push(`${label}: ${error.message || "failed"}`);
-      return "";
+    const formats = options.outputFormat ? [options.outputFormat] : ["jpeg", "png"];
+    for (const outputFormat of formats) {
+      try {
+        return await requestCheckedStickerImage(
+          kind,
+          options.prompt || prompt,
+          options.referenceImage ?? referenceImage,
+          options.editSize,
+          metrics,
+          `${label} ${outputFormat}`,
+          outputFormat
+        );
+      } catch (error) {
+        if (error?.isTimeout) throw error;
+        failedAttempts.push(`${label} ${outputFormat}: ${error.message || "failed"}`);
+      }
     }
+    return "";
   };
 
   const directResult = await tryAttempt("reference edit");
@@ -550,12 +567,13 @@ function escapeSvg(value) {
     .replace(/"/g, "&quot;");
 }
 
-function makeTextLayerSvg({ copyText, styleKey, background = "transparent" }) {
+function makeTextLayerSvg({ copyText, styleKey, background = "transparent", textBrightness = "light" }) {
   const text = String(copyText || "").replace(/^例如：\n?|^Example:\n?/i, "").replace(/[“”"]/g, "").trim() || "NOBOOK · 618 狂欢季\n重走真理诞生路";
   const lines = text.split(/\n+/).slice(0, 4);
   const expressive = styleKey === "expressive";
-  const fill = expressive ? "#f7f3e8" : "#ffffff";
-  const stroke = expressive ? "#222719" : "#121212";
+  const dark = textBrightness === "dark";
+  const fill = dark ? "#1d2118" : (expressive ? "#f7f3e8" : "#ffffff");
+  const stroke = dark ? "#f3efe4" : (expressive ? "#222719" : "#121212");
   const fontFamily = expressive
     ? "'Kaiti SC', 'STKaiti', 'Songti SC', 'Noto Serif SC', serif"
     : "'Songti SC', 'STSong', 'Noto Serif SC', 'Source Han Serif SC', serif";
@@ -745,11 +763,41 @@ function isNearWhitePixel(rgba, index, threshold = 236) {
   return min >= threshold && max - min <= 24;
 }
 
-function removeConnectedWhiteBackground(dataUrl) {
+function isNearBlackPixel(rgba, index, threshold = 24) {
+  const red = rgba[index];
+  const green = rgba[index + 1];
+  const blue = rgba[index + 2];
+  const max = Math.max(red, green, blue);
+  const min = Math.min(red, green, blue);
+  return max <= threshold && max - min <= 24;
+}
+
+function isMattePixel(rgba, index, matteMode) {
+  return matteMode === "black"
+    ? isNearBlackPixel(rgba, index)
+    : isNearWhitePixel(rgba, index);
+}
+
+// Feather alpha by distance from the matte color, so anti-aliased glyph edges fade out
+// smoothly instead of leaving a hard halo. White matte fades on darkness; black on brightness.
+function matteFeatherAlpha(rgba, index, matteMode) {
+  if (matteMode === "black") {
+    const maxChannel = Math.max(rgba[index], rgba[index + 1], rgba[index + 2]);
+    return Math.max(0, Math.min(255, Math.round((maxChannel - 8) * 14)));
+  }
+  const minChannel = Math.min(rgba[index], rgba[index + 1], rgba[index + 2]);
+  return Math.max(0, Math.min(255, Math.round((248 - minChannel) * 14)));
+}
+
+// Only the matte region that is connected to the canvas border is removed. Glyph-interior
+// highlights (white inside dark strokes) and interior dark detail (black outline/shadow inside
+// light strokes) are not border-connected, so the flood fill never reaches them and they survive.
+function removeConnectedMatte(dataUrl, matteMode = "white") {
   const parsed = dataUrlToBuffer(dataUrl);
   if (!parsed || parsed.mime !== "image/png") {
-    throw new Error("Local white-background cutout needs a PNG data URL.");
+    throw new Error("Local matte cutout needs a PNG data URL.");
   }
+  const mode = matteMode === "black" ? "black" : "white";
 
   const png = decodePngToRgba(parsed.buffer);
   const { width, height, rgba } = png;
@@ -762,7 +810,7 @@ function removeConnectedWhiteBackground(dataUrl) {
     const pixel = y * width + x;
     if (visited[pixel]) return;
     const index = pixel * 4;
-    if (!isNearWhitePixel(rgba, index)) return;
+    if (!isMattePixel(rgba, index, mode)) return;
     visited[pixel] = 1;
     queue.push(pixel);
   };
@@ -786,20 +834,52 @@ function removeConnectedWhiteBackground(dataUrl) {
     enqueue(x, y - 1);
   }
 
+  const fallbackChannel = mode === "black" ? 0 : 255;
   for (let pixel = 0; pixel < total; pixel += 1) {
     if (!visited[pixel]) continue;
     const index = pixel * 4;
-    const minChannel = Math.min(rgba[index], rgba[index + 1], rgba[index + 2]);
-    const alpha = Math.max(0, Math.min(255, Math.round((248 - minChannel) * 14)));
+    const alpha = matteFeatherAlpha(rgba, index, mode);
     rgba[index + 3] = alpha;
     if (alpha === 0) {
-      rgba[index] = 255;
-      rgba[index + 1] = 255;
-      rgba[index + 2] = 255;
+      rgba[index] = fallbackChannel;
+      rgba[index + 1] = fallbackChannel;
+      rgba[index + 2] = fallbackChannel;
     }
   }
 
   return `data:image/png;base64,${encodeRgbaToPng(png).toString("base64")}`;
+}
+
+function measureDecorationBrightness(dataUrl) {
+  const parsed = parsedImageBuffer(dataUrl);
+  if (!parsed || parsed.mime !== "image/png") return null;
+  let png;
+  try {
+    png = decodePngToRgba(parsed.buffer);
+  } catch {
+    return null;
+  }
+  let sum = 0;
+  let counted = 0;
+  for (let pixel = 0; pixel < png.width * png.height; pixel += 1) {
+    const index = pixel * 4;
+    const red = png.rgba[index];
+    const green = png.rgba[index + 1];
+    const blue = png.rgba[index + 2];
+    if (png.rgba[index + 3] <= 12 || (Math.min(red, green, blue) >= 238 && Math.max(red, green, blue) - Math.min(red, green, blue) <= 24)) continue;
+    sum += 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+    counted += 1;
+  }
+  return counted >= png.width * png.height * 0.02 ? sum / counted : null;
+}
+
+function resolveMatte(textColorMode, topStickerImage) {
+  if (textColorMode === "dark") return { matteMode: "white", matteColor: "#ffffff", textBrightness: "dark", brightnessSource: "forced-dark" };
+  if (textColorMode === "light") return { matteMode: "black", matteColor: "#000000", textBrightness: "light", brightnessSource: "forced-light" };
+  const brightness = measureDecorationBrightness(topStickerImage);
+  return brightness !== null && brightness < 128
+    ? { matteMode: "black", matteColor: "#000000", textBrightness: "light", brightnessSource: "auto-measured" }
+    : { matteMode: "white", matteColor: "#ffffff", textBrightness: "dark", brightnessSource: brightness === null ? "auto-default" : "auto-measured" };
 }
 
 async function handleStickerBackgrounds(body) {
@@ -921,8 +1001,46 @@ async function handleStickerBackgrounds(body) {
   };
 }
 
+function normalizeTextColorMode(value) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (["dark", "deep", "深", "深色"].includes(normalized)) return "dark";
+  if (["light", "pale", "浅", "浅色"].includes(normalized)) return "light";
+  return "auto";
+}
+
+function textColorModePromptLines(textColorMode, matteMode, textBrightness) {
+  // Shared across all modes: never emit pure black for dark lettering, anchor on the step-1 top
+  // sticker contrast, and keep the lettering distinct from the solid matte it sits on.
+  const shared = [
+    "Hard color rule: never fill DARK main lettering with pure black #000000 or a flat near-#000 blackest tone. Use deep charcoal, warm ink, dark espresso brown, or a very dark neutral with subtle tint instead, so the type keeps depth and never looks like a flat #000 block.",
+    "Authority rule: the step-1 top sticker (Reference image 1) decides the light/dark relationship. Read its real background/ornament brightness (ignoring pure-white fade zones) and keep the lettering's value contrast strong against that.",
+    matteMode === "black"
+      ? "Matte rule: the background is a flat pure-black matte that will be keyed out. The main lettering must be light (warm white, ivory, pearl) and clearly separated from the black matte. Any dark outline, shadow, or interior texture must sit INSIDE or touching the letters, never as a separate dark patch floating in the matte."
+      : "Matte rule: the background is a flat pure-white matte that will be keyed out. The main lettering must be dark and clearly separated from the white matte. Any white highlight or interior detail must sit INSIDE the letters, never as a separate white patch floating in the matte."
+  ];
+  if (textColorMode === "dark") {
+    return [
+      ...shared,
+      "Color mode = DARK lettering (forced) on a white matte: make the main type a deep, rich dark tone (charcoal, ink, espresso) — never pure black. It must read clearly dark against the white matte and dark relative to the top sticker."
+    ];
+  }
+  if (textColorMode === "light") {
+    return [
+      ...shared,
+      "Color mode = LIGHT lettering (forced) on a black matte: make the main type a warm white, ivory, or pearl light neutral so it stands out against the pure-black matte. Add a subtle darker inner edge or shadow only if it stays attached to the strokes; do not place loose dark shapes in the matte."
+    ];
+  }
+  return [
+    ...shared,
+    textBrightness === "light"
+      ? "Color mode = AUTO resolved to LIGHT lettering on a black matte (the top sticker reads dark/saturated): use warm white/ivory lettering that stands out against the pure-black matte."
+      : "Color mode = AUTO resolved to DARK lettering on a white matte (the top sticker reads light/airy): use deep dark (not pure black) lettering that stands out against the pure-white matte."
+  ];
+}
+
 async function handleTextLayer(body) {
   const styleKey = body.styleKey === "expressive" ? "expressive" : "clean";
+  const textColorMode = normalizeTextColorMode(body.textColorMode);
   const fontPresetKeys = new Set(["elegant-songti", "expressive-calligraphy", "rounded-cute"]);
   const fontPresetKey = fontPresetKeys.has(body.fontPresetKey) ? body.fontPresetKey : "";
   const fontReferenceSource = body.fontReferenceSource === "preset" ? "preset" : "upload";
@@ -931,9 +1049,11 @@ async function handleTextLayer(body) {
   const fontReferenceImage = body.fontReferenceImage || "";
   const sourceTypographyReferenceImage = body.sourceTypographyReferenceImage || "";
   const referenceImages = [topStickerImage, fontReferenceImage, sourceTypographyReferenceImage].filter(Boolean);
+  const { matteMode, matteColor, textBrightness } = resolveMatte(textColorMode, topStickerImage);
+  const matteName = matteMode === "black" ? "pure black #000000" : "pure white #ffffff";
   const prompt = [
-    "Generate a standalone livestream typography asset on a strict pure white #ffffff background.",
-    "The final image must be a clean white-background typography design draft, not a transparent image.",
+    `Generate a standalone livestream typography asset on a strict ${matteName} background.`,
+    "The final image must be a clean solid-matte typography design draft, not a transparent image.",
     "Do not composite onto any reference image or recreate any reference background.",
     topStickerImage
       ? "Reference image 1 is the generated top sticker. It is the primary visual source: inherit typography color direction, material feeling, brightness contrast, and small decorative accents around or attached to letters from this top sticker."
@@ -966,22 +1086,27 @@ async function handleTextLayer(body) {
     fontPresetKey === "rounded-cute"
       ? "Typography preset: rounded cute sticker lettering. Use bubbly, thick, soft-cornered, playful, high-readability title shapes, friendly inflated strokes, round terminals, and compact launch-poster hierarchy. It must look clearly different from Songti serif and brush calligraphy. This preset controls letter shape only; do not use the preset sample's orange, navy, cyan, or red palette unless those colors already appear in Reference image 1."
       : "",
-    "If the lettering is light on the white draft, add a darker outline or shadow so the white-background cutout will not erase highlights.",
+    ...textColorModePromptLines(textColorMode, matteMode, textBrightness),
+    matteMode === "black"
+      ? "Keep every glyph readable against the black matte; dark details must stay attached to the lettering."
+      : "Keep every glyph readable against the white matte; light highlights must stay inside dark lettering.",
     "Keep the brand line smaller and clean. Make the main title dominant. The middle dot `·` must stay accurate.",
     "Complex Chinese characters, especially `诞` and `路`, must stay structurally correct and readable.",
     body.promptText ? `用户补充要求：${body.promptText}` : ""
   ].filter(Boolean).join("\n");
 
-  const fallbackTransparent = makeTextLayerSvg({ copyText, styleKey });
-  const fallbackWhiteDraft = makeTextLayerSvg({ copyText, styleKey, background: "#ffffff" });
+  const fallbackTransparent = makeTextLayerSvg({ copyText, styleKey, textBrightness });
+  const fallbackMatteDraft = makeTextLayerSvg({ copyText, styleKey, background: matteColor, textBrightness });
 
   if (!API_KEY || !TEXT_LAYER_USE_API) {
     return {
       ok: true,
       generated: false,
       openAIRequestOk: false,
+      matteMode,
+      matteColor,
       assets: {
-        whiteDraft: fallbackWhiteDraft,
+        whiteDraft: fallbackMatteDraft,
         transparent: fallbackTransparent
       },
       styleKey,
@@ -1004,7 +1129,8 @@ async function handleTextLayer(body) {
       whiteDraft = await requestOpenAIImage({
         prompt,
         size: TEXT_LAYER_SIZE,
-        referenceImages
+        referenceImages,
+        outputFormat: "png"
       });
     } catch (error) {
       if (referenceImages.length < 2 || !topStickerImage) throw error;
@@ -1016,24 +1142,28 @@ async function handleTextLayer(body) {
           "The optional typography reference images could not be sent by the image gateway in this retry. Ignore them and rely on the top sticker plus the selected typography route."
         ].join("\n"),
         size: TEXT_LAYER_SIZE,
-        referenceImage: topStickerImage
+        referenceImage: topStickerImage,
+        outputFormat: "png"
       });
     }
     let transparent = fallbackTransparent;
     let cutoutOk = false;
     let cutoutError = "";
     try {
-      transparent = removeConnectedWhiteBackground(whiteDraft);
+      transparent = removeConnectedMatte(whiteDraft, matteMode);
       cutoutOk = true;
     } catch (error) {
       cutoutError = error.message || "Local cutout failed";
     }
 
+    const matteLabel = matteMode === "black" ? "黑底" : "白底";
     return {
       ok: true,
       generated: true,
       openAIRequestOk: true,
       cutoutOk,
+      matteMode,
+      matteColor,
       assets: {
         whiteDraft,
         transparent
@@ -1047,17 +1177,19 @@ async function handleTextLayer(body) {
       error: cutoutError || referenceFallback,
       message: cutoutOk
         ? (referenceFallback
-          ? "白底字体稿已生成，并已本地扣白底为透明 PNG。可选文字参考图未被网关接受，本次已退回只以上贴图为参考；请检查文字是否完全正确。"
-          : "白底字体稿已生成，并已本地扣白底为透明 PNG。请检查文字是否完全正确。")
-        : `白底字体稿已生成，但本地扣白底失败，已回退 SVG 透明稿：${cutoutError}`
+          ? `${matteLabel}字体稿已生成，并已本地扣${matteLabel}为透明 PNG。可选文字参考图未被网关接受，本次已退回只以上贴图为参考；请检查文字是否完全正确。`
+          : `${matteLabel}字体稿已生成，并已本地扣${matteLabel}为透明 PNG。请检查文字是否完全正确。`)
+        : `${matteLabel}字体稿已生成，但本地扣${matteLabel}失败，已回退 SVG 透明稿：${cutoutError}`
     };
   } catch (error) {
     return {
       ok: true,
       generated: false,
       openAIRequestOk: false,
+      matteMode,
+      matteColor,
       assets: {
-        whiteDraft: fallbackWhiteDraft,
+        whiteDraft: fallbackMatteDraft,
         transparent: fallbackTransparent
       },
       styleKey,
@@ -1129,12 +1261,34 @@ function cleanTaskMapText(value, maxLength) {
     .slice(0, maxLength);
 }
 
+function parseRatio(value) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return null;
+  return Math.min(1, Math.max(0, Math.round(num * 1000) / 1000));
+}
+
+function normalizeDependsOn(value, index) {
+  if (!Array.isArray(value)) return [];
+  const seen = new Set();
+  const result = [];
+  for (const entry of value) {
+    const dep = Number(entry);
+    if (!Number.isInteger(dep) || dep < 0 || dep >= index || seen.has(dep)) continue;
+    seen.add(dep);
+    result.push(dep);
+  }
+  return result;
+}
+
 function normalizeTaskMapBreakdown(rawTasks) {
   const seen = new Set();
-  return (Array.isArray(rawTasks) ? rawTasks : [])
+  const cleaned = (Array.isArray(rawTasks) ? rawTasks : [])
     .map((task) => ({
       title: cleanTaskMapText(task?.title, 32),
-      note: cleanTaskMapText(task?.note, 120)
+      note: cleanTaskMapText(task?.note, 120),
+      startRatio: parseRatio(task?.startRatio),
+      endRatio: parseRatio(task?.endRatio),
+      dependsOn: task?.dependsOn
     }))
     .filter((task) => {
       if (!task.title || seen.has(task.title)) return false;
@@ -1142,6 +1296,25 @@ function normalizeTaskMapBreakdown(rawTasks) {
       return true;
     })
     .slice(0, 6);
+
+  const count = cleaned.length;
+  return cleaned.map((task, index) => {
+    const defaultStart = count ? Math.round((index / count) * 1000) / 1000 : 0;
+    const defaultEnd = count ? Math.round(((index + 1) / count) * 1000) / 1000 : 1;
+    let startRatio = task.startRatio === null ? defaultStart : task.startRatio;
+    let endRatio = task.endRatio === null ? defaultEnd : task.endRatio;
+    if (!(endRatio > startRatio)) {
+      startRatio = defaultStart;
+      endRatio = defaultEnd;
+    }
+    return {
+      title: task.title,
+      note: task.note,
+      startRatio,
+      endRatio,
+      dependsOn: normalizeDependsOn(task.dependsOn, index)
+    };
+  });
 }
 
 function outputTextFromResponse(response) {
@@ -1167,19 +1340,44 @@ function buildTaskMapPrompt(body) {
   };
 
   const instruction = lang === "zh"
-    ? "你是 Task Map 的任务逻辑拆解引擎。只为当前节点生成下一层直接子任务，不要继续向下展开，不要安排日期、时长、优先级或提醒。输出要像结构化大纲，适合无限嵌套的目标拆分。避开已有同级任务和已有子任务，不要重复。标题短、具体、可编辑。备注只写一句用途说明。"
-    : "You are the task-logic breakdown engine for Task Map. Generate only direct child tasks for the current node. Do not expand deeper levels, schedule dates, durations, priorities, or reminders. Output structured outline items suitable for infinitely nestable goal breakdowns. Avoid duplicates with siblings or existing children. Keep titles short, concrete, and editable. Notes must be one concise sentence.";
+    ? "你是 Task Map 的任务逻辑拆解引擎。只为当前节点生成 3~6 个下一层直接子任务，不要继续向下展开，不要安排日期、时长、优先级或提醒。输出要像结构化大纲，适合无限嵌套的目标拆分。避开已有同级任务和已有子任务，不要重复。标题短、具体、可编辑。备注只写一句用途说明。"
+    : "You are the task-logic breakdown engine for Task Map. Generate only 3 to 6 direct child tasks for the current node. Do not expand deeper levels, schedule dates, durations, priorities, or reminders. Output structured outline items suitable for infinitely nestable goal breakdowns. Avoid duplicates with siblings or existing children. Keep titles short, concrete, and editable. Notes must be one concise sentence.";
+
+  const fieldSpec = lang === "zh"
+    ? [
+        "每个 task 必须包含字段：title、note、startRatio、endRatio、dependsOn。",
+        "startRatio 和 endRatio 是 0~1 之间的小数，表示该子任务在整体进度上的相对起止位置，按子任务的逻辑顺序从前到后排布，endRatio 必须大于 startRatio。",
+        "dependsOn 是一个数组，元素是本次输出中作为前置条件的同级子任务下标（从 0 开始，且必须小于当前子任务自身的下标）；没有前置依赖时返回空数组 []。"
+      ].join("\n")
+    : [
+        "Each task must include the fields: title, note, startRatio, endRatio, dependsOn.",
+        "startRatio and endRatio are decimals between 0 and 1 marking the child's relative start/end position along overall progress, laid out front-to-back by logical order, with endRatio strictly greater than startRatio.",
+        "dependsOn is an array of zero-based sibling indices (within this output) that act as prerequisites; each index must be smaller than the task's own index. Use an empty array [] when there is no prerequisite."
+      ].join("\n");
 
   return [
     instruction,
     "",
+    fieldSpec,
+    "",
     lang === "zh"
-      ? "只返回 JSON，不要返回 Markdown 或解释文字。JSON 结构必须是：{\"tasks\":[{\"title\":\"短标题\",\"note\":\"一句备注\"}]}"
-      : "Return JSON only, with no Markdown or explanatory text. The JSON shape must be: {\"tasks\":[{\"title\":\"Short title\",\"note\":\"One concise note\"}]}",
+      ? "只返回 JSON，不要返回 Markdown 或解释文字。JSON 结构必须是：{\"tasks\":[{\"title\":\"短标题\",\"note\":\"一句备注\",\"startRatio\":0,\"endRatio\":0.2,\"dependsOn\":[]}]}"
+      : "Return JSON only, with no Markdown or explanatory text. The JSON shape must be: {\"tasks\":[{\"title\":\"Short title\",\"note\":\"One concise note\",\"startRatio\":0,\"endRatio\":0.2,\"dependsOn\":[]}]}",
     "",
     "Task Map context JSON:",
     JSON.stringify(payload, null, 2)
   ].join("\n");
+}
+
+function withFallbackTaskRatios(tasks) {
+  const count = tasks.length;
+  return tasks.map((task, index) => ({
+    title: task.title,
+    note: task.note,
+    startRatio: count ? Math.round((index / count) * 1000) / 1000 : 0,
+    endRatio: count ? Math.round(((index + 1) / count) * 1000) / 1000 : 1,
+    dependsOn: []
+  }));
 }
 
 function fallbackTaskMapBreakdown(body) {
@@ -1192,59 +1390,59 @@ function fallbackTaskMapBreakdown(body) {
 
   if (lang === "en") {
     if (isSchoolMajor) {
-      return [
+      return withFallbackTaskRatios([
         { title: "Target shortlist", note: "Compare programs, locations, and admission fit." },
         { title: "Subject mapping", note: "List every exam subject and its required materials." },
         { title: "Reference collection", note: "Gather official books, syllabi, and past papers." },
         { title: "Scoreline review", note: "Compare recent score lines and admission risks." },
         { title: "Decision checkpoint", note: "Lock the final target before deeper planning." }
-      ];
+      ]);
     }
     if (isExam || isReview) {
-      return [
+      return withFallbackTaskRatios([
         { title: "Goal and scope", note: "Clarify the exact exam target and review boundary." },
         { title: "Foundation review", note: "Build a stable daily routine for core subjects." },
         { title: "Knowledge framework", note: "Turn chapters and concepts into an outline." },
         { title: "Practice loop", note: "Use drills and past papers to expose weak points." },
         { title: "Final consolidation", note: "Keep only high-impact review and mistake repair." }
-      ];
+      ]);
     }
-    return [
+    return withFallbackTaskRatios([
       { title: "Clarify scope", note: "Define what this node includes and excludes." },
       { title: "Collect inputs", note: "Gather the materials needed before execution." },
       { title: "Split modules", note: "Separate the work into independent logical parts." },
       { title: "Create checklist", note: "Turn each part into verifiable outputs." },
       { title: "Review and refine", note: "Check gaps before planning the timeline." }
-    ];
+    ]);
   }
 
   if (isSchoolMajor) {
-    return [
+    return withFallbackTaskRatios([
       { title: "整理目标院校清单", note: "先列出可选院校、地域、方向和报考限制。" },
       { title: "确认考试科目", note: "把公共课、专业课和特殊要求逐项核对清楚。" },
       { title: "收集参考资料", note: "整理参考书、考试大纲、真题和经验贴来源。" },
       { title: "对比录取难度", note: "横向比较分数线、招生人数和复试比例。" },
       { title: "锁定最终目标", note: "在继续细拆前确定主目标和备选方案。" }
-    ];
+    ]);
   }
 
   if (isExam || isReview) {
-    return [
+    return withFallbackTaskRatios([
       { title: "明确备考边界", note: "确定目标、考试范围和当前基础差距。" },
       { title: "搭建基础节奏", note: "先建立公共课和核心科目的稳定学习节奏。" },
       { title: "建立知识框架", note: "按章节和题型把内容整理成可展开结构。" },
       { title: "进入练习闭环", note: "通过刷题、真题和错题复盘暴露短板。" },
       { title: "考前收束复盘", note: "停止扩张资料，只保留高价值修补项。" }
-    ];
+    ]);
   }
 
-  return [
+  return withFallbackTaskRatios([
     { title: "明确目标边界", note: "先判断这个节点包含什么、不包含什么。" },
     { title: "收集必要资料", note: "把继续拆解所需的信息和素材放到一起。" },
     { title: "拆分关键模块", note: "按逻辑关系分出互相独立的下一级部分。" },
     { title: "形成检查清单", note: "把每个模块变成可以验证的输出。" },
     { title: "复盘结构缺口", note: "检查是否有遗漏、重复或层级不清的部分。" }
-  ];
+  ]);
 }
 
 function parseTaskMapJson(value) {
@@ -1281,10 +1479,16 @@ async function requestOpenAiTaskMapBreakdown(body) {
               items: {
                 type: "object",
                 additionalProperties: false,
-                required: ["title", "note"],
+                required: ["title", "note", "startRatio", "endRatio", "dependsOn"],
                 properties: {
                   title: { type: "string" },
-                  note: { type: "string" }
+                  note: { type: "string" },
+                  startRatio: { type: "number", minimum: 0, maximum: 1 },
+                  endRatio: { type: "number", minimum: 0, maximum: 1 },
+                  dependsOn: {
+                    type: "array",
+                    items: { type: "integer", minimum: 0 }
+                  }
                 }
               }
             }
@@ -1419,7 +1623,16 @@ async function route(request, response) {
   }
 }
 
-export { handleStickerBackgrounds, handleTaskMapBreakdown, handleTextLayer, workflowStatus };
+export {
+  handleStickerBackgrounds,
+  handleTaskMapBreakdown,
+  handleTextLayer,
+  workflowStatus,
+  removeConnectedMatte,
+  resolveMatte,
+  encodeRgbaToPng,
+  decodePngToRgba
+};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   createServer(route).listen(PORT, "127.0.0.1", () => {
