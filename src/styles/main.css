@@ -1275,6 +1275,38 @@ a {
   background: #0b0b0f;
 }
 
+.ai-sticker-actions {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+  max-width: calc(100% - 16px);
+}
+
+.ai-sticker-actions button {
+  min-height: 26px;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(11, 11, 15, 0.68);
+  color: #fff;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.ai-sticker-actions button:hover:not(:disabled) {
+  background: #0b0b0f;
+}
+
+.ai-sticker-actions button:disabled {
+  cursor: wait;
+  opacity: 0.56;
+}
+
 .ai-generation-loader {
   position: absolute;
   inset: 0;
@@ -3522,6 +3554,37 @@ a {
   .embed-panel iframe {
     height: min(68vh, 620px);
     min-height: 420px;
+  }
+}
+
+@media (max-width: 780px) {
+  .ai-workflow-step {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .ai-workflow-step--fusion {
+    grid-template-rows: auto;
+  }
+
+  .ai-workflow-column {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .ai-workflow-column--input {
+    border-right: 0;
+    border-bottom: 1px solid rgba(11, 11, 15, 0.16);
+  }
+
+  .ai-export-panel {
+    grid-column: 1;
+    width: 100%;
+    padding: 16px;
+  }
+
+  .ai-workflow-assets--grid {
+    grid-template-columns: 1fr;
   }
 }
 

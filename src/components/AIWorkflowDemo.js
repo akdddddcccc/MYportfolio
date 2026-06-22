@@ -17,6 +17,7 @@ export default {
         : "Example:\n“NOBOOK · 618 Campaign\nTrace the birth of truth”",
       statusText: this.lang === "zh" ? "等待输入" : "Waiting",
       runningStep: "",
+      runningStickerKind: "",
       loadingTimer: null,
       loadingWordIndex: 0,
       apiBase: typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname)
@@ -26,6 +27,8 @@ export default {
         checked: false,
         online: false,
         hasOpenAIKey: false,
+        hasImageProviderKey: false,
+        imageProvider: "",
         message: ""
       },
       referenceUrl: "",
@@ -157,10 +160,12 @@ export default {
           exportTitle: "图层清单 批量导出",
           exportAll: "批量导出",
           downloadOriginal: "下载原图",
+          regenerate: "单图重生",
+          regenerating: "重生中...",
           localDraft: "本地草稿",
           realGenerated: "真实生成",
           serviceOffline: "本地生成服务未启动",
-          serviceNoKey: "本地服务已启动，未检测到 OPENAI_API_KEY",
+          serviceNoKey: "生图服务已启动，但当前图像 Provider 未配置 Key",
           fontOne: "飘逸宋体",
           fontTwo: "书法张扬体",
           fontRounded: "圆润可爱体",
@@ -216,10 +221,12 @@ export default {
           exportTitle: "Layer list Batch export",
           exportAll: "Batch export",
           downloadOriginal: "Download original",
+          regenerate: "Regenerate",
+          regenerating: "Regenerating...",
           localDraft: "Local draft",
           realGenerated: "Generated",
           serviceOffline: "Local generation server is offline",
-          serviceNoKey: "Local server is running without OPENAI_API_KEY",
+          serviceNoKey: "Image service is running without a key for the selected provider",
           fontOne: "Thin serif",
           fontTwo: "Expressive script",
           fontRounded: "Rounded cute",
@@ -377,12 +384,16 @@ export default {
       try {
         const response = await fetch(`${this.apiBase}/api/ai-workflow/status`);
         const data = await response.json();
+        const hasImageProviderKey = Boolean(data.hasImageProviderKey ?? data.hasOpenAIKey);
+        const providerLabel = data.imageProviderLabel || (data.imageProvider === "openai" ? "OpenAI Official" : "OFOX");
         this.apiStatus = {
           checked: true,
           online: Boolean(data.ok),
-          hasOpenAIKey: Boolean(data.hasOpenAIKey),
-          message: data.hasOpenAIKey
-            ? (this.lang === "zh" ? "本地生图服务已连接，可真实调用 API" : "Local generation server connected")
+          hasOpenAIKey: hasImageProviderKey,
+          hasImageProviderKey,
+          imageProvider: data.imageProvider || "",
+          message: hasImageProviderKey
+            ? (this.lang === "zh" ? `${providerLabel} 生图服务已连接，可真实调用 API` : `${providerLabel} image service connected`)
             : this.labels.serviceNoKey
         };
         this.statusText = this.apiStatus.message;
@@ -391,6 +402,8 @@ export default {
           checked: true,
           online: false,
           hasOpenAIKey: false,
+          hasImageProviderKey: false,
+          imageProvider: "",
           message: this.labels.serviceOffline
         };
         this.statusText = this.labels.serviceOffline;
@@ -557,11 +570,12 @@ export default {
         return;
       }
       this.runningStep = "sticker-bg";
+      const startedAt = Date.now();
       this.statusText = this.lang === "zh"
-        ? "正在按套组顺序生成上贴、侧贴、下贴，每张会单独请求以避免云端超时..."
-        : "Generating the sticker set one by one to avoid cloud timeouts...";
+        ? "正在按顺序生成上贴、下贴、侧贴，降低套组颜色漂移..."
+        : "Generating the sticker set one by one to reduce color drift...";
       try {
-        const kinds = ["top", "side", "bottom"];
+        const kinds = ["top", "bottom", "side"];
         const kindLabels = {
           top: this.lang === "zh" ? "上贴" : "top sticker",
           side: this.lang === "zh" ? "侧贴" : "side sticker",
@@ -569,13 +583,15 @@ export default {
         };
         const allErrors = {};
         const allWarnings = {};
+        const allTimings = {};
         let allGenerated = true;
 
         for (let index = 0; index < kinds.length; index += 1) {
           const kind = kinds[index];
+          this.runningStickerKind = kind;
           this.statusText = this.lang === "zh"
-            ? `正在生成${kindLabels[kind]}（${index + 1}/3），保持同一参考图和套系规则...`
-            : `Generating ${kindLabels[kind]} (${index + 1}/3) with the same reference and series rules...`;
+            ? `正在生成${kindLabels[kind]}（${index + 1}/3），保持同一参考图和颜色锁定规则...`
+            : `Generating ${kindLabels[kind]} (${index + 1}/3) with the same reference and color-lock rules...`;
           try {
             const data = await this.postWorkflow("/api/ai-workflow/sticker-backgrounds", {
               lang: this.lang,
@@ -594,6 +610,10 @@ export default {
             if (!data.generated) allGenerated = false;
             if (data.errors?.[kind]) allErrors[kind] = data.errors[kind];
             if (data.warnings?.[kind]) allWarnings[kind] = data.warnings[kind];
+            if (data.timings?.[kind]) allTimings[kind] = data.timings[kind];
+            this.statusText = this.lang === "zh"
+              ? `${kindLabels[kind]}已返回，继续生成下一张...`
+              : `${kindLabels[kind]} returned. Continuing with the next sticker...`;
           } catch (error) {
             allGenerated = false;
             allErrors[kind] = error.message || "Image request failed";
@@ -612,14 +632,17 @@ export default {
         const warningText = Object.keys(allWarnings).length
           ? Object.values(allWarnings).join(" / ")
           : "";
+        const timingText = this.formatStickerTimingSummary(allTimings, kindLabels, Date.now() - startedAt);
         this.statusText = allGenerated
           ? [
-            this.lang === "zh" ? "上贴、侧贴、下贴已真实生成" : "Sticker backgrounds generated",
-            warningText
+            this.lang === "zh" ? "上贴、下贴、侧贴已真实生成" : "Sticker backgrounds generated",
+            warningText,
+            timingText
           ].filter(Boolean).join(" / ")
           : [
             this.lang === "zh" ? "部分贴片已回退成本地草稿。" : "Some stickers fell back to local drafts.",
             warningText,
+            timingText,
             errorText,
             errorText && this.lang === "zh" ? "如果连续出现超时、余额不足、rate limit 或 quota，通常就是网关额度/限流问题。" : ""
           ].filter(Boolean).join(" ");
@@ -629,6 +652,72 @@ export default {
           : `Sticker generation failed: ${error.message}`;
       } finally {
         this.runningStep = "";
+        this.runningStickerKind = "";
+      }
+    },
+    async regenerateSticker(kind) {
+      if (!this.referenceDataUrl) {
+        this.statusText = this.lang === "zh"
+          ? "请先上传或粘贴参考图，再进行单图重生。"
+          : "Upload or paste a reference image before regenerating.";
+        return;
+      }
+      if (this.runningStep) return;
+      const kindLabels = {
+        top: this.lang === "zh" ? "上贴" : "top sticker",
+        bottom: this.lang === "zh" ? "下贴" : "bottom sticker",
+        side: this.lang === "zh" ? "侧贴" : "side sticker"
+      };
+      const previousOutput = this.stickerOutputs[kind];
+      const startedAt = Date.now();
+      this.runningStep = "sticker-bg";
+      this.runningStickerKind = kind;
+      this.statusText = this.lang === "zh"
+        ? `正在单独重生${kindLabels[kind]}...`
+        : `Regenerating ${kindLabels[kind]}...`;
+      try {
+        const data = await this.postWorkflow("/api/ai-workflow/sticker-backgrounds", {
+          lang: this.lang,
+          kind,
+          promptText: this.promptText,
+          referenceImage: this.referenceDataUrl
+        });
+        const nextOutput = data.assets?.[kind] || "";
+        if (data.generated || !previousOutput) {
+          this.stickerOutputs = {
+            ...this.stickerOutputs,
+            [kind]: nextOutput
+          };
+        }
+        this.stickerPrompts = {
+          ...this.stickerPrompts,
+          [kind]: data.prompts?.[kind] || this.stickerPrompts[kind]
+        };
+        const asset = this.assets.find((item) => item.key === kind);
+        if (asset) asset.ready = Boolean(this.stickerOutputs[kind]);
+        const timingText = this.formatStickerTimingSummary(data.timings || {}, kindLabels, Date.now() - startedAt);
+        if (data.generated) {
+          this.statusText = [
+            this.lang === "zh" ? `${kindLabels[kind]}已完成单图重生` : `${kindLabels[kind]} regenerated`,
+            data.warnings?.[kind],
+            timingText
+          ].filter(Boolean).join(" / ");
+        } else if (previousOutput) {
+          this.statusText = [
+            this.lang === "zh" ? `${kindLabels[kind]}重生失败，已保留上一张结果。` : `Regeneration failed; the previous ${kindLabels[kind]} was kept.`,
+            data.errors?.[kind],
+            timingText
+          ].filter(Boolean).join(" ");
+        } else {
+          this.statusText = [data.message, data.errors?.[kind], timingText].filter(Boolean).join(" ");
+        }
+      } catch (error) {
+        this.statusText = this.lang === "zh"
+          ? `${kindLabels[kind]}重生失败，已保留上一张结果：${error.message}`
+          : `${kindLabels[kind]} regeneration failed; previous result kept: ${error.message}`;
+      } finally {
+        this.runningStep = "";
+        this.runningStickerKind = "";
       }
     },
     async runTextLayer() {
@@ -666,6 +755,29 @@ export default {
       } finally {
         this.runningStep = "";
       }
+    },
+    formatStickerTimingSummary(timings, kindLabels, wallDurationMs) {
+      const kinds = ["top", "bottom", "side"].filter((kind) => Array.isArray(timings[kind]) && timings[kind].length);
+      if (!kinds.length) return "";
+      const parts = kinds.map((kind) => {
+        const entries = timings[kind];
+        const totalMs = entries.reduce((sum, entry) => sum + Number(entry.durationMs || 0), 0);
+        const slowest = entries.reduce((current, entry) => {
+          if (!current || Number(entry.durationMs || 0) > Number(current.durationMs || 0)) return entry;
+          return current;
+        }, null);
+        const total = `${Math.max(1, Math.round(totalMs / 1000))}s`;
+        const slowestText = slowest
+          ? `${slowest.label || slowest.endpoint}: ${Math.max(1, Math.round(Number(slowest.durationMs || 0) / 1000))}s`
+          : "";
+        return slowestText
+          ? `${kindLabels[kind]} ${total} (${slowestText})`
+          : `${kindLabels[kind]} ${total}`;
+      });
+      const wallTime = Math.max(1, Math.round(wallDurationMs / 1000));
+      return this.lang === "zh"
+        ? `本轮总等待约 ${wallTime}s；分项耗时：${parts.join(" / ")}`
+        : `Total wait about ${wallTime}s; timings: ${parts.join(" / ")}`;
     },
     recordStickerOutputSize(kind, event) {
       const image = event.target;
@@ -717,7 +829,7 @@ export default {
     },
     statusByStep(step) {
       const zh = {
-        "sticker-bg": "已生成上贴、侧贴、下贴背景占位结果",
+        "sticker-bg": "已生成上贴、下贴、侧贴背景占位结果",
         "text-layer": "已生成文字图层占位结果",
         cutout: "已抠出透明 png 占位结果",
         "place-text": "文字框已置入合成预览",
@@ -1369,17 +1481,26 @@ export default {
               <div class="ai-sticker-piece ai-sticker-piece--top" :style="stickerPieceStyle('top')">
                 <img v-if="stickerOutputs.top" :src="stickerOutputs.top" alt="Top sticker background" @load="recordStickerOutputSize('top', $event)" />
                 <span>{{ labels.topBg }}</span>
-                <button v-if="stickerOutputs.top" type="button" class="ai-download-original" @click.stop="downloadGeneratedImage(stickerOutputs.top, stickerDownloadName('top'))">{{ labels.downloadOriginal }}</button>
-              </div>
-              <div class="ai-sticker-piece ai-sticker-piece--side" :style="stickerPieceStyle('side')">
-                <img v-if="stickerOutputs.side" :src="stickerOutputs.side" alt="Side sticker background" @load="recordStickerOutputSize('side', $event)" />
-                <span>{{ labels.sideBg }}</span>
-                <button v-if="stickerOutputs.side" type="button" class="ai-download-original" @click.stop="downloadGeneratedImage(stickerOutputs.side, stickerDownloadName('side'))">{{ labels.downloadOriginal }}</button>
+                <div v-if="stickerOutputs.top" class="ai-sticker-actions">
+                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('top')">{{ runningStickerKind === "top" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.top, stickerDownloadName('top'))">{{ labels.downloadOriginal }}</button>
+                </div>
               </div>
               <div class="ai-sticker-piece ai-sticker-piece--bottom" :style="stickerPieceStyle('bottom')">
                 <img v-if="stickerOutputs.bottom" :src="stickerOutputs.bottom" alt="Bottom sticker background" @load="recordStickerOutputSize('bottom', $event)" />
                 <span>{{ labels.bottomBg }}</span>
-                <button v-if="stickerOutputs.bottom" type="button" class="ai-download-original" @click.stop="downloadGeneratedImage(stickerOutputs.bottom, stickerDownloadName('bottom'))">{{ labels.downloadOriginal }}</button>
+                <div v-if="stickerOutputs.bottom" class="ai-sticker-actions">
+                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('bottom')">{{ runningStickerKind === "bottom" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.bottom, stickerDownloadName('bottom'))">{{ labels.downloadOriginal }}</button>
+                </div>
+              </div>
+              <div class="ai-sticker-piece ai-sticker-piece--side" :style="stickerPieceStyle('side')">
+                <img v-if="stickerOutputs.side" :src="stickerOutputs.side" alt="Side sticker background" @load="recordStickerOutputSize('side', $event)" />
+                <span>{{ labels.sideBg }}</span>
+                <div v-if="stickerOutputs.side" class="ai-sticker-actions">
+                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('side')">{{ runningStickerKind === "side" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.side, stickerDownloadName('side'))">{{ labels.downloadOriginal }}</button>
+                </div>
               </div>
               <div
                 v-if="runningStep === 'sticker-bg'"

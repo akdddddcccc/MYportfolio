@@ -5,8 +5,52 @@ import { deflateSync, inflateSync } from "node:zlib";
 import OpenAI from "openai";
 
 const PORT = Number(process.env.AI_WORKFLOW_PORT || 8787);
-const API_KEY = process.env.OPENAI_API_KEY || "";
-const OPENAI_BASE_URL = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+const LEGACY_IMAGE_API_KEY = process.env.OPENAI_API_KEY || "";
+const LEGACY_IMAGE_BASE_URL = (process.env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
+const LEGACY_IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "";
+const requestedImageProvider = (process.env.STICKER_IMAGE_PROVIDER || "ofox").toLowerCase();
+const STICKER_IMAGE_PROVIDER = ["openai", "official", "openai-official"].includes(requestedImageProvider)
+  ? "openai"
+  : "ofox";
+const legacyProvider = LEGACY_IMAGE_BASE_URL.includes("api.ofox.io") ? "ofox" : "openai";
+const envFlag = (name, fallback) => process.env[name] === undefined
+  ? fallback
+  : process.env[name] === "1";
+const imageProviderAdapters = {
+  ofox: {
+    id: "ofox",
+    label: "OFOX",
+    keyName: "OFOX_API_KEY",
+    apiKey: process.env.OFOX_API_KEY || (legacyProvider === "ofox" ? LEGACY_IMAGE_API_KEY : ""),
+    baseUrl: (process.env.OFOX_BASE_URL || "https://api.ofox.io/v1").replace(/\/+$/, ""),
+    model: process.env.OFOX_IMAGE_MODEL || (legacyProvider === "ofox" && LEGACY_IMAGE_MODEL) || "openai/gpt-image-2",
+    quality: process.env.OFOX_IMAGE_QUALITY || process.env.OPENAI_IMAGE_QUALITY || "low",
+    useImageEdits: envFlag("OFOX_IMAGE_USE_EDITS", true),
+    editField: process.env.OFOX_IMAGE_EDIT_FIELD || "image",
+    editSize: process.env.OFOX_IMAGE_EDIT_SIZE || "1024x1024",
+    editFallbackSize: process.env.OFOX_IMAGE_EDIT_FALLBACK_SIZE || "",
+    includeEditExtras: envFlag("OFOX_IMAGE_EDIT_INCLUDE_EXTRAS", false),
+    supportsGenerations: envFlag("OFOX_IMAGE_ALLOW_GENERATIONS", false)
+  },
+  openai: {
+    id: "openai",
+    label: "OpenAI Official",
+    keyName: "OPENAI_OFFICIAL_API_KEY",
+    apiKey: process.env.OPENAI_OFFICIAL_API_KEY || (legacyProvider === "openai" ? LEGACY_IMAGE_API_KEY : ""),
+    baseUrl: (process.env.OPENAI_OFFICIAL_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, ""),
+    model: process.env.OPENAI_OFFICIAL_IMAGE_MODEL || (legacyProvider === "openai" && LEGACY_IMAGE_MODEL) || "gpt-image-2",
+    quality: process.env.OPENAI_OFFICIAL_IMAGE_QUALITY || process.env.OPENAI_IMAGE_QUALITY || "low",
+    useImageEdits: envFlag("OPENAI_OFFICIAL_IMAGE_USE_EDITS", true),
+    editField: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_FIELD || "image",
+    editSize: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_SIZE || "",
+    editFallbackSize: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_FALLBACK_SIZE || "",
+    includeEditExtras: envFlag("OPENAI_OFFICIAL_IMAGE_EDIT_INCLUDE_EXTRAS", true),
+    supportsGenerations: true
+  }
+};
+const IMAGE_PROVIDER = imageProviderAdapters[STICKER_IMAGE_PROVIDER];
+const API_KEY = IMAGE_PROVIDER.apiKey;
+const OPENAI_BASE_URL = IMAGE_PROVIDER.baseUrl;
 const TASKMAP_PROVIDER = (process.env.TASKMAP_PROVIDER || "deepseek").toLowerCase();
 const OPENAI_TASKMAP_API_KEY = process.env.OPENAI_TASKMAP_API_KEY || "";
 const OPENAI_TASKMAP_BASE_URL = (process.env.OPENAI_TASKMAP_BASE_URL || "https://api.openai.com/v1").replace(/\/+$/, "");
@@ -15,19 +59,28 @@ const DEEPSEEK_TASKMAP_API_KEY = process.env.DEEPSEEK_TASKMAP_API_KEY || process
 const DEEPSEEK_TASKMAP_BASE_URL = (process.env.DEEPSEEK_TASKMAP_BASE_URL || "https://api.deepseek.com").replace(/\/+$/, "");
 const DEEPSEEK_TASKMAP_MODEL = process.env.DEEPSEEK_TASKMAP_MODEL || "deepseek-v4-flash";
 const TASKMAP_DEMO_FALLBACK = process.env.TASKMAP_DEMO_FALLBACK === "1";
-const IMAGE_MODEL = process.env.OPENAI_IMAGE_MODEL || "gpt-image-2";
-const IMAGE_QUALITY = process.env.OPENAI_IMAGE_QUALITY || "low";
-const USE_IMAGE_EDITS = process.env.OPENAI_IMAGE_USE_EDITS === "1";
-const IMAGE_TIMEOUT_MS = Number(process.env.OPENAI_IMAGE_TIMEOUT_MS || 90000);
-const IMAGE_EDIT_FIELD = process.env.OPENAI_IMAGE_EDIT_FIELD || "image";
-const IMAGE_EDIT_SIZE = process.env.OPENAI_IMAGE_EDIT_SIZE || "";
-const IMAGE_EDIT_FALLBACK_SIZE = process.env.OPENAI_IMAGE_EDIT_FALLBACK_SIZE || (OPENAI_BASE_URL.includes("api.ofox.io") ? "1024x1024" : "");
-const IMAGE_EDIT_INCLUDE_EXTRAS = process.env.OPENAI_IMAGE_EDIT_INCLUDE_EXTRAS === "1";
+const IMAGE_MODEL = IMAGE_PROVIDER.model;
+const IMAGE_QUALITY = IMAGE_PROVIDER.quality;
+const USE_IMAGE_EDITS = IMAGE_PROVIDER.useImageEdits;
+const DEFAULT_IMAGE_TIMEOUT_MS = 90000;
+const MAX_IMAGE_TIMEOUT_MS = 90000;
+const providerTimeoutValue = STICKER_IMAGE_PROVIDER === "ofox"
+  ? process.env.OFOX_IMAGE_TIMEOUT_MS
+  : process.env.OPENAI_OFFICIAL_IMAGE_TIMEOUT_MS;
+const CONFIGURED_IMAGE_TIMEOUT_MS = Number(providerTimeoutValue || process.env.OPENAI_IMAGE_TIMEOUT_MS || DEFAULT_IMAGE_TIMEOUT_MS);
+const IMAGE_TIMEOUT_MS = Number.isFinite(CONFIGURED_IMAGE_TIMEOUT_MS) && CONFIGURED_IMAGE_TIMEOUT_MS > 0
+  ? Math.min(CONFIGURED_IMAGE_TIMEOUT_MS, MAX_IMAGE_TIMEOUT_MS)
+  : DEFAULT_IMAGE_TIMEOUT_MS;
+const IMAGE_TIMEOUT_CLAMPED = IMAGE_TIMEOUT_MS !== CONFIGURED_IMAGE_TIMEOUT_MS;
+const IMAGE_EDIT_FIELD = IMAGE_PROVIDER.editField;
+const IMAGE_EDIT_SIZE = IMAGE_PROVIDER.editSize;
+const IMAGE_EDIT_FALLBACK_SIZE = IMAGE_PROVIDER.editFallbackSize;
+const IMAGE_EDIT_INCLUDE_EXTRAS = IMAGE_PROVIDER.includeEditExtras;
 const TEXT_LAYER_SIZE = process.env.OPENAI_TEXT_LAYER_SIZE || "1536x1024";
 const TEXT_LAYER_USE_API = process.env.OPENAI_TEXT_LAYER_USE_API !== "0";
 const GENERATION_MODE = process.env.AI_WORKFLOW_GENERATION_MODE || "sequential";
 const WORKFLOW_DOC_PATH = "/Users/eeo/Documents/直播间贴片自动化/直播间贴片生图工作流_主文档.md";
-const RUNTIME_BUILD = "2026-06-12-single-sticker-resilient-v1";
+const RUNTIME_BUILD = "2026-06-22-provider-adapters-top-bottom-side-v1";
 const openAiTaskMapClient = OPENAI_TASKMAP_API_KEY
   ? new OpenAI({
       apiKey: OPENAI_TASKMAP_API_KEY,
@@ -41,6 +94,10 @@ const deepSeekTaskMapClient = DEEPSEEK_TASKMAP_API_KEY
     })
   : null;
 
+function elapsedMs(startedAt) {
+  return Math.max(0, Date.now() - startedAt);
+}
+
 const stickerSpecs = {
   top: {
     zhName: "上贴背景",
@@ -48,7 +105,7 @@ const stickerSpecs = {
     size: "1536x1024",
     width: 1536,
     height: 1024,
-    instruction: "生成直播间顶部横向贴片。顶部和左右边缘可有装饰、材质和光效，底边必须自然过渡到中性纯白或近白背景。若存在聚焦感，视觉轻微向下汇聚，但不要形成明确主体或海报中心。"
+    instruction: "生成直播间顶部横向贴片。顶部 35% 和左右边缘可有装饰、材质和光效，必须保留参考图的主色、饱和度、线条对比和深浅层次，不能泛白、雾化或褪色；只有底边 25% 可以自然过渡到中性纯白或近白背景。若存在聚焦感，视觉轻微向下汇聚，但不要形成明确主体或海报中心。"
   },
   side: {
     zhName: "侧贴背景",
@@ -56,7 +113,7 @@ const stickerSpecs = {
     size: "1024x1536",
     width: 1024,
     height: 1536,
-    instruction: "生成直播间侧边竖向窄幅贴片。装饰集中在左上角、上沿或外侧边缘，大部分区域保持素净、透气，不抢直播主体和商品。不要强纵深、不要中心主体、不要密集信息排版。严禁密铺、平铺、网格式重复、花纹重复、连续小图案、壁纸纹样或满版装饰；侧贴必须像一条留白充足的边缘贴片，而不是 pattern tile。"
+    instruction: "生成直播间侧边竖向窄幅贴片。装饰集中在左上角、上沿或外侧边缘，装饰线条必须保留参考图主色、饱和度和深浅对比，不能整体变淡；大部分区域保持素净、透气，不抢直播主体和商品。不要强纵深、不要中心主体、不要密集信息排版。严禁密铺、平铺、网格式重复、花纹重复、连续小图案、壁纸纹样或满版装饰；侧贴必须像一条留白充足的边缘贴片，而不是 pattern tile。"
   },
   bottom: {
     zhName: "下贴背景",
@@ -64,17 +121,19 @@ const stickerSpecs = {
     size: "1536x1024",
     width: 1536,
     height: 1024,
-    instruction: "生成直播间底部横向贴片。下沿可承载主要装饰、材质和光效，顶边必须自然过渡到中性纯白或近白背景。若存在聚焦感，视觉轻微向上汇聚，但不要形成明确主体或促销海报感。"
+    instruction: "生成直播间底部横向贴片。下沿 35% 可承载主要装饰、材质和光效，必须保留参考图的主色、饱和度、线条对比和深浅关系，不能泛白、雾化或褪色；只有顶边 25% 可以自然过渡到中性纯白或近白背景。若存在聚焦感，视觉轻微向上汇聚，但不要形成明确主体或促销海报感。"
   }
 };
 
 const basePrompt = `根据当前唯一参考图生成直播间贴片背景底图。
 只继承当前参考图的构图气质、色彩关系、材质、光效、边缘装饰密度和留白方式。
+颜色锁定：装饰区域必须保持参考图主要颜色的饱和度、明度层次和深色线条对比，不能把彩色装饰整体洗成浅灰、浅粉、浅蓝或接近白色。
+留白只发生在指定过渡边缘，不允许把整张贴片做成低饱和、雾化、褪色、奶白或半透明质感。
 不要继承或生成文字、logo、二维码、价格标签、促销信息、人物、具体商品、海报排版、信息图结构。
 将参考图中的主体转译为抽象背景语言，使画面适合叠加直播间内容。
-整体干净、透气、浅色过渡自然，不抢直播主体。`;
+整体干净、透气，过渡边缘自然，不抢直播主体。`;
 
-const negativePrompt = `禁止生成：文字、logo、二维码、人物、具体商品、价格、优惠券、促销标签、按钮、信息图、海报模板、广告版式、月亮、天体、球体、强中心主体、强边框、深色压迫背景、过密装饰、脏灰底色。`;
+const negativePrompt = `禁止生成：文字、logo、二维码、人物、具体商品、价格、优惠券、促销标签、按钮、信息图、海报模板、广告版式、月亮、天体、球体、强中心主体、强边框、深色压迫背景、过密装饰、脏灰底色、整图泛白、整图雾化、低饱和褪色、彩色线条变浅、装饰区域接近白色。`;
 
 let workflowDocCache = null;
 
@@ -140,13 +199,22 @@ function dataUrlToUploadFile(dataUrl, index) {
   return blob;
 }
 
-async function requestOpenAIImage({ prompt, size, referenceImage, referenceImages, editSize }) {
+async function requestOpenAIImage({ prompt, size, referenceImage, referenceImages, editSize, metrics, attemptLabel }) {
   const headers = { Authorization: `Bearer ${API_KEY}` };
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), IMAGE_TIMEOUT_MS);
   const inputImages = Array.isArray(referenceImages) && referenceImages.length
     ? referenceImages
     : (referenceImage ? [referenceImage] : []);
+  const startedAt = Date.now();
+  const metric = {
+    label: attemptLabel || (inputImages.length ? "image edit" : "image generation"),
+    provider: IMAGE_PROVIDER.id,
+    endpoint: inputImages.length ? "images/edits" : "images/generations",
+    size: editSize || IMAGE_EDIT_SIZE || size,
+    referenceCount: inputImages.length,
+    ok: false
+  };
 
   try {
     if (USE_IMAGE_EDITS && inputImages.length) {
@@ -169,10 +237,20 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
           body,
           signal: controller.signal
         });
-        return parseOpenAIImageResponse(response);
+        metric.status = response.status;
+        const image = await parseOpenAIImageResponse(response);
+        metric.ok = true;
+        return image;
       }
     }
 
+    if (!IMAGE_PROVIDER.supportsGenerations) {
+      throw new Error(`${IMAGE_PROVIDER.label} adapter only enables reference-image editing. Configure a reference image or enable OFOX_IMAGE_ALLOW_GENERATIONS after verifying gateway support.`);
+    }
+
+    metric.endpoint = "images/generations";
+    metric.size = size;
+    metric.referenceCount = 0;
     const response = await fetch(`${OPENAI_BASE_URL}/images/generations`, {
       method: "POST",
       headers: {
@@ -188,13 +266,19 @@ async function requestOpenAIImage({ prompt, size, referenceImage, referenceImage
       }),
       signal: controller.signal
     });
-    return parseOpenAIImageResponse(response);
+    metric.status = response.status;
+    const image = await parseOpenAIImageResponse(response);
+    metric.ok = true;
+    return image;
   } catch (error) {
+    metric.error = error?.message || "Image request failed";
     if (error?.name === "AbortError") {
       throw new Error(`Image request timed out after ${Math.round(IMAGE_TIMEOUT_MS / 1000)}s`);
     }
     throw error;
   } finally {
+    metric.durationMs = elapsedMs(startedAt);
+    metrics?.push(metric);
     clearTimeout(timeoutId);
   }
 }
@@ -336,27 +420,50 @@ function normalizeStickerImageSize(dataUrl, kind) {
   return `data:image/png;base64,${encodeRgbaToPng(normalized).toString("base64")}`;
 }
 
-async function requestCheckedStickerImage(kind, prompt, referenceImage, editSize) {
+async function requestCheckedStickerImage(kind, prompt, referenceImage, editSize, metrics, attemptLabel) {
   const image = await requestOpenAIImage({
     prompt,
     size: stickerSpecs[kind].size,
     referenceImage,
-    editSize
+    editSize,
+    metrics,
+    attemptLabel
   });
-  const dataUrl = await imageUrlToDataUrl(image);
-  assertStickerImageNotBlank(dataUrl, kind);
-  return normalizeStickerImageSize(dataUrl, kind);
+  const postprocessStartedAt = Date.now();
+  const metric = {
+    label: `${attemptLabel || "image"} postprocess`,
+    endpoint: "local/postprocess",
+    size: stickerSpecs[kind].size,
+    referenceCount: 0,
+    ok: false
+  };
+  try {
+    const dataUrl = await imageUrlToDataUrl(image);
+    assertStickerImageNotBlank(dataUrl, kind);
+    const normalized = normalizeStickerImageSize(dataUrl, kind);
+    metric.ok = true;
+    return normalized;
+  } catch (error) {
+    metric.error = error?.message || "Sticker postprocess failed";
+    throw error;
+  } finally {
+    metric.durationMs = elapsedMs(postprocessStartedAt);
+    metrics?.push(metric);
+  }
 }
 
 async function requestStickerImage(kind, prompt, referenceImage) {
   const failedAttempts = [];
+  const metrics = [];
   const tryAttempt = async (label, options = {}) => {
     try {
       return await requestCheckedStickerImage(
         kind,
         options.prompt || prompt,
         options.referenceImage ?? referenceImage,
-        options.editSize
+        options.editSize,
+        metrics,
+        label
       );
     } catch (error) {
       failedAttempts.push(`${label}: ${error.message || "failed"}`);
@@ -365,7 +472,7 @@ async function requestStickerImage(kind, prompt, referenceImage) {
   };
 
   const directResult = await tryAttempt("reference edit");
-  if (directResult) return { image: directResult, warning: "" };
+  if (directResult) return { image: directResult, warning: "", metrics };
 
   const requestedEditSize = IMAGE_EDIT_SIZE || stickerSpecs[kind].size;
   if (USE_IMAGE_EDITS && referenceImage && IMAGE_EDIT_FALLBACK_SIZE && requestedEditSize !== IMAGE_EDIT_FALLBACK_SIZE) {
@@ -373,7 +480,8 @@ async function requestStickerImage(kind, prompt, referenceImage) {
     if (squareResult) {
       return {
         image: squareResult,
-        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${IMAGE_EDIT_FALLBACK_SIZE} 兼容尺寸生成并裁成贴片比例。`
+        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${IMAGE_EDIT_FALLBACK_SIZE} 兼容尺寸生成并裁成贴片比例。`,
+        metrics
       };
     }
   }
@@ -390,11 +498,14 @@ async function requestStickerImage(kind, prompt, referenceImage) {
   if (generatedResult) {
     return {
       image: generatedResult,
-      warning: `${stickerSpecs[kind].zhName} 的图生图不可用，已改用文字描述生成；参考图相似度会降低。`
+      warning: `${stickerSpecs[kind].zhName} 的图生图不可用，已改用文字描述生成；参考图相似度会降低。`,
+      metrics
     };
   }
 
-  throw new Error(failedAttempts.join(" / ") || "Image generation failed");
+  const error = new Error(failedAttempts.join(" / ") || "Image generation failed");
+  error.metrics = metrics;
+  throw error;
 }
 
 function fallbackSticker(kind, userPrompt) {
@@ -426,7 +537,7 @@ function fallbackSticker(kind, userPrompt) {
   </g>
   <rect x="0" y="${fadeStart}" width="${spec.width}" height="${Math.abs(fadeEnd - fadeStart)}" fill="#fbfaf4" opacity="0.48"/>
   <text x="42" y="72" fill="#1d2720" font-size="28" font-family="Arial, sans-serif" opacity="0.72">${label} / local draft</text>
-  <text x="42" y="116" fill="#1d2720" font-size="18" font-family="Arial, sans-serif" opacity="0.52">${escapeSvg(userPrompt || "等待 OPENAI_API_KEY 后生成真实贴片背景").slice(0, 96)}</text>
+  <text x="42" y="116" fill="#1d2720" font-size="18" font-family="Arial, sans-serif" opacity="0.52">${escapeSvg(userPrompt || `等待 ${IMAGE_PROVIDER.keyName} 后生成真实贴片背景`).slice(0, 96)}</text>
 </svg>`;
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`;
 }
@@ -692,7 +803,7 @@ function removeConnectedWhiteBackground(dataUrl) {
 }
 
 async function handleStickerBackgrounds(body) {
-  const kinds = ["top", "side", "bottom"];
+  const kinds = ["top", "bottom", "side"];
   const prompts = Object.fromEntries(kinds.map((kind) => [
     kind,
     buildStickerPrompt(kind, body.promptText || "")
@@ -705,11 +816,16 @@ async function handleStickerBackgrounds(body) {
       ok: true,
       openAIRequestOk: false,
       generated: false,
+      provider: IMAGE_PROVIDER.id,
+      providerLabel: IMAGE_PROVIDER.label,
       model: IMAGE_MODEL,
       quality: IMAGE_QUALITY,
       baseUrl: OPENAI_BASE_URL,
       useImageEdits: USE_IMAGE_EDITS,
       timeoutMs: IMAGE_TIMEOUT_MS,
+      configuredTimeoutMs: CONFIGURED_IMAGE_TIMEOUT_MS,
+      timeoutClamped: IMAGE_TIMEOUT_CLAMPED,
+      maxTimeoutMs: MAX_IMAGE_TIMEOUT_MS,
       imageEditField: IMAGE_EDIT_FIELD,
       imageEditSize: IMAGE_EDIT_SIZE || "per-sticker-size",
       imageEditFallbackSize: IMAGE_EDIT_FALLBACK_SIZE || "off",
@@ -719,21 +835,24 @@ async function handleStickerBackgrounds(body) {
       assets: Object.fromEntries(fallbackKinds.map((kind) => [kind, fallbackSticker(kind, body.promptText)])),
       prompts,
       errors: {},
-      message: "未检测到 OPENAI_API_KEY，已返回本地 SVG 草稿和完整 prompt。"
+      message: `未检测到 ${IMAGE_PROVIDER.keyName}，已返回本地 SVG 草稿和完整 prompt。`
     };
   }
 
   const results = {};
   const errors = {};
   const warnings = {};
+  const timings = {};
 
   if (singleKind) {
     try {
       const result = await requestStickerImage(singleKind, prompts[singleKind], body.referenceImage);
       results[singleKind] = result.image;
+      timings[singleKind] = result.metrics || [];
       if (result.warning) warnings[singleKind] = result.warning;
     } catch (error) {
       errors[singleKind] = error.message || "Image generation failed";
+      timings[singleKind] = error.metrics || [];
       results[singleKind] = fallbackSticker(singleKind, body.promptText);
     }
   } else if (GENERATION_MODE === "parallel") {
@@ -746,9 +865,11 @@ async function handleStickerBackgrounds(body) {
       const kind = kinds[index];
       if (result.status === "fulfilled") {
         results[result.value[0]] = result.value[1].image;
+        timings[result.value[0]] = result.value[1].metrics || [];
         if (result.value[1].warning) warnings[result.value[0]] = result.value[1].warning;
       } else {
         errors[kind] = result.reason?.message || "Image generation failed";
+        timings[kind] = result.reason?.metrics || [];
         results[kind] = fallbackSticker(kind, body.promptText);
       }
     });
@@ -757,9 +878,11 @@ async function handleStickerBackgrounds(body) {
       try {
         const result = await requestStickerImage(kind, prompts[kind], body.referenceImage);
         results[kind] = result.image;
+        timings[kind] = result.metrics || [];
         if (result.warning) warnings[kind] = result.warning;
       } catch (error) {
         errors[kind] = error.message || "Image generation failed";
+        timings[kind] = error.metrics || [];
         results[kind] = fallbackSticker(kind, body.promptText);
       }
     }
@@ -769,11 +892,16 @@ async function handleStickerBackgrounds(body) {
     ok: true,
     openAIRequestOk: Object.keys(errors).length === 0,
     generated: Boolean(API_KEY) && Object.keys(errors).length === 0,
+    provider: IMAGE_PROVIDER.id,
+    providerLabel: IMAGE_PROVIDER.label,
     model: IMAGE_MODEL,
     quality: IMAGE_QUALITY,
     baseUrl: OPENAI_BASE_URL,
     useImageEdits: USE_IMAGE_EDITS,
     timeoutMs: IMAGE_TIMEOUT_MS,
+    configuredTimeoutMs: CONFIGURED_IMAGE_TIMEOUT_MS,
+    timeoutClamped: IMAGE_TIMEOUT_CLAMPED,
+    maxTimeoutMs: MAX_IMAGE_TIMEOUT_MS,
     imageEditField: IMAGE_EDIT_FIELD,
     imageEditSize: IMAGE_EDIT_SIZE || "per-sticker-size",
     imageEditFallbackSize: IMAGE_EDIT_FALLBACK_SIZE || "off",
@@ -784,11 +912,12 @@ async function handleStickerBackgrounds(body) {
     prompts,
     errors,
     warnings,
+    timings,
     message: API_KEY
       ? (Object.keys(errors).length
-        ? "OpenAI 生图失败，已回退成本地草稿。"
+        ? `${IMAGE_PROVIDER.label} 生图失败，已回退成本地草稿。`
         : (Object.keys(warnings).length ? "贴片背景已生成，但部分图片使用了兼容重试路径。" : "贴片背景已生成。"))
-      : "未检测到 OPENAI_API_KEY，已返回本地 SVG 草稿和完整 prompt。"
+      : `未检测到 ${IMAGE_PROVIDER.keyName}，已返回本地 SVG 草稿和完整 prompt。`
   };
 }
 
@@ -858,10 +987,12 @@ async function handleTextLayer(body) {
       styleKey,
       fontPresetKey,
       prompt,
+      provider: IMAGE_PROVIDER.id,
+      providerLabel: IMAGE_PROVIDER.label,
       model: IMAGE_MODEL,
       size: TEXT_LAYER_SIZE,
       message: !API_KEY
-        ? "未检测到 OPENAI_API_KEY，已返回本地 SVG 文字图层草稿。"
+        ? `未检测到 ${IMAGE_PROVIDER.keyName}，已返回本地 SVG 文字图层草稿。`
         : "文字图层 API 已关闭，已返回本地 SVG 文字图层草稿。"
     };
   }
@@ -946,11 +1077,23 @@ async function workflowStatus() {
   return {
     ok: true,
     hasOpenAIKey: Boolean(API_KEY),
+    hasImageProviderKey: Boolean(API_KEY),
+    imageProvider: IMAGE_PROVIDER.id,
+    imageProviderLabel: IMAGE_PROVIDER.label,
+    providers: Object.fromEntries(Object.entries(imageProviderAdapters).map(([id, adapter]) => [id, {
+      configured: Boolean(adapter.apiKey),
+      label: adapter.label,
+      model: adapter.model,
+      baseUrl: adapter.baseUrl
+    }])),
     model: IMAGE_MODEL,
     quality: IMAGE_QUALITY,
     baseUrl: OPENAI_BASE_URL,
     useImageEdits: USE_IMAGE_EDITS,
     timeoutMs: IMAGE_TIMEOUT_MS,
+    configuredTimeoutMs: CONFIGURED_IMAGE_TIMEOUT_MS,
+    timeoutClamped: IMAGE_TIMEOUT_CLAMPED,
+    maxTimeoutMs: MAX_IMAGE_TIMEOUT_MS,
     imageEditField: IMAGE_EDIT_FIELD,
     imageEditSize: IMAGE_EDIT_SIZE || "per-sticker-size",
     imageEditFallbackSize: IMAGE_EDIT_FALLBACK_SIZE || "off",
@@ -1281,12 +1424,13 @@ export { handleStickerBackgrounds, handleTaskMapBreakdown, handleTextLayer, work
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   createServer(route).listen(PORT, "127.0.0.1", () => {
     console.log(`AI workflow local server listening on http://127.0.0.1:${PORT}`);
-    console.log(`OpenAI base URL: ${OPENAI_BASE_URL}`);
+    console.log(`Sticker image provider: ${IMAGE_PROVIDER.label}`);
+    console.log(`Sticker image base URL: ${OPENAI_BASE_URL}`);
     console.log(`Image model: ${IMAGE_MODEL}`);
-    console.log(`Image timeout: ${IMAGE_TIMEOUT_MS}ms`);
+    console.log(`Image timeout: ${IMAGE_TIMEOUT_MS}ms${IMAGE_TIMEOUT_CLAMPED ? ` (configured ${CONFIGURED_IMAGE_TIMEOUT_MS}ms clamped)` : ""}`);
     console.log(`Image edit field: ${IMAGE_EDIT_FIELD}`);
     console.log(`Generation mode: ${GENERATION_MODE}`);
-    console.log(`OpenAI key: ${API_KEY ? "configured" : "missing, local SVG fallback enabled"}`);
+    console.log(`${IMAGE_PROVIDER.keyName}: ${API_KEY ? "configured" : "missing, local SVG fallback enabled"}`);
     console.log(`Task Map provider: ${TASKMAP_PROVIDER === "openai" ? "openai" : "deepseek"}`);
     console.log(`Task Map DeepSeek key: ${DEEPSEEK_TASKMAP_API_KEY ? "configured" : "missing"}`);
     console.log(`Task Map OpenAI key: ${OPENAI_TASKMAP_API_KEY ? "configured" : "missing"}`);

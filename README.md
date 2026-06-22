@@ -20,6 +20,22 @@ Open:
 http://127.0.0.1:4174
 ```
 
+## Demo API Configuration
+
+The livestream sticker demo has two separate server-side image adapters. Set
+`STICKER_IMAGE_PROVIDER=ofox` or `STICKER_IMAGE_PROVIDER=openai`, then configure
+the matching variables from `.env.example` in the local shell or EdgeOne
+environment settings.
+
+- OFOX reads `OFOX_API_KEY`, `OFOX_BASE_URL`, and `OFOX_IMAGE_MODEL`.
+- Official OpenAI reads `OPENAI_OFFICIAL_API_KEY`,
+  `OPENAI_OFFICIAL_BASE_URL`, and `OPENAI_OFFICIAL_IMAGE_MODEL`.
+- Task Map remains independent and reads `DEEPSEEK_TASKMAP_API_KEY` by default.
+
+Never put real keys in `.env.example`, frontend code, Git commits, or browser
+storage. EdgeOne injects the configured values into the server-side cloud
+function at runtime.
+
 ## Main Files
 
 - `src/data/content.js`: homepage text, navigation labels, contact info, filter labels
