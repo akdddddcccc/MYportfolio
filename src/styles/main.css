@@ -1168,6 +1168,43 @@ a {
   color: #fff;
 }
 
+.ai-workflow-toolrow button.is-used {
+  border-color: #0b0b0f;
+  background: #0b0b0f;
+  color: #fff;
+  font-weight: 600;
+}
+
+.ai-workflow-toolrow button.is-used::after {
+  content: "✓";
+  margin-left: 6px;
+  font-weight: 700;
+}
+
+.ai-workflow-reset-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border: 1px solid rgba(11, 11, 15, 0.42);
+  background: #fff;
+  color: #0b0b0f;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ai-workflow-reset-icon:hover,
+.ai-workflow-reset-icon:focus-visible {
+  background: #0b0b0f;
+  color: #fff;
+  outline: none;
+}
+
 .ai-workflow-button {
   display: inline-flex;
   align-items: center;

@@ -16,6 +16,12 @@ const legacyProvider = LEGACY_IMAGE_BASE_URL.includes("api.ofox.io") ? "ofox" : 
 const envFlag = (name, fallback) => process.env[name] === undefined
   ? fallback
   : process.env[name] === "1";
+// A missing or literal "auto" edit-size means "use the requested per-sticker size".
+// Any explicit value (e.g. "1536x1024") is preserved verbatim.
+const normalizeEditSizeEnv = (value) => {
+  const trimmed = String(value ?? "").trim();
+  return trimmed.toLowerCase() === "auto" ? "" : trimmed;
+};
 const imageProviderAdapters = {
   ofox: {
     id: "ofox",
@@ -27,8 +33,8 @@ const imageProviderAdapters = {
     quality: process.env.OFOX_IMAGE_QUALITY || process.env.OPENAI_IMAGE_QUALITY || "low",
     useImageEdits: envFlag("OFOX_IMAGE_USE_EDITS", true),
     editField: process.env.OFOX_IMAGE_EDIT_FIELD || "image",
-    editSize: process.env.OFOX_IMAGE_EDIT_SIZE || "1024x1024",
-    editFallbackSize: process.env.OFOX_IMAGE_EDIT_FALLBACK_SIZE || "",
+    editSize: normalizeEditSizeEnv(process.env.OFOX_IMAGE_EDIT_SIZE),
+    editFallbackSize: normalizeEditSizeEnv(process.env.OFOX_IMAGE_EDIT_FALLBACK_SIZE),
     includeEditExtras: envFlag("OFOX_IMAGE_EDIT_INCLUDE_EXTRAS", false),
     supportsGenerations: envFlag("OFOX_IMAGE_ALLOW_GENERATIONS", false)
   },
@@ -42,8 +48,8 @@ const imageProviderAdapters = {
     quality: process.env.OPENAI_OFFICIAL_IMAGE_QUALITY || process.env.OPENAI_IMAGE_QUALITY || "low",
     useImageEdits: envFlag("OPENAI_OFFICIAL_IMAGE_USE_EDITS", true),
     editField: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_FIELD || "image",
-    editSize: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_SIZE || "",
-    editFallbackSize: process.env.OPENAI_OFFICIAL_IMAGE_EDIT_FALLBACK_SIZE || "",
+    editSize: normalizeEditSizeEnv(process.env.OPENAI_OFFICIAL_IMAGE_EDIT_SIZE),
+    editFallbackSize: normalizeEditSizeEnv(process.env.OPENAI_OFFICIAL_IMAGE_EDIT_FALLBACK_SIZE),
     includeEditExtras: envFlag("OPENAI_OFFICIAL_IMAGE_EDIT_INCLUDE_EXTRAS", true),
     supportsGenerations: true
   }
@@ -491,13 +497,21 @@ async function requestStickerImage(kind, prompt, referenceImage) {
   const directResult = await tryAttempt("reference edit");
   if (directResult) return { image: directResult, warning: "", metrics };
 
+  // The requested edit size is the per-sticker spec unless an explicit env override is set.
+  // top/bottom resolve to 1536x1024 landscape, side to 1024x1536 portrait.
   const requestedEditSize = IMAGE_EDIT_SIZE || stickerSpecs[kind].size;
   if (USE_IMAGE_EDITS && referenceImage && IMAGE_EDIT_FALLBACK_SIZE && requestedEditSize !== IMAGE_EDIT_FALLBACK_SIZE) {
-    const squareResult = await tryAttempt(`reference edit ${IMAGE_EDIT_FALLBACK_SIZE}`, { editSize: IMAGE_EDIT_FALLBACK_SIZE });
+    // Compatibility fallback (e.g. a square 1024x1024 gateway size) is forced to PNG so the
+    // postprocess step can decode and resize it back to the requested sticker ratio. A JPEG
+    // fallback would skip normalizeStickerImageSize and leak a square asset (e.g. a square side).
+    const squareResult = await tryAttempt(`reference edit ${IMAGE_EDIT_FALLBACK_SIZE}`, {
+      editSize: IMAGE_EDIT_FALLBACK_SIZE,
+      outputFormat: "png"
+    });
     if (squareResult) {
       return {
         image: squareResult,
-        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${IMAGE_EDIT_FALLBACK_SIZE} 兼容尺寸生成并裁成贴片比例。`,
+        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${IMAGE_EDIT_FALLBACK_SIZE} 兼容尺寸以 PNG 生成并归一化回贴片比例（${stickerSpecs[kind].size}）。`,
         metrics
       };
     }
@@ -1015,7 +1029,7 @@ function textColorModePromptLines(textColorMode, matteMode, textBrightness) {
     "Hard color rule: never fill DARK main lettering with pure black #000000 or a flat near-#000 blackest tone. Use deep charcoal, warm ink, dark espresso brown, or a very dark neutral with subtle tint instead, so the type keeps depth and never looks like a flat #000 block.",
     "Authority rule: the step-1 top sticker (Reference image 1) decides the light/dark relationship. Read its real background/ornament brightness (ignoring pure-white fade zones) and keep the lettering's value contrast strong against that.",
     matteMode === "black"
-      ? "Matte rule: the background is a flat pure-black matte that will be keyed out. The main lettering must be light (warm white, ivory, pearl) and clearly separated from the black matte. Any dark outline, shadow, or interior texture must sit INSIDE or touching the letters, never as a separate dark patch floating in the matte."
+      ? "Matte rule: the background is a flat pure-black matte that will be keyed out. The main lettering must be light (pure white #ffffff is allowed, as are warm white, ivory, or pearl) and clearly separated from the black matte. Any dark outline, shadow, or interior texture must sit INSIDE or touching the letters, never as a separate dark patch floating in the matte."
       : "Matte rule: the background is a flat pure-white matte that will be keyed out. The main lettering must be dark and clearly separated from the white matte. Any white highlight or interior detail must sit INSIDE the letters, never as a separate white patch floating in the matte."
   ];
   if (textColorMode === "dark") {
@@ -1027,14 +1041,14 @@ function textColorModePromptLines(textColorMode, matteMode, textBrightness) {
   if (textColorMode === "light") {
     return [
       ...shared,
-      "Color mode = LIGHT lettering (forced) on a black matte: make the main type a warm white, ivory, or pearl light neutral so it stands out against the pure-black matte. Add a subtle darker inner edge or shadow only if it stays attached to the strokes; do not place loose dark shapes in the matte."
+      "Color mode = LIGHT lettering (forced) on a black matte: make the main type a light neutral so it stands out against the pure-black matte. Pure white #ffffff is allowed in light mode; warm white, ivory, or pearl are also fine. Add a subtle darker inner edge or shadow only if it stays attached to the strokes; do not place loose dark shapes in the matte."
     ];
   }
   return [
     ...shared,
     textBrightness === "light"
-      ? "Color mode = AUTO resolved to LIGHT lettering on a black matte (the top sticker reads dark/saturated): use warm white/ivory lettering that stands out against the pure-black matte."
-      : "Color mode = AUTO resolved to DARK lettering on a white matte (the top sticker reads light/airy): use deep dark (not pure black) lettering that stands out against the pure-white matte."
+      ? "Color mode = AUTO resolved to LIGHT lettering on a black matte (the top sticker reads dark/saturated): use light lettering that stands out against the pure-black matte. Pure white #ffffff is allowed here; warm white or ivory are also fine."
+      : "Color mode = AUTO resolved to DARK lettering on a white matte (the top sticker reads light/airy): use deep dark — never pure black #000000 — lettering that stands out against the pure-white matte."
   ];
 }
 
@@ -1066,10 +1080,13 @@ async function handleTextLayer(body) {
     sourceTypographyReferenceImage
       ? "An additional source reference is the user's original step-1 reference image. If it contains lettering, extract only broad typography cues such as stroke thickness, terminal shape, weight rhythm, spacing, and title hierarchy. Never copy its actual words, slogans, logo marks, background, scene, palette, decorations, products, people, labels, or composition."
       : "",
-    "The top sticker reference always wins for color, material direction, and small surrounding decorative elements.",
-    "Color lock: choose lettering fill, outline, shadow, highlights, edge effects, and small accent strokes only from Reference image 1/top sticker or from neutral contrast needed for readability. Never borrow the color palette from a font reference or typography preset.",
+    "Color authority: Reference image 1 (the generated top sticker) is the SOLE authority for every color decision — typography fill, global palette, highlights, outline, shadow, edge effects, glow, and all decorative color. Sample colors only from the top sticker, plus neutral contrast tones needed purely for readability.",
+    "Color exclusion: the font-reference image (Reference image 2) and the optional source-typography image (Reference image 3) must NEVER contribute any color, global palette, decoration palette, accent color, gradient, scene, or background. Treat those two references as monochrome shape guides only — read their letterform and texture, discard their hues entirely. If they conflict with the top sticker on color, the top sticker always wins.",
+    "ABSOLUTE COLOR RULE — Reference image 1 (the generated top sticker) ALONE decides every color in this asset: it alone chooses the lettering fill, the lettering outline, the lettering shadow, the lettering highlights, every gradient, and every decorative-accent color. No other reference and no default palette may introduce a single hue. Sample all color exclusively from Reference image 1, adding only neutral black/white contrast tones when readability strictly requires it.",
+    "ABSOLUTE SHAPE-ONLY RULE — Reference image 2 (font reference) and Reference image 3 (optional source typography) are SHAPE-ONLY references and MUST be read as if fully grayscale/desaturated. They may influence ONLY glyph silhouette, stroke construction, and local face texture. They MUST NOT influence ANY color, ANY palette, ANY color temperature (warm/cool), ANY decoration, ANY background, ANY scene, or ANY compositional color. Strip away their colors completely before using them.",
+    "These two rules never conflict and never override each other: Reference image 1 is the only color source; References 2 and 3 are the only auxiliary shape sources. Color comes from Reference image 1; shape may come from References 2 and 3; the two channels stay strictly separate.",
     "Letterform lock: the selected typography route controls silhouette, stroke structure, serif/brush/rounded character, and spacing. The top sticker reference must not collapse different typography routes into the same font style.",
-    "The optional font reference never decides the background, global color, large ornaments, or non-text visual content.",
+    "The font reference and source-typography reference never decide the background, global color, palette, large ornaments, decorative color, or any non-text visual content.",
     "Do not recreate large color blocks, ribbons, watercolor backgrounds, geometric networks, poster scenes, people, products, logos, QR codes, labels, captions, slogans, signatures, or watermarks.",
     "First judge the intended text placement brightness from the top sticker: light placement areas need darker lettering; dark or saturated placement areas need lighter lettering with strong outline, shadow, or contrast edge.",
     "必须逐字保留以下原文案，不增删、不翻译、不改写，保留换行结构：",

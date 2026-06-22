@@ -530,13 +530,13 @@ export default {
       if (this.activeUploadTarget === "font") this.setUploadTarget("reference");
     },
     async fontReferenceImageForRun() {
-      if (this.selectedFontStyle === "reference") return this.fontReferenceDataUrl;
+      if (this.selectedFontStyle === "reference") return this.neutralizeFontReference(this.fontReferenceDataUrl);
       const presetUrl = this.fontPresetReferenceUrls[this.selectedFontStyle];
       if (!presetUrl) return "";
       if (!this.fontPresetReferenceDataUrls[presetUrl]) {
         this.fontPresetReferenceDataUrls[presetUrl] = await this.imageUrlToDataUrl(presetUrl);
       }
-      return this.fontPresetReferenceDataUrls[presetUrl];
+      return this.neutralizeFontReference(this.fontPresetReferenceDataUrls[presetUrl]);
     },
     fontPresetKeyForRun() {
       const keys = {
@@ -551,6 +551,42 @@ export default {
       if (!response.ok) throw new Error(`Font preset image not found: ${url}`);
       const blob = await response.blob();
       return this.fileToDataUrl(blob);
+    },
+    async neutralizeFontReference(dataUrl) {
+      return new Promise((resolve) => {
+        if (!dataUrl) {
+          resolve(dataUrl);
+          return;
+        }
+        const image = new Image();
+        image.onload = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = image.naturalWidth;
+            canvas.height = image.naturalHeight;
+            const ctx = canvas.getContext("2d");
+            if (!ctx) {
+              resolve(dataUrl);
+              return;
+            }
+            ctx.drawImage(image, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            for (let i = 0; i < pixels.length; i += 4) {
+              const gray = Math.round(0.299 * pixels[i] + 0.587 * pixels[i + 1] + 0.114 * pixels[i + 2]);
+              pixels[i] = gray;
+              pixels[i + 1] = gray;
+              pixels[i + 2] = gray;
+            }
+            ctx.putImageData(imageData, 0, 0);
+            resolve(canvas.toDataURL("image/png"));
+          } catch {
+            resolve(dataUrl);
+          }
+        };
+        image.onerror = () => resolve(dataUrl);
+        image.src = dataUrl;
+      });
     },
     fileToDataUrl(file) {
       return new Promise((resolve, reject) => {
@@ -895,6 +931,21 @@ export default {
         : (this.lang === "zh"
           ? "移动到上贴或下贴区域后直接拖动画线，系统会自动判断渐隐对象。"
           : "Move over the top or bottom sticker and drag to draw; the target is detected automatically.");
+    },
+    resetFadePaths() {
+      this.topPathPoints = [];
+      this.bottomPathPoints = [];
+      this.redrawPath();
+    },
+    resetTextPlacement() {
+      this.centerTextLayer();
+    },
+    resetSidePlacement() {
+      this.sideLayer.width = 210;
+      this.sideLayer.height = this.sideStickerHeight;
+      this.sideLayer.x = 36;
+      this.sideLayer.y = Math.round((this.compositionSize.height - this.sideLayer.height) / 2);
+      this.keepSideLayerInBounds();
     },
     resizeCompositionForDisplay() {
       const board = this.$refs.compositionBoard;
@@ -1701,9 +1752,12 @@ export default {
                 </div>
               </div>
               <div class="ai-workflow-toolrow">
-                <button type="button" :class="{ active: activeFusionMode === 'fade' }" @click="startFadeMode">{{ fadeButtonLabel }}</button>
-                <button type="button" :class="{ active: activeFusionMode === 'text' }" @click="placeTextLayer">{{ placeTextButtonLabel }}</button>
-                <button type="button" :class="{ active: activeFusionMode === 'side' }" @click="placeSideSticker">{{ placeSideButtonLabel }}</button>
+                <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" @click="startFadeMode">{{ fadeButtonLabel }}</button>
+                <button v-if="fadeHasPath" type="button" class="ai-workflow-reset-icon" :title="labels.redoFade" :aria-label="labels.redoFade" @click.stop="resetFadePaths">&#8635;</button>
+                <button type="button" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" @click="placeTextLayer">{{ placeTextButtonLabel }}</button>
+                <button v-if="textBoxPlaced" type="button" class="ai-workflow-reset-icon" :title="labels.resetTextBox" :aria-label="labels.resetTextBox" @click.stop="resetTextPlacement">&#8635;</button>
+                <button type="button" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" @click="placeSideSticker">{{ placeSideButtonLabel }}</button>
+                <button v-if="sideLayerVisible" type="button" class="ai-workflow-reset-icon" :title="labels.resetSide" :aria-label="labels.resetSide" @click.stop="resetSidePlacement">&#8635;</button>
               </div>
             </div>
             <div
