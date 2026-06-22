@@ -1580,20 +1580,20 @@ export default {
                   <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.top, stickerDownloadName('top'))">{{ labels.downloadOriginal }}</button>
                 </div>
               </div>
-              <div class="ai-sticker-piece ai-sticker-piece--bottom" :style="stickerPieceStyle('bottom')">
-                <img v-if="stickerOutputs.bottom" :src="stickerOutputs.bottom" alt="Bottom sticker background" @load="recordStickerOutputSize('bottom', $event)" />
-                <span>{{ labels.bottomBg }}</span>
-                <div v-if="stickerOutputs.bottom" class="ai-sticker-actions">
-                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('bottom')">{{ runningStickerKind === "bottom" ? labels.regenerating : labels.regenerate }}</button>
-                  <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.bottom, stickerDownloadName('bottom'))">{{ labels.downloadOriginal }}</button>
-                </div>
-              </div>
               <div class="ai-sticker-piece ai-sticker-piece--side" :style="stickerPieceStyle('side')">
                 <img v-if="stickerOutputs.side" :src="stickerOutputs.side" alt="Side sticker background" @load="recordStickerOutputSize('side', $event)" />
                 <span>{{ labels.sideBg }}</span>
                 <div v-if="stickerOutputs.side" class="ai-sticker-actions">
                   <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('side')">{{ runningStickerKind === "side" ? labels.regenerating : labels.regenerate }}</button>
                   <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.side, stickerDownloadName('side'))">{{ labels.downloadOriginal }}</button>
+                </div>
+              </div>
+              <div class="ai-sticker-piece ai-sticker-piece--bottom" :style="stickerPieceStyle('bottom')">
+                <img v-if="stickerOutputs.bottom" :src="stickerOutputs.bottom" alt="Bottom sticker background" @load="recordStickerOutputSize('bottom', $event)" />
+                <span>{{ labels.bottomBg }}</span>
+                <div v-if="stickerOutputs.bottom" class="ai-sticker-actions">
+                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('bottom')">{{ runningStickerKind === "bottom" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.bottom, stickerDownloadName('bottom'))">{{ labels.downloadOriginal }}</button>
                 </div>
               </div>
               <div
