@@ -64,7 +64,7 @@ export default {
       fontReferenceObjectUrl: "",
       liveRoomObjectUrl: "",
       textInteraction: null,
-      textLayerVisible: true,
+      textLayerVisible: false,
       textBoxPlaced: false,
       selectedFontStyle: "clean",
       textColorMode: "auto",
@@ -837,8 +837,13 @@ export default {
         this.textLayerPromptBuilt = data.prompt || "";
         this.textLayerVerified = false;
         this.assets[0].ready = true;
-        this.statusText = data.message;
-        this.placeTextLayer(false);
+        this.textLayerVisible = false;
+        this.textBoxPlaced = false;
+        this.sideLayerVisible = false;
+        this.statusText = [
+          data.message,
+          this.lang === "zh" ? "请在第三栏先完成手绘渐隐，再置入文字框。" : "In step 3, draw the fade first, then place the text box."
+        ].filter(Boolean).join(" ");
       } catch (error) {
         this.statusText = this.lang === "zh"
           ? `文字图层生成失败：${error.message}`
@@ -963,6 +968,10 @@ export default {
       this.activeFusionMode = "fade";
       this.topPathPoints = [];
       this.bottomPathPoints = [];
+      this.textBoxPlaced = false;
+      this.textLayerVisible = false;
+      this.sideLayerVisible = false;
+      this.resetSideLayerPosition();
       this.redrawPath();
       this.statusText = this.lang === "zh"
         ? "渐隐路径已重置；悬停在贴片区域，按住 Shift 可画水平直线。"
@@ -970,10 +979,23 @@ export default {
     },
     resetTextPlacement() {
       this.activeFusionMode = "text";
-      this.centerTextLayer();
+      this.textBoxPlaced = false;
+      this.textLayerVisible = false;
+      this.sideLayerVisible = false;
+      this.resetSideLayerPosition();
+      this.statusText = this.lang === "zh"
+        ? "文字框和后续侧贴已回退；可重新置入文字框。"
+        : "The text box and later side sticker were rolled back. Place the text box again.";
     },
     resetSidePlacement() {
       this.activeFusionMode = "side";
+      this.sideLayerVisible = false;
+      this.resetSideLayerPosition();
+      this.statusText = this.lang === "zh"
+        ? "侧贴已回退；可重新置入侧贴。"
+        : "The side sticker was rolled back. Place it again.";
+    },
+    resetSideLayerPosition() {
       this.sideLayer.width = 210;
       this.sideLayer.height = this.sideStickerHeight;
       this.sideLayer.x = 36;
@@ -1784,10 +1806,10 @@ export default {
                   <h3>{{ labels.stickerEffect }}</h3>
                 </div>
               </div>
-              <div class="ai-workflow-toolrow">
-                <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" @click="fadeHasPath ? resetFadePaths() : startFadeMode()"><span>{{ fadeButtonLabel }}</span><span v-if="fadeHasPath" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
-                <button type="button" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" @click="textBoxPlaced ? resetTextPlacement() : placeTextLayer()"><span>{{ placeTextButtonLabel }}</span><span v-if="textBoxPlaced" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
-                <button type="button" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" @click="sideLayerVisible ? resetSidePlacement() : placeSideSticker()"><span>{{ placeSideButtonLabel }}</span><span v-if="sideLayerVisible" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
+              <div class="ai-workflow-toolrow ai-fusion-toolrow">
+                <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" :title="fadeHasPath ? labels.redoFade : labels.fadeBrush" @click="fadeHasPath ? resetFadePaths() : startFadeMode()"><span>{{ fadeButtonLabel }}</span><img v-if="fadeHasPath" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
+                <button type="button" :disabled="!fadeHasPath" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" :title="textBoxPlaced ? labels.resetTextBox : labels.placeText" @click="textBoxPlaced ? resetTextPlacement() : placeTextLayer()"><span>{{ placeTextButtonLabel }}</span><img v-if="textBoxPlaced" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
+                <button type="button" :disabled="!textBoxPlaced" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" :title="sideLayerVisible ? labels.resetSide : labels.placeSide" @click="sideLayerVisible ? resetSidePlacement() : placeSideSticker()"><span>{{ placeSideButtonLabel }}</span><img v-if="sideLayerVisible" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
               </div>
             </div>
             <div
