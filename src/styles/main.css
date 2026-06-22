@@ -1179,31 +1179,24 @@ a {
 }
 
 .ai-fusion-toolrow {
-  position: relative;
-  gap: 10px;
-  padding-bottom: 14px;
-}
-
-.ai-fusion-toolrow::after {
-  position: absolute;
-  right: 16px;
-  bottom: 3px;
-  left: 16px;
-  height: 1px;
-  background: rgba(11, 11, 15, 0.42);
-  content: "";
+  align-items: center;
+  gap: 0;
 }
 
 .ai-fusion-toolrow button {
-  position: relative;
-  z-index: 1;
+  min-height: 44px;
+  white-space: nowrap;
 }
 
-.ai-fusion-toolrow button:disabled {
-  border-color: rgba(11, 11, 15, 0.2);
-  background: rgba(11, 11, 15, 0.03);
-  color: rgba(11, 11, 15, 0.42);
-  cursor: not-allowed;
+.ai-fusion-connector {
+  width: 26px;
+  height: 2px;
+  flex: 0 0 26px;
+  background: #99999a;
+}
+
+.ai-fusion-connector.is-complete {
+  background: #0b0b0f;
 }
 
 .ai-workflow-reset-glyph {
@@ -3674,6 +3667,18 @@ a {
 
   .ai-workflow-assets--grid {
     grid-template-columns: 1fr;
+  }
+
+  .ai-fusion-toolrow {
+    gap: 8px;
+  }
+
+  .ai-fusion-toolrow button {
+    flex: 1 1 138px;
+  }
+
+  .ai-fusion-connector {
+    display: none;
   }
 }
 

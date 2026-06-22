@@ -842,7 +842,7 @@ export default {
         this.sideLayerVisible = false;
         this.statusText = [
           data.message,
-          this.lang === "zh" ? "请在第三栏先完成手绘渐隐，再置入文字框。" : "In step 3, draw the fade first, then place the text box."
+          this.lang === "zh" ? "第三栏可直接置入文字框，也可先手绘渐隐微调默认遮罩。" : "In step 3, place the text box directly or draw a fade first to refine the default mask."
         ].filter(Boolean).join(" ");
       } catch (error) {
         this.statusText = this.lang === "zh"
@@ -1808,8 +1808,10 @@ export default {
               </div>
               <div class="ai-workflow-toolrow ai-fusion-toolrow">
                 <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" :title="fadeHasPath ? labels.redoFade : labels.fadeBrush" @click="fadeHasPath ? resetFadePaths() : startFadeMode()"><span>{{ fadeButtonLabel }}</span><img v-if="fadeHasPath" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
-                <button type="button" :disabled="!fadeHasPath" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" :title="textBoxPlaced ? labels.resetTextBox : labels.placeText" @click="textBoxPlaced ? resetTextPlacement() : placeTextLayer()"><span>{{ placeTextButtonLabel }}</span><img v-if="textBoxPlaced" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
-                <button type="button" :disabled="!textBoxPlaced" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" :title="sideLayerVisible ? labels.resetSide : labels.placeSide" @click="sideLayerVisible ? resetSidePlacement() : placeSideSticker()"><span>{{ placeSideButtonLabel }}</span><img v-if="sideLayerVisible" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
+                <span class="ai-fusion-connector" :class="{ 'is-complete': fadeHasPath }" aria-hidden="true"></span>
+                <button type="button" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" :title="textBoxPlaced ? labels.resetTextBox : labels.placeText" @click="textBoxPlaced ? resetTextPlacement() : placeTextLayer()"><span>{{ placeTextButtonLabel }}</span><img v-if="textBoxPlaced" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
+                <span class="ai-fusion-connector" :class="{ 'is-complete': textBoxPlaced }" aria-hidden="true"></span>
+                <button type="button" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" :title="sideLayerVisible ? labels.resetSide : labels.placeSide" @click="sideLayerVisible ? resetSidePlacement() : placeSideSticker()"><span>{{ placeSideButtonLabel }}</span><img v-if="sideLayerVisible" class="ai-workflow-reset-glyph" src="/images/work/restart-icon.svg" alt="" /></button>
               </div>
             </div>
             <div
