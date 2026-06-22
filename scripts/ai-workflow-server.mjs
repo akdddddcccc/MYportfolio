@@ -83,6 +83,12 @@ const IMAGE_EDIT_SIZE = IMAGE_PROVIDER.editSize;
 const IMAGE_EDIT_FALLBACK_SIZE = IMAGE_PROVIDER.editFallbackSize;
 const IMAGE_EDIT_INCLUDE_EXTRAS = IMAGE_PROVIDER.includeEditExtras;
 const TEXT_LAYER_SIZE = process.env.OPENAI_TEXT_LAYER_SIZE || "1536x1024";
+const configuredTextLayerFallbackSize = STICKER_IMAGE_PROVIDER === "ofox"
+  ? normalizeEditSizeEnv(process.env.OFOX_TEXT_LAYER_EDIT_FALLBACK_SIZE)
+  : normalizeEditSizeEnv(process.env.OPENAI_OFFICIAL_TEXT_LAYER_EDIT_FALLBACK_SIZE);
+const TEXT_LAYER_EDIT_FALLBACK_SIZE = configuredTextLayerFallbackSize
+  || IMAGE_EDIT_FALLBACK_SIZE
+  || (STICKER_IMAGE_PROVIDER === "ofox" ? "1024x1024" : "");
 const TEXT_LAYER_USE_API = process.env.OPENAI_TEXT_LAYER_USE_API !== "0";
 const GENERATION_MODE = process.env.AI_WORKFLOW_GENERATION_MODE || "sequential";
 const WORKFLOW_DOC_PATH = "/Users/eeo/Documents/直播间贴片自动化/直播间贴片生图工作流_主文档.md";
@@ -309,7 +315,9 @@ async function parseOpenAIImageResponse(response, requestedFormat) {
   if (!response.ok) {
     const requestId = response.headers.get("x-request-id");
     const message = data?.error?.message || `OpenAI request failed with ${response.status}`;
-    throw new Error(requestId ? `${message} (request ${requestId})` : message);
+    const error = new Error(requestId ? `${message} (request ${requestId})` : message);
+    error.status = response.status;
+    throw error;
   }
   const imageBase64 = data?.data?.[0]?.b64_json;
   const imageUrl = data?.data?.[0]?.url;
@@ -500,38 +508,41 @@ async function requestStickerImage(kind, prompt, referenceImage) {
   // The requested edit size is the per-sticker spec unless an explicit env override is set.
   // top/bottom resolve to 1536x1024 landscape, side to 1024x1536 portrait.
   const requestedEditSize = IMAGE_EDIT_SIZE || stickerSpecs[kind].size;
-  if (USE_IMAGE_EDITS && referenceImage && IMAGE_EDIT_FALLBACK_SIZE && requestedEditSize !== IMAGE_EDIT_FALLBACK_SIZE) {
+  const compatibilityEditSize = IMAGE_EDIT_FALLBACK_SIZE || (IMAGE_PROVIDER.id === "ofox" ? "1024x1024" : "");
+  if (USE_IMAGE_EDITS && referenceImage && compatibilityEditSize && requestedEditSize !== compatibilityEditSize) {
     // Compatibility fallback (e.g. a square 1024x1024 gateway size) is forced to PNG so the
     // postprocess step can decode and resize it back to the requested sticker ratio. A JPEG
     // fallback would skip normalizeStickerImageSize and leak a square asset (e.g. a square side).
-    const squareResult = await tryAttempt(`reference edit ${IMAGE_EDIT_FALLBACK_SIZE}`, {
-      editSize: IMAGE_EDIT_FALLBACK_SIZE,
+    const squareResult = await tryAttempt(`reference edit ${compatibilityEditSize}`, {
+      editSize: compatibilityEditSize,
       outputFormat: "png"
     });
     if (squareResult) {
       return {
         image: squareResult,
-        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${IMAGE_EDIT_FALLBACK_SIZE} 兼容尺寸以 PNG 生成并归一化回贴片比例（${stickerSpecs[kind].size}）。`,
+        warning: `${stickerSpecs[kind].zhName} 的原比例图生图失败，已用 ${compatibilityEditSize} 兼容尺寸以 PNG 生成并归一化回贴片比例（${stickerSpecs[kind].size}）。`,
         metrics
       };
     }
   }
 
-  const generationPrompt = [
-    prompt,
-    "",
-    "The image edit gateway returned blank or unusable output for the reference image. Generate a fresh non-blank sticker background from the written style instructions. The result must contain visible decorative texture, color, and composition; never return a blank or nearly white canvas."
-  ].join("\n");
-  const generatedResult = await tryAttempt("text-only generation retry", {
-    referenceImage: "",
-    prompt: generationPrompt
-  });
-  if (generatedResult) {
-    return {
-      image: generatedResult,
-      warning: `${stickerSpecs[kind].zhName} 的图生图不可用，已改用文字描述生成；参考图相似度会降低。`,
-      metrics
-    };
+  if (IMAGE_PROVIDER.supportsGenerations) {
+    const generationPrompt = [
+      prompt,
+      "",
+      "The image edit gateway returned blank or unusable output for the reference image. Generate a fresh non-blank sticker background from the written style instructions. The result must contain visible decorative texture, color, and composition; never return a blank or nearly white canvas."
+    ].join("\n");
+    const generatedResult = await tryAttempt("text-only generation retry", {
+      referenceImage: "",
+      prompt: generationPrompt
+    });
+    if (generatedResult) {
+      return {
+        image: generatedResult,
+        warning: `${stickerSpecs[kind].zhName} 的图生图不可用，已改用文字描述生成；参考图相似度会降低。`,
+        metrics
+      };
+    }
   }
 
   const error = new Error(failedAttempts.join(" / ") || "Image generation failed");
@@ -1140,29 +1151,51 @@ async function handleTextLayer(body) {
   }
 
   try {
+    const failedAttempts = [];
+    const tryTextEdit = async (label, options) => {
+      try {
+        return await requestOpenAIImage({
+          prompt: options.prompt || prompt,
+          size: TEXT_LAYER_SIZE,
+          referenceImages: options.referenceImages,
+          referenceImage: options.referenceImage,
+          editSize: options.editSize,
+          outputFormat: "png"
+        });
+      } catch (error) {
+        failedAttempts.push(`${label}: ${error.message || "failed"}`);
+        return "";
+      }
+    };
+
+    // Keep the detailed font reference when the gateway accepts it, but fall back progressively
+    // to the top sticker alone and then a compact compatible edit size before using local SVG.
+    let whiteDraft = await tryTextEdit("top sticker + typography references", { referenceImages });
     let referenceFallback = "";
-    let whiteDraft = "";
-    try {
-      whiteDraft = await requestOpenAIImage({
-        prompt,
-        size: TEXT_LAYER_SIZE,
-        referenceImages,
-        outputFormat: "png"
-      });
-    } catch (error) {
-      if (referenceImages.length < 2 || !topStickerImage) throw error;
-      referenceFallback = error.message || "Multi-reference image edit failed";
-      whiteDraft = await requestOpenAIImage({
+    if (!whiteDraft && topStickerImage) {
+      referenceFallback = failedAttempts[failedAttempts.length - 1] || "Multi-reference image edit failed";
+      whiteDraft = await tryTextEdit("top sticker only", {
         prompt: [
           prompt,
           "",
           "The optional typography reference images could not be sent by the image gateway in this retry. Ignore them and rely on the top sticker plus the selected typography route."
         ].join("\n"),
-        size: TEXT_LAYER_SIZE,
-        referenceImage: topStickerImage,
-        outputFormat: "png"
+        referenceImage: topStickerImage
       });
     }
+    if (!whiteDraft && topStickerImage && TEXT_LAYER_EDIT_FALLBACK_SIZE && TEXT_LAYER_EDIT_FALLBACK_SIZE !== TEXT_LAYER_SIZE) {
+      referenceFallback = failedAttempts.join(" / ");
+      whiteDraft = await tryTextEdit(`top sticker compatibility ${TEXT_LAYER_EDIT_FALLBACK_SIZE}`, {
+        prompt: [
+          prompt,
+          "",
+          "Use the supplied top sticker as the only reference. Preserve the requested text exactly and return a clean solid-matte typography draft."
+        ].join("\n"),
+        referenceImage: topStickerImage,
+        editSize: TEXT_LAYER_EDIT_FALLBACK_SIZE
+      });
+    }
+    if (!whiteDraft) throw new Error(failedAttempts.join(" / ") || "Text layer generation failed");
     let transparent = fallbackTransparent;
     let cutoutOk = false;
     let cutoutError = "";

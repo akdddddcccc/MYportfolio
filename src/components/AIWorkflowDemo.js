@@ -18,6 +18,8 @@ export default {
       statusText: this.lang === "zh" ? "等待输入" : "Waiting",
       runningStep: "",
       runningStickerKind: "",
+      isStickerGenerationRunning: false,
+      isTextGenerationRunning: false,
       loadingTimer: null,
       loadingWordIndex: 0,
       apiBase: typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname)
@@ -141,7 +143,7 @@ export default {
           textReferenceTop: "文字颜色、材质和周围小装饰继承第一步生成的上贴背景；字体参考图只学习字形、笔势和字面质感，不学习背景、颜色和其他元素。",
           extractReferenceTextStyle: "从第一步参考图提取文字风格",
           extractReferenceTextStyleHint: "仅在参考图里有可用文字时打开；只学习字形气质，不复制文案、背景和颜色。",
-          textNeedsTop: "请先完成第一步，生成上贴背景后再生成文字层。",
+          textNeedsTop: "请先生成上贴背景；上贴返回后即可与其余贴片并行生成文字层。",
           fontReferenceReady: "字体参考图已载入，只作为字形和局部质感参考",
           whiteDraft: "白底字体稿",
           run: "执行当前步骤",
@@ -156,10 +158,11 @@ export default {
           transparentPng: "透明 png",
           stickerEffect: "贴片效果",
           liveRoomBase: "直播间底图",
-          fadeBrush: "手绘渐隐",
-          placeText: "置入文字框",
+          fadeBrush: "1.手绘渐隐",
+          fadeShiftHint: "按住 Shift 可画水平直线",
+          placeText: "2.置入文字框",
           textMoveHint: "方向键微调位置",
-          placeSide: "置入侧贴",
+          placeSide: "3.置入侧贴",
           exportTitle: "图层清单 批量导出",
           exportAll: "批量导出",
           downloadOriginal: "下载原图",
@@ -177,9 +180,9 @@ export default {
           textColorAuto: "自动",
           textColorDark: "深色字",
           textColorLight: "浅色字",
-          redoFade: "重做渐隐",
-          resetTextBox: "重置文字框",
-          resetSide: "重置侧贴",
+          redoFade: "1.手绘渐隐重置",
+          resetTextBox: "2.文字框重置",
+          resetSide: "3.侧贴重置",
           waitingUpload: "等待上传截图",
           manualCheckTitle: "文字核对",
           manualCheckBody: "生成图可能改字。请逐字对照目标文案，确认品牌名、数字、符号、换行和复杂汉字都正确后再进入融合。",
@@ -208,7 +211,7 @@ export default {
           textReferenceTop: "Typography color, material, and small surrounding accents inherit from the top sticker generated in step 1. The optional font reference only guides letter shape, stroke rhythm, and face texture.",
           extractReferenceTextStyle: "Extract text style from step-1 reference",
           extractReferenceTextStyleHint: "Enable only when the first reference contains useful lettering. It learns typography mood only, not copy, background, or color.",
-          textNeedsTop: "Generate the top sticker in step 1 before creating the text layer.",
+          textNeedsTop: "Generate the top sticker first. Once it returns, the text layer can run beside the remaining stickers.",
           fontReferenceReady: "Font reference loaded. It only guides letterform and local texture.",
           whiteDraft: "White draft",
           run: "Run current step",
@@ -223,10 +226,11 @@ export default {
           transparentPng: "Transparent png",
           stickerEffect: "Sticker effect",
           liveRoomBase: "Live-room base",
-          fadeBrush: "Draw fade",
-          placeText: "Place text box",
+          fadeBrush: "1. Draw fade",
+          fadeShiftHint: "Hold Shift to draw a horizontal line",
+          placeText: "2. Place text box",
           textMoveHint: "Arrow keys move",
-          placeSide: "Place side sticker",
+          placeSide: "3. Place side sticker",
           exportTitle: "Layer list Batch export",
           exportAll: "Batch export",
           downloadOriginal: "Download original",
@@ -244,9 +248,9 @@ export default {
           textColorAuto: "Auto",
           textColorDark: "Dark text",
           textColorLight: "Light text",
-          redoFade: "Redo fade",
-          resetTextBox: "Reset text box",
-          resetSide: "Reset side sticker",
+          redoFade: "1. Reset fade",
+          resetTextBox: "2. Reset text box",
+          resetSide: "3. Reset side sticker",
           waitingUpload: "Waiting for screenshot",
           manualCheckTitle: "Text check",
           manualCheckBody: "Generated lettering can alter copy. Compare every character, number, symbol, line break, and complex glyph before fusion.",
@@ -561,15 +565,17 @@ export default {
         const image = new Image();
         image.onload = () => {
           try {
+            const maxEdge = 1024;
+            const scale = Math.min(1, maxEdge / Math.max(image.naturalWidth, image.naturalHeight));
             const canvas = document.createElement("canvas");
-            canvas.width = image.naturalWidth;
-            canvas.height = image.naturalHeight;
+            canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+            canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
             const ctx = canvas.getContext("2d");
             if (!ctx) {
               resolve(dataUrl);
               return;
             }
-            ctx.drawImage(image, 0, 0);
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const pixels = imageData.data;
             for (let i = 0; i < pixels.length; i += 4) {
@@ -579,7 +585,9 @@ export default {
               pixels[i + 2] = gray;
             }
             ctx.putImageData(imageData, 0, 0);
-            resolve(canvas.toDataURL("image/png"));
+            // Typography references only provide shape and local texture. A compact JPEG keeps
+            // that information while avoiding a large canvas-PNG upload beside the top sticker.
+            resolve(canvas.toDataURL("image/jpeg", 0.84));
           } catch {
             resolve(dataUrl);
           }
@@ -624,6 +632,9 @@ export default {
       }
       return data;
     },
+    setStickerGenerationStatus(message) {
+      if (!this.isTextGenerationRunning) this.statusText = message;
+    },
     async runStickerBackgrounds() {
       this.setUploadTarget("reference");
       if (!this.referenceDataUrl) {
@@ -632,11 +643,11 @@ export default {
           : "Upload or paste a reference image in step 1 first.";
         return;
       }
-      this.runningStep = "sticker-bg";
+      this.isStickerGenerationRunning = true;
       const startedAt = Date.now();
-      this.statusText = this.lang === "zh"
+      this.setStickerGenerationStatus(this.lang === "zh"
         ? "正在按顺序生成上贴、下贴、侧贴，降低套组颜色漂移..."
-        : "Generating the sticker set one by one to reduce color drift...";
+        : "Generating the sticker set one by one to reduce color drift...");
       try {
         const kinds = ["top", "bottom", "side"];
         const kindLabels = {
@@ -649,12 +660,11 @@ export default {
         const allTimings = {};
         let allGenerated = true;
 
-        for (let index = 0; index < kinds.length; index += 1) {
-          const kind = kinds[index];
+        const generateKind = async (kind, index) => {
           this.runningStickerKind = kind;
-          this.statusText = this.lang === "zh"
+          this.setStickerGenerationStatus(this.lang === "zh"
             ? `正在生成${kindLabels[kind]}（${index + 1}/3），保持同一参考图和颜色锁定规则...`
-            : `Generating ${kindLabels[kind]} (${index + 1}/3) with the same reference and color-lock rules...`;
+            : `Generating ${kindLabels[kind]} (${index + 1}/3) with the same reference and color-lock rules...`);
           try {
             const data = await this.postWorkflow("/api/ai-workflow/sticker-backgrounds", {
               lang: this.lang,
@@ -674,17 +684,29 @@ export default {
             if (data.errors?.[kind]) allErrors[kind] = data.errors[kind];
             if (data.warnings?.[kind]) allWarnings[kind] = data.warnings[kind];
             if (data.timings?.[kind]) allTimings[kind] = data.timings[kind];
-            this.statusText = this.lang === "zh"
-              ? `${kindLabels[kind]}已返回，继续生成下一张...`
-              : `${kindLabels[kind]} returned. Continuing with the next sticker...`;
+            const asset = this.assets.find((item) => item.key === kind);
+            if (asset) asset.ready = Boolean(this.stickerOutputs[kind]);
+            this.setStickerGenerationStatus(kind === "top"
+              ? (this.lang === "zh"
+                ? "上贴已返回：文字图层现在可与下贴、侧贴并行生成。"
+                : "The top sticker is ready. The text layer can now run while the remaining stickers continue.")
+              : (this.lang === "zh"
+                ? `${kindLabels[kind]}已返回，继续生成下一张...`
+                : `${kindLabels[kind]} returned. Continuing with the next sticker...`));
           } catch (error) {
             allGenerated = false;
             allErrors[kind] = error.message || "Image request failed";
-            this.statusText = this.lang === "zh"
+            this.setStickerGenerationStatus(this.lang === "zh"
               ? `${kindLabels[kind]}生成失败，继续尝试下一张...`
-              : `${kindLabels[kind]} failed. Continuing with the next sticker...`;
+              : `${kindLabels[kind]} failed. Continuing with the next sticker...`);
           }
-        }
+        };
+
+        // The top sticker is the only dependency for typography. Once it returns, the browser
+        // yields to user input while the remaining two stickers continue sequentially.
+        await generateKind(kinds[0], 0);
+        await generateKind(kinds[1], 1);
+        await generateKind(kinds[2], 2);
 
         this.assets[1].ready = true;
         this.assets[2].ready = true;
@@ -696,7 +718,7 @@ export default {
           ? Object.values(allWarnings).join(" / ")
           : "";
         const timingText = this.formatStickerTimingSummary(allTimings, kindLabels, Date.now() - startedAt);
-        this.statusText = allGenerated
+        this.setStickerGenerationStatus(allGenerated
           ? [
             this.lang === "zh" ? "上贴、下贴、侧贴已真实生成" : "Sticker backgrounds generated",
             warningText,
@@ -708,13 +730,13 @@ export default {
             timingText,
             errorText,
             errorText && this.lang === "zh" ? "如果连续出现超时、余额不足、rate limit 或 quota，通常就是网关额度/限流问题。" : ""
-          ].filter(Boolean).join(" ");
+          ].filter(Boolean).join(" "));
       } catch (error) {
-        this.statusText = this.lang === "zh"
+        this.setStickerGenerationStatus(this.lang === "zh"
           ? `贴片背景生成失败：${error.message}`
-          : `Sticker generation failed: ${error.message}`;
+          : `Sticker generation failed: ${error.message}`);
       } finally {
-        this.runningStep = "";
+        this.isStickerGenerationRunning = false;
         this.runningStickerKind = "";
       }
     },
@@ -725,7 +747,7 @@ export default {
           : "Upload or paste a reference image before regenerating.";
         return;
       }
-      if (this.runningStep) return;
+      if (this.runningStep || this.isStickerGenerationRunning || this.isTextGenerationRunning) return;
       const kindLabels = {
         top: this.lang === "zh" ? "上贴" : "top sticker",
         bottom: this.lang === "zh" ? "下贴" : "bottom sticker",
@@ -733,7 +755,7 @@ export default {
       };
       const previousOutput = this.stickerOutputs[kind];
       const startedAt = Date.now();
-      this.runningStep = "sticker-bg";
+      this.isStickerGenerationRunning = true;
       this.runningStickerKind = kind;
       this.statusText = this.lang === "zh"
         ? `正在单独重生${kindLabels[kind]}...`
@@ -779,7 +801,7 @@ export default {
           ? `${kindLabels[kind]}重生失败，已保留上一张结果：${error.message}`
           : `${kindLabels[kind]} regeneration failed; previous result kept: ${error.message}`;
       } finally {
-        this.runningStep = "";
+        this.isStickerGenerationRunning = false;
         this.runningStickerKind = "";
       }
     },
@@ -788,10 +810,15 @@ export default {
         this.statusText = this.labels.textNeedsTop;
         return;
       }
-      this.runningStep = "text-layer";
-      this.statusText = this.labels.running;
+      this.isTextGenerationRunning = true;
+      this.statusText = this.isStickerGenerationRunning
+        ? (this.lang === "zh" ? "文字图层生成中；下贴和侧贴仍在后台继续生成。" : "Text layer generation is running while the remaining stickers continue in the background.")
+        : this.labels.running;
       try {
         const fontReferenceImage = await this.fontReferenceImageForRun();
+        const sourceTypographyReferenceImage = this.extractTextStyleFromReference
+          ? await this.neutralizeFontReference(this.referenceDataUrl)
+          : "";
         const data = await this.postWorkflow("/api/ai-workflow/text-layer", {
           lang: this.lang,
           copyText: this.copyText,
@@ -803,7 +830,7 @@ export default {
           topStickerImage: this.stickerOutputs.top,
           referenceImage: this.stickerOutputs.top,
           fontReferenceImage,
-          sourceTypographyReferenceImage: this.extractTextStyleFromReference ? this.referenceDataUrl : ""
+          sourceTypographyReferenceImage
         });
         this.textLayerDraftOutput = data.assets?.whiteDraft || "";
         this.textLayerOutput = data.assets?.transparent || "";
@@ -817,7 +844,7 @@ export default {
           ? `文字图层生成失败：${error.message}`
           : `Text layer generation failed: ${error.message}`;
       } finally {
-        this.runningStep = "";
+        this.isTextGenerationRunning = false;
       }
     },
     formatStickerTimingSummary(timings, kindLabels, wallDurationMs) {
@@ -933,14 +960,20 @@ export default {
           : "Move over the top or bottom sticker and drag to draw; the target is detected automatically.");
     },
     resetFadePaths() {
+      this.activeFusionMode = "fade";
       this.topPathPoints = [];
       this.bottomPathPoints = [];
       this.redrawPath();
+      this.statusText = this.lang === "zh"
+        ? "渐隐路径已重置；悬停在贴片区域，按住 Shift 可画水平直线。"
+        : "Fade paths reset. Hover a sticker area; hold Shift to draw a horizontal line.";
     },
     resetTextPlacement() {
+      this.activeFusionMode = "text";
       this.centerTextLayer();
     },
     resetSidePlacement() {
+      this.activeFusionMode = "side";
       this.sideLayer.width = 210;
       this.sideLayer.height = this.sideStickerHeight;
       this.sideLayer.x = 36;
@@ -1559,8 +1592,8 @@ export default {
               <span>{{ labels.prompt }}</span>
               <textarea v-model="promptText" rows="3" :placeholder="labels.promptPlaceholder"></textarea>
             </label>
-            <button type="button" class="ai-workflow-button" :disabled="runningStep === 'sticker-bg'" @click="runStickerBackgrounds">
-              {{ runningStep === "sticker-bg" ? labels.running : labels.run }}
+            <button type="button" class="ai-workflow-button" :disabled="isStickerGenerationRunning" @click="runStickerBackgrounds">
+              {{ isStickerGenerationRunning ? labels.running : labels.run }}
             </button>
           </div>
 
@@ -1576,7 +1609,7 @@ export default {
                 <img v-if="stickerOutputs.top" :src="stickerOutputs.top" alt="Top sticker background" @load="recordStickerOutputSize('top', $event)" />
                 <span>{{ labels.topBg }}</span>
                 <div v-if="stickerOutputs.top" class="ai-sticker-actions">
-                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('top')">{{ runningStickerKind === "top" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" :disabled="Boolean(runningStep) || isStickerGenerationRunning || isTextGenerationRunning" @click.stop="regenerateSticker('top')">{{ runningStickerKind === "top" ? labels.regenerating : labels.regenerate }}</button>
                   <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.top, stickerDownloadName('top'))">{{ labels.downloadOriginal }}</button>
                 </div>
               </div>
@@ -1584,7 +1617,7 @@ export default {
                 <img v-if="stickerOutputs.side" :src="stickerOutputs.side" alt="Side sticker background" @load="recordStickerOutputSize('side', $event)" />
                 <span>{{ labels.sideBg }}</span>
                 <div v-if="stickerOutputs.side" class="ai-sticker-actions">
-                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('side')">{{ runningStickerKind === "side" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" :disabled="Boolean(runningStep) || isStickerGenerationRunning || isTextGenerationRunning" @click.stop="regenerateSticker('side')">{{ runningStickerKind === "side" ? labels.regenerating : labels.regenerate }}</button>
                   <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.side, stickerDownloadName('side'))">{{ labels.downloadOriginal }}</button>
                 </div>
               </div>
@@ -1592,12 +1625,12 @@ export default {
                 <img v-if="stickerOutputs.bottom" :src="stickerOutputs.bottom" alt="Bottom sticker background" @load="recordStickerOutputSize('bottom', $event)" />
                 <span>{{ labels.bottomBg }}</span>
                 <div v-if="stickerOutputs.bottom" class="ai-sticker-actions">
-                  <button type="button" :disabled="Boolean(runningStep)" @click.stop="regenerateSticker('bottom')">{{ runningStickerKind === "bottom" ? labels.regenerating : labels.regenerate }}</button>
+                  <button type="button" :disabled="Boolean(runningStep) || isStickerGenerationRunning || isTextGenerationRunning" @click.stop="regenerateSticker('bottom')">{{ runningStickerKind === "bottom" ? labels.regenerating : labels.regenerate }}</button>
                   <button type="button" @click.stop="downloadGeneratedImage(stickerOutputs.bottom, stickerDownloadName('bottom'))">{{ labels.downloadOriginal }}</button>
                 </div>
               </div>
               <div
-                v-if="runningStep === 'sticker-bg'"
+                v-if="isStickerGenerationRunning"
                 class="ai-generation-loader"
                 role="status"
                 aria-live="polite"
@@ -1663,8 +1696,8 @@ export default {
               </span>
             </label>
             <p class="ai-status-line">{{ labels.textReferenceTop }}</p>
-            <button type="button" class="ai-workflow-button" :disabled="runningStep === 'text-layer'" @click="runTextLayer">
-              {{ runningStep === "text-layer" ? labels.running : labels.run }}
+            <button type="button" class="ai-workflow-button" :disabled="isTextGenerationRunning || !stickerOutputs.top" @click="runTextLayer">
+              {{ isTextGenerationRunning ? labels.running : labels.run }}
             </button>
           </div>
 
@@ -1687,7 +1720,7 @@ export default {
                 <button v-if="textLayerOutput" type="button" class="ai-workflow-button" @click="downloadGeneratedImage(textLayerOutput, 'text-layer-transparent.png')">{{ labels.transparentPng }} · {{ labels.downloadOriginal }}</button>
               </div>
               <div
-                v-if="runningStep === 'text-layer'"
+                v-if="isTextGenerationRunning"
                 class="ai-generation-loader"
                 role="status"
                 aria-live="polite"
@@ -1752,12 +1785,9 @@ export default {
                 </div>
               </div>
               <div class="ai-workflow-toolrow">
-                <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" @click="startFadeMode">{{ fadeButtonLabel }}</button>
-                <button v-if="fadeHasPath" type="button" class="ai-workflow-reset-icon" :title="labels.redoFade" :aria-label="labels.redoFade" @click.stop="resetFadePaths">&#8635;</button>
-                <button type="button" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" @click="placeTextLayer">{{ placeTextButtonLabel }}</button>
-                <button v-if="textBoxPlaced" type="button" class="ai-workflow-reset-icon" :title="labels.resetTextBox" :aria-label="labels.resetTextBox" @click.stop="resetTextPlacement">&#8635;</button>
-                <button type="button" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" @click="placeSideSticker">{{ placeSideButtonLabel }}</button>
-                <button v-if="sideLayerVisible" type="button" class="ai-workflow-reset-icon" :title="labels.resetSide" :aria-label="labels.resetSide" @click.stop="resetSidePlacement">&#8635;</button>
+                <button type="button" :class="{ active: activeFusionMode === 'fade', 'is-used': fadeHasPath }" @click="fadeHasPath ? resetFadePaths() : startFadeMode()"><span>{{ fadeButtonLabel }}</span><span v-if="fadeHasPath" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
+                <button type="button" :class="{ active: activeFusionMode === 'text', 'is-used': textBoxPlaced }" @click="textBoxPlaced ? resetTextPlacement() : placeTextLayer()"><span>{{ placeTextButtonLabel }}</span><span v-if="textBoxPlaced" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
+                <button type="button" :class="{ active: activeFusionMode === 'side', 'is-used': sideLayerVisible }" @click="sideLayerVisible ? resetSidePlacement() : placeSideSticker()"><span>{{ placeSideButtonLabel }}</span><span v-if="sideLayerVisible" class="ai-workflow-reset-glyph" aria-hidden="true">&#8635;</span></button>
               </div>
             </div>
             <div
@@ -1829,6 +1859,8 @@ export default {
               </div>
               <canvas
                 ref="pathCanvas"
+                :title="activeFusionMode === 'fade' ? labels.fadeShiftHint : ''"
+                :aria-label="activeFusionMode === 'fade' ? labels.fadeShiftHint : ''"
                 @pointerdown="startDrawing"
                 @pointermove="continueDrawing"
                 @pointerup="endDrawing"
