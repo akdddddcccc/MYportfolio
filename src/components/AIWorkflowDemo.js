@@ -1385,21 +1385,38 @@ export default {
       return canvas;
     },
     applyStickerMask(canvas, kind, offsetY = 0) {
-      const mask = this.createRenderCanvas(canvas.width, canvas.height);
-      const maskCtx = mask.getContext("2d");
-      const path = new Path2D(kind === "top" ? this.topMaskD : this.bottomMaskD);
-      maskCtx.save();
-      maskCtx.translate(0, -offsetY);
-      maskCtx.filter = `blur(${kind === "top" ? 42 : 42}px)`;
-      maskCtx.fillStyle = "#fff";
-      maskCtx.fill(path);
-      maskCtx.restore();
-
       const ctx = canvas.getContext("2d");
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-in";
-      ctx.drawImage(mask, 0, 0);
-      ctx.restore();
+      const fallbackY = kind === "top"
+        ? this.topStickerHeight * 0.72
+        : this.bottomStickerY + this.bottomStickerHeight * 0.28;
+      const path = this.normalizedPath(
+        kind === "top" ? this.topPathPoints : this.bottomPathPoints,
+        fallbackY,
+        kind
+      ).map((point) => ({ x: point.x, y: point.y - offsetY }));
+      const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const featherRadius = 84;
+      let segment = 0;
+
+      // Canvas filter blur is not reliable in every browser export path. Rasterize the same
+      // normalized fade line directly so exported PNG alpha always follows the preview mask.
+      for (let x = 0; x < canvas.width; x += 1) {
+        while (segment < path.length - 2 && x > path[segment + 1].x) segment += 1;
+        const from = path[segment];
+        const to = path[Math.min(segment + 1, path.length - 1)];
+        const span = Math.max(1, to.x - from.x);
+        const progress = Math.min(1, Math.max(0, (x - from.x) / span));
+        const lineY = from.y + (to.y - from.y) * progress;
+
+        for (let y = 0; y < canvas.height; y += 1) {
+          const signedDistance = kind === "top" ? lineY - y : y - lineY;
+          const normalized = Math.min(1, Math.max(0, (signedDistance + featherRadius) / (featherRadius * 2)));
+          const alpha = normalized * normalized * (3 - 2 * normalized);
+          const index = (y * canvas.width + x) * 4 + 3;
+          pixels.data[index] = Math.round(pixels.data[index] * alpha);
+        }
+      }
+      ctx.putImageData(pixels, 0, 0);
     },
     async renderTextLayerPng() {
       const canvas = this.createRenderCanvas(this.textLayer.width, this.textLayer.height);
