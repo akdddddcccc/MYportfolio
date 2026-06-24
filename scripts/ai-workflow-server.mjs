@@ -22,6 +22,10 @@ const normalizeEditSizeEnv = (value) => {
   const trimmed = String(value ?? "").trim();
   return trimmed.toLowerCase() === "auto" ? "" : trimmed;
 };
+const optionalExperimentEnv = (name) => {
+  const value = String(process.env[name] || "").trim();
+  return ["", "-", "disabled", "none", "off"].includes(value.toLowerCase()) ? "" : value;
+};
 const imageProviderAdapters = {
   ofox: {
     id: "ofox",
@@ -68,10 +72,10 @@ const TASKMAP_DEMO_FALLBACK = process.env.TASKMAP_DEMO_FALLBACK === "1";
 // Makers Models remains an isolated experiment. Do not route the frozen demo's
 // OFOX, official OpenAI, or Task Map requests through it until image endpoints
 // and multi-reference edits have been verified against the deployed gateway.
-const MAKERS_MODELS_API_KEY = process.env.MAKERS_MODELS_API_KEY || "";
-const MAKERS_MODELS_BASE_URL = (process.env.MAKERS_MODELS_BASE_URL || "").replace(/\/+$/, "");
+const MAKERS_MODELS_API_KEY = optionalExperimentEnv("MAKERS_MODELS_API_KEY");
+const MAKERS_MODELS_BASE_URL = optionalExperimentEnv("MAKERS_MODELS_BASE_URL").replace(/\/+$/, "");
 const MAKERS_MODELS_TEXT_MODEL = process.env.MAKERS_MODELS_TEXT_MODEL || "@makers/deepseek-v4-flash";
-const MAKERS_MODELS_IMAGE_MODEL = process.env.MAKERS_MODELS_IMAGE_MODEL || "";
+const MAKERS_MODELS_IMAGE_MODEL = optionalExperimentEnv("MAKERS_MODELS_IMAGE_MODEL");
 const MAKERS_MODELS_ENABLE_IMAGE_PROBE = process.env.MAKERS_MODELS_ENABLE_IMAGE_PROBE === "1";
 const MAKERS_MODELS_TIMEOUT_MS = Math.min(
   60000,

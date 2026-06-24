@@ -18,13 +18,33 @@ browser bundle.
 MAKERS_MODELS_API_KEY=...
 MAKERS_MODELS_BASE_URL=...             # Copy the exact endpoint from Makers Models
 MAKERS_MODELS_TEXT_MODEL=@makers/deepseek-v4-flash
-MAKERS_MODELS_IMAGE_MODEL=             # Exact image model ID, only after it is confirmed
+MAKERS_MODELS_IMAGE_MODEL=disabled      # EdgeOne does not allow blanks; treated as unset
 MAKERS_MODELS_ENABLE_IMAGE_PROBE=0     # Deliberately switch to 1 for billed image tests
 MAKERS_MODELS_TIMEOUT_MS=30000
 ```
 
 The base URL intentionally has no guessed default. The console documentation is
 the authority for the gateway URL and its required API version suffix.
+
+## AI Gateway text-only configuration
+
+The EdgeOne **AI Gateway** console is a separate product surface from Makers
+Models, but this probe can test it when the endpoint accepts OpenAI-compatible
+`/chat/completions` requests with Bearer authentication. For the current
+text-only test, configure the gateway's own credential, endpoint, and model ID:
+
+```text
+MAKERS_MODELS_API_KEY=<AI Gateway call credential>
+MAKERS_MODELS_BASE_URL=<the API Endpoint shown by the ds-model instance>
+MAKERS_MODELS_TEXT_MODEL=<the exact model name in the AI Gateway request example>
+MAKERS_MODELS_IMAGE_MODEL=disabled
+MAKERS_MODELS_ENABLE_IMAGE_PROBE=0
+MAKERS_MODELS_TIMEOUT_MS=30000
+```
+
+Do not retain the default `@makers/deepseek-v4-flash` unless the AI Gateway
+request example explicitly uses that exact model identifier. The instance name
+`ds-model` is not necessarily the model value required by the API.
 
 ## Endpoints
 
