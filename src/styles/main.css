@@ -748,6 +748,32 @@ a {
   line-height: 1.8;
 }
 
+.project-hero-actions {
+  margin-top: clamp(34px, 5vw, 62px);
+}
+
+.project-product-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(100%, 380px);
+  min-height: 54px;
+  padding: 14px 22px;
+  border: 1px solid #0b0b0f;
+  background: #0b0b0f;
+  color: #fff;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.project-product-link:hover {
+  background: transparent;
+  color: #0b0b0f;
+}
+
 .download-row {
   display: flex;
   flex-wrap: wrap;
