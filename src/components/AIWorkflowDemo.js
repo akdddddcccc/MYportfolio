@@ -4,6 +4,10 @@ export default {
     lang: {
       type: String,
       required: true
+    },
+    productUrl: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -127,6 +131,8 @@ export default {
           kicker: "interactive demo",
           title: "贴片生成测试台",
           intro: "按功能步骤重新排布：先生成三贴背景，再生成文字图层，最后上传直播间底图进行路径融合和批量导出。",
+          fullProductReady: "进入正式版工作台",
+          fullProductPending: "正式版工作台整理中",
           stickerInput: "贴片 input",
           textInput: "文字层 input",
           fusionInput: "融合 input",
@@ -195,6 +201,8 @@ export default {
           kicker: "interactive demo",
           title: "Sticker generation test bench",
           intro: "Reordered by workflow: generate sticker backgrounds, create the text layer, then upload a live-room base for path blending and batch export.",
+          fullProductReady: "Open full workbench",
+          fullProductPending: "Full workbench coming soon",
           stickerInput: "sticker input",
           textInput: "text layer input",
           fusionInput: "fusion input",
@@ -1593,6 +1601,14 @@ export default {
         <p class="ai-service-status" :class="{ online: apiStatus.online, keyless: apiStatus.online && !apiStatus.hasOpenAIKey }">
           {{ apiStatus.message || statusText }}
         </p>
+        <div class="task-map-demo__actions">
+          <a v-if="productUrl" class="task-map-product-link" :href="productUrl" target="_blank" rel="noreferrer">
+            {{ labels.fullProductReady }}
+          </a>
+          <button v-else type="button" class="task-map-product-link task-map-product-link--pending" disabled>
+            {{ labels.fullProductPending }}
+          </button>
+        </div>
       </div>
 
       <div class="ai-workflow-tabs" aria-label="Workflow steps">

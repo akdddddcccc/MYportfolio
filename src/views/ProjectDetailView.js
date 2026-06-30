@@ -262,7 +262,7 @@ export default {
       </section>
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
-      <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
+      <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
 
       <section v-if="outputImages.length" class="output-gallery">
         <figure

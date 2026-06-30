@@ -943,7 +943,8 @@ export const projects = [
         "iframes": [],
         "pdfs": [],
         "demo": {
-          "type": "ai-workflow"
+          "type": "ai-workflow",
+          "productUrl": "http://muyang-tool.noteach.com.cn/"
         },
         "sectionLabels": [
           "interactive demo",
@@ -959,7 +960,8 @@ export const projects = [
         "iframes": [],
         "pdfs": [],
         "demo": {
-          "type": "ai-workflow"
+          "type": "ai-workflow",
+          "productUrl": "http://muyang-tool.noteach.com.cn/"
         },
         "sectionLabels": [
           "交互 demo",
