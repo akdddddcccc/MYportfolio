@@ -851,7 +851,9 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
   const { width, height, rgba } = png;
   const total = width * height;
   const visited = new Uint8Array(total);
-  const queue = [];
+  const queue = new Uint32Array(total);
+  let head = 0;
+  let tail = 0;
 
   const enqueue = (x, y) => {
     if (x < 0 || y < 0 || x >= width || y >= height) return;
@@ -860,7 +862,7 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     const index = pixel * 4;
     if (!isMattePixel(rgba, index, mode)) return;
     visited[pixel] = 1;
-    queue.push(pixel);
+    queue[tail++] = pixel;
   };
 
   for (let x = 0; x < width; x += 1) {
@@ -872,8 +874,8 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     enqueue(width - 1, y);
   }
 
-  for (let cursor = 0; cursor < queue.length; cursor += 1) {
-    const pixel = queue[cursor];
+  while (head < tail) {
+    const pixel = queue[head++];
     const x = pixel % width;
     const y = Math.floor(pixel / width);
     enqueue(x + 1, y);
@@ -883,28 +885,28 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
   }
 
   const minimumHoleArea = Math.max(6, Math.round(total * 0.000008));
+  const visitComponent = (pixel) => {
+    if (visited[pixel] || !isMattePixel(rgba, pixel * 4, mode)) return;
+    visited[pixel] = 2;
+    queue[tail++] = pixel;
+  };
   for (let seed = 0; seed < total; seed += 1) {
     if (visited[seed] || !isMattePixel(rgba, seed * 4, mode)) continue;
-    const component = [seed];
+    head = 0;
+    tail = 1;
+    queue[0] = seed;
     visited[seed] = 2;
-    for (let cursor = 0; cursor < component.length; cursor += 1) {
-      const pixel = component[cursor];
+    while (head < tail) {
+      const pixel = queue[head++];
       const x = pixel % width;
       const y = Math.floor(pixel / width);
-      const enqueueComponent = (nextX, nextY) => {
-        if (nextX < 0 || nextY < 0 || nextX >= width || nextY >= height) return;
-        const nextPixel = nextY * width + nextX;
-        if (visited[nextPixel] || !isMattePixel(rgba, nextPixel * 4, mode)) return;
-        visited[nextPixel] = 2;
-        component.push(nextPixel);
-      };
-      enqueueComponent(x + 1, y);
-      enqueueComponent(x - 1, y);
-      enqueueComponent(x, y + 1);
-      enqueueComponent(x, y - 1);
+      if (x + 1 < width) visitComponent(pixel + 1);
+      if (x > 0) visitComponent(pixel - 1);
+      if (y + 1 < height) visitComponent(pixel + width);
+      if (y > 0) visitComponent(pixel - width);
     }
-    if (component.length < minimumHoleArea) {
-      for (const pixel of component) visited[pixel] = 3;
+    if (tail < minimumHoleArea) {
+      for (let index = 0; index < tail; index += 1) visited[queue[index]] = 3;
     }
   }
 
