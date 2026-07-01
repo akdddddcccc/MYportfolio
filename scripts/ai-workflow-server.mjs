@@ -838,9 +838,8 @@ function matteFeatherAlpha(rgba, index, matteMode) {
   return Math.max(0, Math.min(255, Math.round((248 - minChannel) * 14)));
 }
 
-// Only the matte region that is connected to the canvas border is removed. Glyph-interior
-// highlights (white inside dark strokes) and interior dark detail (black outline/shadow inside
-// light strokes) are not border-connected, so the flood fill never reaches them and they survive.
+// Remove the border-connected matte plus enclosed matte components large enough to be glyph
+// counters (O / 日 / 田). Tiny isolated matte-colored highlights remain foreground detail.
 function removeConnectedMatte(dataUrl, matteMode = "white") {
   const parsed = dataUrlToBuffer(dataUrl);
   if (!parsed || parsed.mime !== "image/png") {
@@ -883,9 +882,35 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     enqueue(x, y - 1);
   }
 
+  const minimumHoleArea = Math.max(6, Math.round(total * 0.000008));
+  for (let seed = 0; seed < total; seed += 1) {
+    if (visited[seed] || !isMattePixel(rgba, seed * 4, mode)) continue;
+    const component = [seed];
+    visited[seed] = 2;
+    for (let cursor = 0; cursor < component.length; cursor += 1) {
+      const pixel = component[cursor];
+      const x = pixel % width;
+      const y = Math.floor(pixel / width);
+      const enqueueComponent = (nextX, nextY) => {
+        if (nextX < 0 || nextY < 0 || nextX >= width || nextY >= height) return;
+        const nextPixel = nextY * width + nextX;
+        if (visited[nextPixel] || !isMattePixel(rgba, nextPixel * 4, mode)) return;
+        visited[nextPixel] = 2;
+        component.push(nextPixel);
+      };
+      enqueueComponent(x + 1, y);
+      enqueueComponent(x - 1, y);
+      enqueueComponent(x, y + 1);
+      enqueueComponent(x, y - 1);
+    }
+    if (component.length < minimumHoleArea) {
+      for (const pixel of component) visited[pixel] = 3;
+    }
+  }
+
   const fallbackChannel = mode === "black" ? 0 : 255;
   for (let pixel = 0; pixel < total; pixel += 1) {
-    if (!visited[pixel]) continue;
+    if (visited[pixel] !== 1 && visited[pixel] !== 2) continue;
     const index = pixel * 4;
     const alpha = matteFeatherAlpha(rgba, index, mode);
     rgba[index + 3] = alpha;
