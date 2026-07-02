@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "dev:workflow": "node scripts/ai-workflow-server.mjs",
+    "dev:workflow": "AI_WORKFLOW_LOCAL_SERVER=1 node scripts/ai-workflow-server.mjs",
     "build": "vite build && node scripts/copy-static-assets.mjs",
     "preview": "vite preview --host 127.0.0.1"
   },

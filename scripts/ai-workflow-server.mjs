@@ -1931,7 +1931,10 @@ export {
   decodePngToRgba
 };
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+// EdgeOne imports this module inside a warm cloud-function worker. Starting a
+// listener during import leaves port 8787 occupied and breaks the next request.
+// Only the explicit local development command may create the HTTP server.
+if (process.env.AI_WORKFLOW_LOCAL_SERVER === "1" && process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   createServer(route).listen(PORT, "127.0.0.1", () => {
     console.log(`AI workflow local server listening on http://127.0.0.1:${PORT}`);
     console.log(`Sticker image provider: ${IMAGE_PROVIDER.label}`);
