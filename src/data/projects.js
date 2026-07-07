@@ -932,7 +932,7 @@ export const projects = [
     "image": "/images/work/ai-mcp-workflow-cover-square.png",
     "title": {
       "en": "AI MCP Workflow - Reference-to-layer Prototype",
-      "zh": "AI MCP 工作流——参考图到图层素材自动化"
+      "zh": "AI 直播间视觉工作台"
     },
     "details": {
       "en": {
@@ -953,7 +953,7 @@ export const projects = [
         ]
       },
       "zh": {
-        "title": "AI MCP 工作流——参考图到图层素材自动化",
+        "title": "AI 直播间视觉工作台",
         "description": "一个 vibe coding 交互原型，把参考图、文字图层、上贴/侧贴/下贴背景、手绘路径融合、透明图层导出整理成可接入真实 API 的网页流程。",
         "hero": "/images/work/ai-mcp-workflow-cover-square.png",
         "images": [],
