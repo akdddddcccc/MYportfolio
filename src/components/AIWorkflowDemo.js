@@ -42,7 +42,7 @@ export default {
       fontPresetReferenceDataUrls: {},
       fontPresetReferenceUrls: {
         clean: "/images/work/ai-workflow-font-presets/elegant-songti.png",
-        expressive: "/images/work/ai-workflow-font-presets/expressive-calligraphy.png",
+        expressive: "/images/work/ai-workflow-font-presets/expressive-calligraphy-v2.png",
         rounded: "/images/work/ai-workflow-font-presets/rounded-cute.png"
       },
       liveRoomUrl: "",
