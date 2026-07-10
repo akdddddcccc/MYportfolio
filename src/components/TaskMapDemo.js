@@ -10,9 +10,17 @@ export default {
       default: ""
     }
   },
+  data() {
+    return {
+      activeStepIndex: 0
+    };
+  },
   computed: {
     formalUrl() {
       return this.productUrl || "http://muyang-tool.noteach.com.cn/task-map/";
+    },
+    activeStep() {
+      return this.labels.steps[this.activeStepIndex] || this.labels.steps[0];
     },
     labels() {
       return this.lang === "zh"
@@ -86,6 +94,17 @@ export default {
           };
     }
   },
+  methods: {
+    setActiveStep(index) {
+      this.activeStepIndex = index;
+    },
+    screenClass(index) {
+      if (index === this.activeStepIndex) return "active";
+      if (index === this.activeStepIndex - 1) return "previous";
+      if (index === this.activeStepIndex + 1) return "next";
+      return index < this.activeStepIndex ? "far-previous" : "far-next";
+    }
+  },
   template: `
     <section class="task-map-demo task-map-story" aria-label="Task Map product story">
       <div class="task-map-demo__intro task-map-story__intro">
@@ -102,17 +121,52 @@ export default {
         </div>
       </div>
 
-      <div class="task-map-story__rail" tabindex="0" :aria-label="labels.scrollHint">
-        <article v-for="step in labels.steps" :key="step.index" class="task-map-story__slide">
-          <figure class="task-map-story__figure">
+      <div class="task-map-story__process">
+        <div class="task-map-story__progress" role="tablist" :aria-label="labels.scrollHint">
+          <button
+            v-for="(step, index) in labels.steps"
+            :key="step.index"
+            :class="{ active: index === activeStepIndex }"
+            type="button"
+            role="tab"
+            :aria-selected="index === activeStepIndex"
+            @click="setActiveStep(index)"
+          >
+            <i aria-hidden="true"></i>
+            <span>{{ step.index }}</span>
+          </button>
+        </div>
+
+        <div class="task-map-story__viewer">
+          <figure
+            v-for="(step, index) in labels.steps"
+            :key="step.image"
+            :class="['task-map-story__screen', screenClass(index)]"
+            :aria-hidden="index !== activeStepIndex"
+          >
             <img :src="step.image" :alt="step.title" loading="lazy">
           </figure>
-          <div class="task-map-story__slide-copy">
-            <span>{{ step.index }}</span>
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.body }}</p>
+
+          <div class="task-map-story__active-copy">
+            <span>{{ activeStep.index }}</span>
+            <h3>{{ activeStep.title }}</h3>
+            <p>{{ activeStep.body }}</p>
           </div>
-        </article>
+        </div>
+      </div>
+
+      <div class="task-map-story__step-grid">
+        <button
+          v-for="(step, index) in labels.steps"
+          :key="step.index"
+          :class="{ active: index === activeStepIndex }"
+          type="button"
+          @click="setActiveStep(index)"
+        >
+          <span>{{ step.index }}</span>
+          <strong>{{ step.title }}</strong>
+          <small>{{ step.body }}</small>
+        </button>
       </div>
     </section>
   `
