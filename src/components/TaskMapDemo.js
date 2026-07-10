@@ -122,9 +122,6 @@ export default {
           <p>{{ labels.intro }}</p>
         </div>
         <div class="task-map-demo__actions task-map-story__actions">
-          <a class="task-map-product-link" :href="formalUrl" target="_blank" rel="noreferrer">
-            {{ labels.openProduct }}
-          </a>
           <span>{{ labels.note }}</span>
         </div>
       </div>
@@ -154,27 +151,15 @@ export default {
           >
             <img :src="step.image" :alt="step.title" loading="lazy">
           </figure>
-
-          <div class="task-map-story__active-copy">
-            <span>{{ activeStep.index }}</span>
-            <h3>{{ activeStep.title }}</h3>
-            <p>{{ activeStep.body }}</p>
-          </div>
         </div>
       </div>
 
-      <div class="task-map-story__step-grid">
-        <button
-          v-for="(step, index) in labels.steps"
-          :key="step.index"
-          :class="{ active: index === activeStepIndex }"
-          type="button"
-          @click="setActiveStep(index)"
-        >
-          <span>{{ step.marker || step.index }}</span>
-          <strong>{{ step.title }}</strong>
-          <small>{{ step.body }}</small>
-        </button>
+      <div class="task-map-story__single-copy" aria-live="polite">
+        <span>{{ activeStep.marker || activeStep.index }}</span>
+        <div>
+          <strong>{{ activeStep.title }}</strong>
+          <small>{{ activeStep.body }}</small>
+        </div>
       </div>
     </section>
   `
