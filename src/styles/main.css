@@ -1905,7 +1905,7 @@ a {
 
 .task-map-story {
   display: grid;
-  gap: 28px;
+  gap: 36px;
 }
 
 .task-map-story__intro {
@@ -1943,14 +1943,15 @@ a {
 
 .task-map-story__process {
   display: grid;
-  gap: 24px;
-  padding: clamp(22px, 4vw, 42px);
-  color: #eff7f1;
+  gap: clamp(28px, 4vw, 48px);
+  padding: clamp(30px, 5vw, 64px) clamp(26px, 5vw, 72px);
+  color: #0b0b0f;
   background:
-    radial-gradient(circle at 28% 28%, rgba(123, 248, 156, 0.12), transparent 28%),
-    linear-gradient(135deg, rgba(123, 248, 156, 0.08), transparent 42%),
-    #06090d;
-  border: 1px solid rgba(11, 11, 15, 0.14);
+    linear-gradient(90deg, rgba(11, 11, 15, 0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(11, 11, 15, 0.035) 1px, transparent 1px),
+    #f7f7f4;
+  background-size: 42px 42px;
+  border: 1px solid rgba(11, 11, 15, 0.12);
 }
 
 .task-map-story__progress {
@@ -1958,17 +1959,18 @@ a {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
-  max-width: 560px;
+  max-width: 620px;
+  min-height: 54px;
 }
 
 .task-map-story__progress::before {
   content: "";
   position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 18px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.72);
+  left: 19px;
+  right: calc(25% - 19px);
+  top: 19px;
+  height: 2px;
+  background: rgba(11, 11, 15, 0.72);
 }
 
 .task-map-story__progress button {
@@ -1976,9 +1978,9 @@ a {
   z-index: 1;
   display: grid;
   justify-items: start;
-  gap: 8px;
+  gap: 10px;
   padding: 0;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(11, 11, 15, 0.48);
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -1986,18 +1988,34 @@ a {
 }
 
 .task-map-story__progress button i {
-  width: 36px;
-  height: 36px;
+  position: relative;
+  width: 38px;
+  height: 38px;
   display: block;
-  background: #f3f3f0;
-  border: 7px solid #06090d;
+  background: #f7f7f4;
+  border: 4px solid #0b0b0f;
   border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.74);
+  box-shadow: 0 0 0 8px #f7f7f4;
 }
 
-.task-map-story__progress button.active i {
-  background: #7bf89c;
-  box-shadow: 0 0 0 2px #7bf89c, 0 0 22px rgba(123, 248, 156, 0.34);
+.task-map-story__progress button i::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  background: #0b0b0f;
+  opacity: 0;
+  transform: scale(0.62);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.task-map-story__progress button.active {
+  color: #0b0b0f;
+}
+
+.task-map-story__progress button.active i::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .task-map-story__progress button span {
@@ -2008,21 +2026,25 @@ a {
 
 .task-map-story__viewer {
   position: relative;
-  min-height: clamp(360px, 40vw, 620px);
+  min-height: clamp(420px, 43vw, 660px);
   overflow: hidden;
+  background:
+    radial-gradient(circle at 24% 36%, rgba(11, 11, 15, 0.045), transparent 32%),
+    rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(11, 11, 15, 0.08);
 }
 
 .task-map-story__screen {
   position: absolute;
   left: 50%;
-  top: 54%;
-  width: min(760px, 58vw);
+  top: 50%;
+  width: min(860px, 62vw);
   aspect-ratio: 16 / 9;
   margin: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  background: #0b1015;
-  box-shadow: 0 22px 54px rgba(0, 0, 0, 0.36);
+  border: 1px solid rgba(11, 11, 15, 0.18);
+  background: #ffffff;
+  box-shadow: 0 28px 70px rgba(11, 11, 15, 0.16);
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.72);
   transition: transform 0.38s ease, opacity 0.38s ease, filter 0.38s ease;
@@ -2036,30 +2058,30 @@ a {
 
 .task-map-story__screen.previous {
   z-index: 3;
-  opacity: 0.68;
-  filter: brightness(0.72);
-  transform: translate(calc(-50% - 210px), calc(-50% + 34px)) scale(0.72);
+  opacity: 0.66;
+  filter: grayscale(0.12) brightness(0.94);
+  transform: translate(calc(-50% - 260px), calc(-50% + 42px)) scale(0.7);
 }
 
 .task-map-story__screen.next {
   z-index: 2;
-  opacity: 0.62;
-  filter: brightness(0.66);
-  transform: translate(calc(-50% + 230px), calc(-50% + 48px)) scale(0.68);
+  opacity: 0.58;
+  filter: grayscale(0.16) brightness(0.9);
+  transform: translate(calc(-50% + 280px), calc(-50% + 58px)) scale(0.66);
 }
 
 .task-map-story__screen.far-previous,
 .task-map-story__screen.far-next {
   opacity: 0.24;
-  filter: brightness(0.48);
+  filter: grayscale(0.28) brightness(0.86);
 }
 
 .task-map-story__screen.far-previous {
-  transform: translate(calc(-50% - 310px), calc(-50% + 70px)) scale(0.56);
+  transform: translate(calc(-50% - 390px), calc(-50% + 92px)) scale(0.52);
 }
 
 .task-map-story__screen.far-next {
-  transform: translate(calc(-50% + 340px), calc(-50% + 80px)) scale(0.54);
+  transform: translate(calc(-50% + 420px), calc(-50% + 104px)) scale(0.5);
 }
 
 .task-map-story__screen img {
@@ -2071,20 +2093,20 @@ a {
 
 .task-map-story__active-copy {
   position: absolute;
-  left: 0;
-  bottom: 0;
+  left: clamp(20px, 4vw, 58px);
+  bottom: clamp(20px, 4vw, 58px);
   z-index: 6;
-  width: min(420px, 42vw);
+  width: min(500px, 42vw);
   display: grid;
   gap: 10px;
-  padding: 18px 20px;
-  background: rgba(6, 9, 13, 0.78);
-  border: 1px solid rgba(123, 248, 156, 0.26);
-  backdrop-filter: blur(14px);
+  padding: clamp(18px, 2.4vw, 30px);
+  background: rgba(247, 247, 244, 0.92);
+  border: 1px solid rgba(11, 11, 15, 0.18);
+  backdrop-filter: blur(10px);
 }
 
 .task-map-story__active-copy span {
-  color: #7bf89c;
+  color: rgba(11, 11, 15, 0.52);
   font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
   font-size: 13px;
   font-weight: 700;
@@ -2092,17 +2114,17 @@ a {
 
 .task-map-story__active-copy h3 {
   margin: 0;
-  color: #f7fff9;
+  color: #0b0b0f;
   font-family: "MiSans", "Alibaba PuHuiTi", sans-serif;
-  font-size: clamp(28px, 4vw, 50px);
+  font-size: clamp(30px, 4.4vw, 56px);
   line-height: 1.02;
 }
 
 .task-map-story__active-copy p {
   margin: 0;
-  color: rgba(239, 247, 241, 0.72);
-  font-size: 14px;
-  line-height: 1.72;
+  color: rgba(11, 11, 15, 0.68);
+  font-size: 15px;
+  line-height: 1.78;
 }
 
 .task-map-story__step-grid {
@@ -2128,7 +2150,7 @@ a {
 
 .task-map-story__step-grid button.active {
   background:
-    linear-gradient(135deg, rgba(123, 248, 156, 0.12), transparent 42%),
+    linear-gradient(135deg, rgba(11, 11, 15, 0.06), transparent 48%),
     #ffffff;
 }
 
