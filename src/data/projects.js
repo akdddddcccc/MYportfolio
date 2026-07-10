@@ -896,12 +896,12 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "task-map",
-          "productUrl": ""
+          "productUrl": "http://muyang-tool.noteach.com.cn/task-map/"
         },
         "sectionLabels": [
-          "interactive demo",
-          "export html",
-          "export pdf"
+          "product logic",
+          "full workspace",
+          "export flow"
         ]
       },
       "zh": {
@@ -913,12 +913,12 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "task-map",
-          "productUrl": ""
+          "productUrl": "http://muyang-tool.noteach.com.cn/task-map/"
         },
         "sectionLabels": [
-          "交互 demo",
-          "导出 html",
-          "导出 pdf"
+          "产品思路",
+          "正式工作台",
+          "导出流程"
         ]
       }
     },
