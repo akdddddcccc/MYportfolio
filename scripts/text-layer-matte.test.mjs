@@ -7,8 +7,7 @@ import {
 } from "./ai-workflow-server.mjs";
 
 // These tests never call the image API. They synthesize matte+glyph PNGs in memory and verify
-// that the cutout only removes the border-connected matte while preserving interior detail
-// (a white highlight inside dark text, and a black outline inside light text).
+// border matte removal, enclosed glyph-counter removal, and tiny highlight preservation.
 
 const WIDTH = 32;
 const HEIGHT = 32;
@@ -48,13 +47,15 @@ function alphaAt(rgba, x, y) {
   return rgba[(y * WIDTH + x) * 4 + 3];
 }
 
-// ---- Test 1: white matte, dark glyph block with an interior white highlight ----
+// ---- Test 1: white matte, dark glyph block with a counter and a tiny highlight ----
 {
   const rgba = makeRgba([255, 255, 255]); // pure white matte everywhere
   // Dark glyph block in the center (well away from the border).
   fillRect(rgba, 10, 10, 22, 22, [30, 34, 28]);
-  // Interior white highlight INSIDE the dark block — must survive (not border-connected).
+  // A counter like the inside of O / 日 must become transparent.
   fillRect(rgba, 14, 14, 18, 18, [255, 255, 255]);
+  // A single-pixel highlight remains foreground detail.
+  setPixel(rgba, 11, 11, [255, 255, 255]);
 
   const out = removeConnectedMatte(toDataUrl(rgba), "white");
   const decoded = decodePngToRgba(Buffer.from(out.split(",")[1], "base64"));
@@ -62,31 +63,31 @@ function alphaAt(rgba, x, y) {
   // Border matte fully transparent.
   assert.equal(alphaAt(decoded.rgba, 0, 0), 0, "white matte corner should be transparent");
   assert.equal(alphaAt(decoded.rgba, 31, 31), 0, "white matte far corner should be transparent");
-  // Dark glyph body fully opaque.
-  assert.equal(alphaAt(decoded.rgba, 11, 11), 255, "dark glyph edge should stay opaque");
+  // Dark glyph body and tiny highlight remain opaque.
+  assert.equal(alphaAt(decoded.rgba, 11, 11), 255, "tiny white highlight should stay opaque");
   assert.equal(alphaAt(decoded.rgba, 20, 20), 255, "dark glyph body should stay opaque");
-  // Interior white highlight preserved (NOT keyed out, because it is not border-connected).
-  assert.equal(alphaAt(decoded.rgba, 16, 16), 255, "interior white highlight must be preserved");
-  console.log("PASS: white matte keeps interior highlight, removes connected matte");
+  assert.equal(alphaAt(decoded.rgba, 16, 16), 0, "white enclosed glyph counter should be transparent");
+  console.log("PASS: white matte removes enclosed counter and keeps tiny highlight");
 }
 
-// ---- Test 2: black matte, light glyph block with an interior black detail ----
+// ---- Test 2: black matte, light glyph block with a counter and a tiny detail ----
 {
   const rgba = makeRgba([0, 0, 0]); // pure black matte everywhere
   // Light glyph block in the center.
   fillRect(rgba, 10, 10, 22, 22, [240, 238, 230]);
-  // Interior black detail INSIDE the light block — must survive.
+  // A large enclosed black component is a glyph counter.
   fillRect(rgba, 14, 14, 18, 18, [0, 0, 0]);
+  setPixel(rgba, 11, 11, [0, 0, 0]);
 
   const out = removeConnectedMatte(toDataUrl(rgba), "black");
   const decoded = decodePngToRgba(Buffer.from(out.split(",")[1], "base64"));
 
   assert.equal(alphaAt(decoded.rgba, 0, 0), 0, "black matte corner should be transparent");
   assert.equal(alphaAt(decoded.rgba, 31, 31), 0, "black matte far corner should be transparent");
-  assert.equal(alphaAt(decoded.rgba, 11, 11), 255, "light glyph edge should stay opaque");
+  assert.equal(alphaAt(decoded.rgba, 11, 11), 255, "tiny black detail should stay opaque");
   assert.equal(alphaAt(decoded.rgba, 20, 20), 255, "light glyph body should stay opaque");
-  assert.equal(alphaAt(decoded.rgba, 16, 16), 255, "interior black detail must be preserved");
-  console.log("PASS: black matte keeps interior detail, removes connected matte");
+  assert.equal(alphaAt(decoded.rgba, 16, 16), 0, "black enclosed glyph counter should be transparent");
+  console.log("PASS: black matte removes enclosed counter and keeps tiny detail");
 }
 
 // ---- Test 3: resolveMatte mode mapping ----

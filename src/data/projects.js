@@ -883,42 +883,42 @@ export const projects = [
     "discipline": "vibe-coding",
     "image": "/images/work/task-map-prototype-cover.png",
     "title": {
-      "en": "Task Map - Interactive Planning Prototype",
-      "zh": "Task Map——任务结构排期原型"
+      "en": "AI Task Gantt Studio",
+      "zh": "AI 任务甘特图工作台"
     },
     "details": {
       "en": {
-        "title": "Task Map - Interactive Planning Prototype",
-        "description": "A vibe coding prototype that explores a structure-first task planning flow: build an editable outline, assign time later, let parent ranges auto-summarize or become locked constraints, and export the current demo as an interactive HTML or printable PDF.",
+        "title": "AI Task Gantt Studio",
+        "description": "A structure-first planning workbench: start from one root goal, decompose tasks in a mind map, refine schedules in a Gantt view, then export the result as a readable PDF or interactive HTML.",
         "hero": "/images/work/task-map-prototype-cover.png",
         "images": [],
         "iframes": [],
         "pdfs": [],
         "demo": {
           "type": "task-map",
-          "productUrl": ""
+          "productUrl": "http://muyang-tool.noteach.com.cn/task-map/"
         },
         "sectionLabels": [
-          "interactive demo",
-          "export html",
-          "export pdf"
+          "one root goal",
+          "structure to timeline",
+          "export and delivery"
         ]
       },
       "zh": {
-        "title": "Task Map——任务结构排期原型",
-        "description": "一个 vibe coding 交互原型，尝试把任务规划从表单填写前移到结构思考：先建立可编辑大纲，再给具体节点补充时间，父任务可以自动汇总范围，也可以锁定为约束，并支持导出当前 demo 为可交互 HTML 或可打印 PDF。",
+        "title": "AI 任务甘特图工作台",
+        "description": "一个结构优先的任务规划工作台：从单一总目标出发，先在思维导图里拆解任务关系，再进入甘特图精排时间，最后导出为可阅读 PDF 或可交互 HTML。",
         "hero": "/images/work/task-map-prototype-cover.png",
         "images": [],
         "iframes": [],
         "pdfs": [],
         "demo": {
           "type": "task-map",
-          "productUrl": ""
+          "productUrl": "http://muyang-tool.noteach.com.cn/task-map/"
         },
         "sectionLabels": [
-          "交互 demo",
-          "导出 html",
-          "导出 pdf"
+          "一个总目标",
+          "先结构后时间",
+          "导出与交付"
         ]
       }
     },
@@ -943,7 +943,8 @@ export const projects = [
         "iframes": [],
         "pdfs": [],
         "demo": {
-          "type": "ai-workflow"
+          "type": "ai-workflow",
+          "productUrl": "http://muyang-tool.noteach.com.cn/"
         },
         "sectionLabels": [
           "interactive demo",
@@ -959,7 +960,8 @@ export const projects = [
         "iframes": [],
         "pdfs": [],
         "demo": {
-          "type": "ai-workflow"
+          "type": "ai-workflow",
+          "productUrl": "http://muyang-tool.noteach.com.cn/"
         },
         "sectionLabels": [
           "交互 demo",

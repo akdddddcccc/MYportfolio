@@ -22,6 +22,10 @@ const normalizeEditSizeEnv = (value) => {
   const trimmed = String(value ?? "").trim();
   return trimmed.toLowerCase() === "auto" ? "" : trimmed;
 };
+const optionalExperimentEnv = (name) => {
+  const value = String(process.env[name] || "").trim();
+  return ["", "-", "disabled", "none", "off"].includes(value.toLowerCase()) ? "" : value;
+};
 const imageProviderAdapters = {
   ofox: {
     id: "ofox",
@@ -65,6 +69,18 @@ const DEEPSEEK_TASKMAP_API_KEY = process.env.DEEPSEEK_TASKMAP_API_KEY || process
 const DEEPSEEK_TASKMAP_BASE_URL = (process.env.DEEPSEEK_TASKMAP_BASE_URL || "https://api.deepseek.com").replace(/\/+$/, "");
 const DEEPSEEK_TASKMAP_MODEL = process.env.DEEPSEEK_TASKMAP_MODEL || "deepseek-v4-flash";
 const TASKMAP_DEMO_FALLBACK = process.env.TASKMAP_DEMO_FALLBACK === "1";
+// Makers Models remains an isolated experiment. Do not route the frozen demo's
+// OFOX, official OpenAI, or Task Map requests through it until image endpoints
+// and multi-reference edits have been verified against the deployed gateway.
+const MAKERS_MODELS_API_KEY = optionalExperimentEnv("MAKERS_MODELS_API_KEY");
+const MAKERS_MODELS_BASE_URL = optionalExperimentEnv("MAKERS_MODELS_BASE_URL").replace(/\/+$/, "");
+const MAKERS_MODELS_TEXT_MODEL = process.env.MAKERS_MODELS_TEXT_MODEL || "@makers/deepseek-v4-flash";
+const MAKERS_MODELS_IMAGE_MODEL = optionalExperimentEnv("MAKERS_MODELS_IMAGE_MODEL");
+const MAKERS_MODELS_ENABLE_IMAGE_PROBE = process.env.MAKERS_MODELS_ENABLE_IMAGE_PROBE === "1";
+const MAKERS_MODELS_TIMEOUT_MS = Math.min(
+  60000,
+  Math.max(5000, Number(process.env.MAKERS_MODELS_TIMEOUT_MS || 30000) || 30000)
+);
 const IMAGE_MODEL = IMAGE_PROVIDER.model;
 const IMAGE_QUALITY = IMAGE_PROVIDER.quality;
 const USE_IMAGE_EDITS = IMAGE_PROVIDER.useImageEdits;
@@ -822,9 +838,8 @@ function matteFeatherAlpha(rgba, index, matteMode) {
   return Math.max(0, Math.min(255, Math.round((248 - minChannel) * 14)));
 }
 
-// Only the matte region that is connected to the canvas border is removed. Glyph-interior
-// highlights (white inside dark strokes) and interior dark detail (black outline/shadow inside
-// light strokes) are not border-connected, so the flood fill never reaches them and they survive.
+// Remove the border-connected matte plus enclosed matte components large enough to be glyph
+// counters (O / 日 / 田). Tiny isolated matte-colored highlights remain foreground detail.
 function removeConnectedMatte(dataUrl, matteMode = "white") {
   const parsed = dataUrlToBuffer(dataUrl);
   if (!parsed || parsed.mime !== "image/png") {
@@ -836,7 +851,9 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
   const { width, height, rgba } = png;
   const total = width * height;
   const visited = new Uint8Array(total);
-  const queue = [];
+  const queue = new Uint32Array(total);
+  let head = 0;
+  let tail = 0;
 
   const enqueue = (x, y) => {
     if (x < 0 || y < 0 || x >= width || y >= height) return;
@@ -845,7 +862,7 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     const index = pixel * 4;
     if (!isMattePixel(rgba, index, mode)) return;
     visited[pixel] = 1;
-    queue.push(pixel);
+    queue[tail++] = pixel;
   };
 
   for (let x = 0; x < width; x += 1) {
@@ -857,8 +874,8 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     enqueue(width - 1, y);
   }
 
-  for (let cursor = 0; cursor < queue.length; cursor += 1) {
-    const pixel = queue[cursor];
+  while (head < tail) {
+    const pixel = queue[head++];
     const x = pixel % width;
     const y = Math.floor(pixel / width);
     enqueue(x + 1, y);
@@ -867,9 +884,35 @@ function removeConnectedMatte(dataUrl, matteMode = "white") {
     enqueue(x, y - 1);
   }
 
+  const minimumHoleArea = Math.max(6, Math.round(total * 0.000008));
+  const visitComponent = (pixel) => {
+    if (visited[pixel] || !isMattePixel(rgba, pixel * 4, mode)) return;
+    visited[pixel] = 2;
+    queue[tail++] = pixel;
+  };
+  for (let seed = 0; seed < total; seed += 1) {
+    if (visited[seed] || !isMattePixel(rgba, seed * 4, mode)) continue;
+    head = 0;
+    tail = 1;
+    queue[0] = seed;
+    visited[seed] = 2;
+    while (head < tail) {
+      const pixel = queue[head++];
+      const x = pixel % width;
+      const y = Math.floor(pixel / width);
+      if (x + 1 < width) visitComponent(pixel + 1);
+      if (x > 0) visitComponent(pixel - 1);
+      if (y + 1 < height) visitComponent(pixel + width);
+      if (y > 0) visitComponent(pixel - width);
+    }
+    if (tail < minimumHoleArea) {
+      for (let index = 0; index < tail; index += 1) visited[queue[index]] = 3;
+    }
+  }
+
   const fallbackChannel = mode === "black" ? 0 : 255;
   for (let pixel = 0; pixel < total; pixel += 1) {
-    if (!visited[pixel]) continue;
+    if (visited[pixel] !== 1 && visited[pixel] !== 2) continue;
     const index = pixel * 4;
     const alpha = matteFeatherAlpha(rgba, index, mode);
     rgba[index + 3] = alpha;
@@ -1309,8 +1352,197 @@ async function workflowStatus() {
         baseUrl: DEEPSEEK_TASKMAP_BASE_URL
       },
       demoFallback: TASKMAP_DEMO_FALLBACK
+    },
+    makersModels: {
+      configured: Boolean(MAKERS_MODELS_API_KEY && MAKERS_MODELS_BASE_URL),
+      hasApiKey: Boolean(MAKERS_MODELS_API_KEY),
+      hasBaseUrl: Boolean(MAKERS_MODELS_BASE_URL),
+      baseUrl: MAKERS_MODELS_BASE_URL || null,
+      textModel: MAKERS_MODELS_TEXT_MODEL,
+      imageModel: MAKERS_MODELS_IMAGE_MODEL || null,
+      imageProbeEnabled: MAKERS_MODELS_ENABLE_IMAGE_PROBE,
+      timeoutMs: MAKERS_MODELS_TIMEOUT_MS
     }
   };
+}
+
+function makersProbeError(message, status, details = {}) {
+  const error = new Error(message);
+  error.status = status;
+  Object.assign(error, details);
+  return error;
+}
+
+function shortResponseBody(value) {
+  return String(value || "").replace(/\s+/g, " ").trim().slice(0, 700);
+}
+
+async function requestMakersModels(path, options = {}) {
+  if (!MAKERS_MODELS_API_KEY || !MAKERS_MODELS_BASE_URL) {
+    throw makersProbeError(
+      "Makers Models is not configured. Set MAKERS_MODELS_API_KEY and MAKERS_MODELS_BASE_URL in server-side environment variables.",
+      400
+    );
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), MAKERS_MODELS_TIMEOUT_MS);
+  const startedAt = Date.now();
+  try {
+    const response = await fetch(`${MAKERS_MODELS_BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        Authorization: `Bearer ${MAKERS_MODELS_API_KEY}`,
+        ...(options.headers || {})
+      },
+      signal: controller.signal
+    });
+    const raw = await response.text();
+    let data = null;
+    try {
+      data = raw ? JSON.parse(raw) : null;
+    } catch {
+      data = null;
+    }
+    if (!response.ok) {
+      throw makersProbeError(
+        data?.error?.message || `Makers Models request failed with ${response.status}: ${shortResponseBody(raw)}`,
+        response.status,
+        { responseBody: shortResponseBody(raw) }
+      );
+    }
+    return {
+      status: response.status,
+      durationMs: elapsedMs(startedAt),
+      data,
+      raw
+    };
+  } catch (error) {
+    if (error?.name === "AbortError") {
+      throw makersProbeError(`Makers Models request timed out after ${Math.round(MAKERS_MODELS_TIMEOUT_MS / 1000)}s`, 504);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function summarizeMakersImageResponse(data) {
+  const first = data?.data?.[0] || {};
+  return {
+    returnedImage: Boolean(first.b64_json || first.url),
+    returnedUrl: Boolean(first.url),
+    returnedBase64: Boolean(first.b64_json),
+    responseKeys: data && typeof data === "object" ? Object.keys(data) : []
+  };
+}
+
+async function handleMakersModelsProbe(body = {}) {
+  const wantsImage = body.testImage === true;
+  const wantsEdit = body.testEdit === true;
+  const referenceImages = (Array.isArray(body.referenceImages) ? body.referenceImages : [])
+    .filter((image) => typeof image === "string" && image.startsWith("data:"))
+    .slice(0, 4);
+
+  if ((wantsImage || wantsEdit) && !MAKERS_MODELS_ENABLE_IMAGE_PROBE) {
+    return {
+      ok: false,
+      code: "makers_image_probe_disabled",
+      message: "Image probing is disabled. Set MAKERS_MODELS_ENABLE_IMAGE_PROBE=1 only for this isolated experiment.",
+      makersModels: {
+        textModel: MAKERS_MODELS_TEXT_MODEL,
+        imageModel: MAKERS_MODELS_IMAGE_MODEL || null
+      }
+    };
+  }
+  if ((wantsImage || wantsEdit) && !MAKERS_MODELS_IMAGE_MODEL) {
+    return {
+      ok: false,
+      code: "makers_image_model_missing",
+      message: "Set MAKERS_MODELS_IMAGE_MODEL to an exact image-capable model ID listed in the Makers Models console before running an image probe."
+    };
+  }
+  if (wantsEdit && !referenceImages.length) {
+    return {
+      ok: false,
+      code: "makers_reference_images_missing",
+      message: "A referenceImages data URL array is required for the image-edit probe."
+    };
+  }
+
+  const result = {
+    ok: true,
+    experiment: "edgeone-makers-models",
+    text: null,
+    image: null,
+    edit: null
+  };
+
+  const textResponse = await requestMakersModels("/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: MAKERS_MODELS_TEXT_MODEL,
+      messages: [
+        { role: "system", content: "Reply in one short sentence." },
+        { role: "user", content: "Reply with: Makers Models text probe passed." }
+      ],
+      temperature: 0
+    })
+  });
+  result.text = {
+    ok: true,
+    model: MAKERS_MODELS_TEXT_MODEL,
+    status: textResponse.status,
+    durationMs: textResponse.durationMs,
+    output: shortResponseBody(textResponse.data?.choices?.[0]?.message?.content || textResponse.data?.output_text || textResponse.raw)
+  };
+
+  if (wantsImage) {
+    const imageResponse = await requestMakersModels("/images/generations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: MAKERS_MODELS_IMAGE_MODEL,
+        prompt: "A minimal abstract livestream top-sticker background, no text, no logo, a single soft color field with a clean white lower edge.",
+        size: "1024x1024",
+        output_format: "jpeg"
+      })
+    });
+    result.image = {
+      ok: true,
+      model: MAKERS_MODELS_IMAGE_MODEL,
+      status: imageResponse.status,
+      durationMs: imageResponse.durationMs,
+      ...summarizeMakersImageResponse(imageResponse.data)
+    };
+  }
+
+  if (wantsEdit) {
+    const form = new FormData();
+    form.append("model", MAKERS_MODELS_IMAGE_MODEL);
+    form.append("prompt", "Create a minimal abstract livestream side-sticker background from these visual references. Preserve only color, texture, and edge-decoration character. Do not include text or logos.");
+    form.append("size", "1024x1024");
+    form.append("output_format", "png");
+    referenceImages.forEach((image, index) => {
+      const file = dataUrlToUploadFile(image, index);
+      if (file) form.append("image", file, file.name || `reference-${index + 1}.png`);
+    });
+    const editResponse = await requestMakersModels("/images/edits", {
+      method: "POST",
+      body: form
+    });
+    result.edit = {
+      ok: true,
+      model: MAKERS_MODELS_IMAGE_MODEL,
+      referenceCount: referenceImages.length,
+      status: editResponse.status,
+      durationMs: editResponse.durationMs,
+      ...summarizeMakersImageResponse(editResponse.data)
+    };
+  }
+
+  return result;
 }
 
 function cleanTaskMapText(value, maxLength) {
@@ -1673,6 +1905,11 @@ async function route(request, response) {
       sendJson(response, data.ok ? 200 : 400, data);
       return;
     }
+    if (url.pathname === "/api/ai-workflow/makers-models-probe") {
+      const data = await handleMakersModelsProbe(body);
+      sendJson(response, data.ok ? 200 : 400, data);
+      return;
+    }
     sendJson(response, 404, { ok: false, message: "Not found" });
   } catch (error) {
     sendJson(response, 500, {
@@ -1686,6 +1923,7 @@ export {
   handleStickerBackgrounds,
   handleTaskMapBreakdown,
   handleTextLayer,
+  handleMakersModelsProbe,
   workflowStatus,
   removeConnectedMatte,
   resolveMatte,
@@ -1693,7 +1931,10 @@ export {
   decodePngToRgba
 };
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+// EdgeOne imports this module inside a warm cloud-function worker. Starting a
+// listener during import leaves port 8787 occupied and breaks the next request.
+// Only the explicit local development command may create the HTTP server.
+if (process.env.AI_WORKFLOW_LOCAL_SERVER === "1" && process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   createServer(route).listen(PORT, "127.0.0.1", () => {
     console.log(`AI workflow local server listening on http://127.0.0.1:${PORT}`);
     console.log(`Sticker image provider: ${IMAGE_PROVIDER.label}`);
@@ -1707,5 +1948,6 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     console.log(`Task Map DeepSeek key: ${DEEPSEEK_TASKMAP_API_KEY ? "configured" : "missing"}`);
     console.log(`Task Map OpenAI key: ${OPENAI_TASKMAP_API_KEY ? "configured" : "missing"}`);
     console.log(`Task Map model: ${TASKMAP_PROVIDER === "openai" ? OPENAI_TASKMAP_MODEL : DEEPSEEK_TASKMAP_MODEL}`);
+    console.log(`Makers Models experiment: ${MAKERS_MODELS_API_KEY && MAKERS_MODELS_BASE_URL ? "configured" : "not configured"}`);
   });
 }

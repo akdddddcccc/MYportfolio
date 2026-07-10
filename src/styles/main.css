@@ -748,6 +748,32 @@ a {
   line-height: 1.8;
 }
 
+.project-hero-actions {
+  margin-top: clamp(34px, 5vw, 62px);
+}
+
+.project-product-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: min(100%, 380px);
+  min-height: 54px;
+  padding: 14px 22px;
+  border: 1px solid #0b0b0f;
+  background: #0b0b0f;
+  color: #fff;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+.project-product-link:hover {
+  background: transparent;
+  color: #0b0b0f;
+}
+
 .download-row {
   display: flex;
   flex-wrap: wrap;
@@ -1875,6 +1901,240 @@ a {
 
 .task-map-demo__actions span {
   color: rgba(11, 11, 15, 0.6);
+}
+
+.task-map-story {
+  display: grid;
+  gap: 36px;
+}
+
+.task-map-story__intro {
+  grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 0.72fr);
+  gap: clamp(64px, 10vw, 150px);
+  align-items: end;
+  padding: clamp(34px, 5vw, 72px) 0 clamp(26px, 4vw, 58px);
+}
+
+.task-map-story__intro h2 {
+  max-width: 7.5em;
+  font-size: clamp(60px, 8.6vw, 132px);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.task-map-story__intro p:not(.task-map-demo__kicker) {
+  max-width: 34em;
+  font-size: clamp(18px, 1.55vw, 25px);
+  font-weight: 650;
+  line-height: 1.95;
+}
+
+.task-map-story__actions {
+  align-content: start;
+  justify-items: start;
+  gap: 14px;
+  padding-bottom: clamp(4px, 1vw, 18px);
+}
+
+.task-map-story__actions span {
+  max-width: 34em;
+  font-size: clamp(17px, 1.38vw, 23px);
+  font-weight: 650;
+  line-height: 1.75;
+}
+
+.task-map-story__process {
+  display: grid;
+  gap: clamp(28px, 4vw, 48px);
+  padding: clamp(30px, 5vw, 64px) clamp(26px, 5vw, 72px);
+  color: #0b0b0f;
+  background:
+    linear-gradient(90deg, rgba(11, 11, 15, 0.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(11, 11, 15, 0.035) 1px, transparent 1px),
+    #f7f7f4;
+  background-size: 42px 42px;
+  border: 1px solid rgba(11, 11, 15, 0.12);
+}
+
+.task-map-story__progress {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  max-width: 620px;
+  min-height: 54px;
+}
+
+.task-map-story__progress::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  right: calc(25% - 19px);
+  top: 19px;
+  height: 2px;
+  background: rgba(11, 11, 15, 0.72);
+}
+
+.task-map-story__progress button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 0;
+  color: rgba(11, 11, 15, 0.48);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+}
+
+.task-map-story__progress button i {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: block;
+  background: #f7f7f4;
+  border: 4px solid #0b0b0f;
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px #f7f7f4;
+}
+
+.task-map-story__progress button i::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 50%;
+  background: #0b0b0f;
+  opacity: 0;
+  transform: scale(0.62);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.task-map-story__progress button.active {
+  color: #0b0b0f;
+}
+
+.task-map-story__progress button.active i::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.task-map-story__progress button span {
+  color: inherit;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.task-map-story__viewer {
+  position: relative;
+  min-height: clamp(420px, 43vw, 660px);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 24% 36%, rgba(11, 11, 15, 0.045), transparent 32%),
+    rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(11, 11, 15, 0.08);
+}
+
+.task-map-story__screen {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(860px, 62vw);
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(11, 11, 15, 0.18);
+  background: #ffffff;
+  box-shadow: 0 28px 70px rgba(11, 11, 15, 0.16);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.72);
+  transition: transform 0.38s ease, opacity 0.38s ease, filter 0.38s ease;
+}
+
+.task-map-story__screen.active {
+  z-index: 4;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.task-map-story__screen.previous {
+  z-index: 3;
+  opacity: 0.66;
+  filter: grayscale(0.12) brightness(0.94);
+  transform: translate(calc(-50% - 260px), calc(-50% + 42px)) scale(0.7);
+}
+
+.task-map-story__screen.next {
+  z-index: 2;
+  opacity: 0.58;
+  filter: grayscale(0.16) brightness(0.9);
+  transform: translate(calc(-50% + 280px), calc(-50% + 58px)) scale(0.66);
+}
+
+.task-map-story__screen.far-previous,
+.task-map-story__screen.far-next {
+  opacity: 0.24;
+  filter: grayscale(0.28) brightness(0.86);
+}
+
+.task-map-story__screen.far-previous {
+  transform: translate(calc(-50% - 390px), calc(-50% + 92px)) scale(0.52);
+}
+
+.task-map-story__screen.far-next {
+  transform: translate(calc(-50% + 420px), calc(-50% + 104px)) scale(0.5);
+}
+
+.task-map-story__screen img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.task-map-story__single-copy {
+  width: min(760px, 100%);
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 38px);
+  min-height: 132px;
+  margin-top: -8px;
+  padding: clamp(18px, 3vw, 34px) clamp(18px, 4vw, 54px);
+  text-align: center;
+  border-top: 1px solid rgba(11, 11, 15, 0.14);
+  border-bottom: 1px solid rgba(11, 11, 15, 0.14);
+}
+
+.task-map-story__single-copy span {
+  color: rgba(11, 11, 15, 0.32);
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: clamp(62px, 8vw, 118px);
+  line-height: 0.9;
+}
+
+.task-map-story__single-copy div {
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+}
+
+.task-map-story__single-copy strong {
+  max-width: 12em;
+  font-family: "MiSans", "Alibaba PuHuiTi", sans-serif;
+  font-size: clamp(28px, 3.8vw, 54px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+
+.task-map-story__single-copy small {
+  max-width: 30em;
+  color: rgba(11, 11, 15, 0.62);
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 560;
+  line-height: 1.72;
 }
 
 .task-map-shell {
@@ -3561,6 +3821,45 @@ a {
   .task-map-demo__actions button {
     width: 100%;
     justify-content: center;
+  }
+
+  .task-map-story__intro {
+    padding: 18px 0 12px;
+  }
+
+  .task-map-story__intro h2 {
+    max-width: 9em;
+    font-size: clamp(42px, 13vw, 72px);
+  }
+
+  .task-map-story__process {
+    padding: 18px;
+  }
+
+  .task-map-story__progress {
+    max-width: none;
+  }
+
+  .task-map-story__viewer {
+    min-height: 380px;
+  }
+
+  .task-map-story__screen {
+    width: min(540px, 82vw);
+  }
+
+  .task-map-story__screen.previous {
+    transform: translate(calc(-50% - 120px), calc(-50% + 38px)) scale(0.68);
+  }
+
+  .task-map-story__screen.next {
+    transform: translate(calc(-50% + 130px), calc(-50% + 52px)) scale(0.64);
+  }
+
+  .task-map-story__single-copy {
+    flex-direction: column;
+    min-height: 180px;
+    gap: 10px;
   }
 
   .output-gallery {

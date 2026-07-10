@@ -67,6 +67,12 @@ export default {
     demoType() {
       return this.detail.demo?.type || "";
     },
+    productUrl() {
+      return this.detail.demo?.productUrl || "";
+    },
+    productLinkLabel() {
+      return this.lang === "zh" ? "进入正式版工作台" : "Open full workbench";
+    },
     embeds() {
       return (this.detail.iframes || []).map((src, index) => ({
         label: this.embedLabel(src, index),
@@ -252,6 +258,11 @@ export default {
             </template>
           </h1>
           <p>{{ description }}</p>
+          <div v-if="productUrl" class="project-hero-actions">
+            <a class="project-product-link" :href="productUrl" target="_blank" rel="noreferrer">
+              {{ productLinkLabel }}
+            </a>
+          </div>
         </div>
       </div>
 
