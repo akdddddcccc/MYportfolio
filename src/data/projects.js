@@ -936,7 +936,7 @@ export const projects = [
     },
     "details": {
       "en": {
-        "title": "AI MCP Workflow - Reference-to-layer Prototype",
+        "title": "AI Live Sticker Studio - Reference-to-layer Prototype",
         "description": "A vibe coding prototype that turns a manual reference-image workflow into an API-ready web flow: extract text layers, generate top/side/bottom sticker backgrounds, draw blend paths, recolor text, and export layered assets for Figma or Photoshop.",
         "hero": "/images/work/ai-mcp-workflow-cover-square.png",
         "images": [],
@@ -944,7 +944,7 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "ai-workflow",
-          "productUrl": "http://muyang-tool.noteach.com.cn/"
+          "productUrl": "http://muyang-tool.noteach.com.cn/live-sticker/"
         },
         "sectionLabels": [
           "interactive demo",
@@ -961,7 +961,7 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "ai-workflow",
-          "productUrl": "http://muyang-tool.noteach.com.cn/"
+          "productUrl": "http://muyang-tool.noteach.com.cn/live-sticker/"
         },
         "sectionLabels": [
           "交互 demo",
