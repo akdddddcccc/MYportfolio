@@ -2345,8 +2345,9 @@ a {
 
 .task-map-project-step-track {
   display: flex;
-  transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.78s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .task-map-project-step {
@@ -2355,19 +2356,12 @@ a {
   grid-template-columns: minmax(260px, 0.52fr) minmax(360px, 1fr);
   gap: clamp(30px, 6vw, 82px);
   align-items: start;
-  opacity: 0.34;
-  transform: translateY(14px);
-  transition: opacity 0.42s ease, transform 0.42s ease;
-}
-
-.task-map-project-step.active {
   opacity: 1;
   transform: translateY(0);
 }
 
 .task-map-project-step__copy {
-  position: sticky;
-  top: 116px;
+  position: relative;
   display: grid;
   gap: 16px;
   max-width: 460px;
