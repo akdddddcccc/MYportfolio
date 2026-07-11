@@ -913,7 +913,7 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "task-map",
-          "productUrl": "http://muyang-tool.noteach.com.cn/task-map/"
+          "productUrl": "https://www.cmuyang23333.top/task-map/"
         },
         "sectionLabels": [
           "一个总目标",
@@ -944,7 +944,7 @@ export const projects = [
         "pdfs": [],
         "demo": {
           "type": "ai-workflow",
-          "productUrl": "http://muyang-tool.noteach.com.cn/live-sticker/"
+          "productUrl": "https://www.cmuyang23333.top/live-sticker/"
         },
         "sectionLabels": [
           "interactive demo",
