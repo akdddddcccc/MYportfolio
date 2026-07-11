@@ -1,11 +1,7 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 
-@font-face {
-  font-family: "Inter";
-  src: url("/assets/fonts/Inter-Regular.ttf") format("truetype");
-  font-display: swap;
-  font-weight: 400;
-  font-style: normal;
+:root {
+  --font-ui: "Inter", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", sans-serif;
 }
 
 @font-face {
@@ -54,7 +50,7 @@ body {
   margin: 0;
   background: #f5f5f5;
   color: #0b0b0f;
-  font-family: "Inter", "MiSans", "Alibaba PuHuiTi", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-ui);
   overflow-x: hidden;
 }
 
@@ -1401,7 +1397,7 @@ a {
 .ai-generation-loader small {
   max-width: 420px;
   color: rgba(11, 11, 15, 0.62);
-  font-family: "MiSans", "Alibaba PuHuiTi", sans-serif;
+  font-family: var(--font-ui);
   font-size: 12px;
   line-height: 1.6;
 }
@@ -2123,7 +2119,7 @@ a {
 
 .task-map-story__single-copy strong {
   max-width: 12em;
-  font-family: "MiSans", "Alibaba PuHuiTi", sans-serif;
+  font-family: var(--font-ui);
   font-size: clamp(28px, 3.8vw, 54px);
   line-height: 1.04;
   letter-spacing: -0.02em;
@@ -2135,6 +2131,187 @@ a {
   font-size: clamp(15px, 1.25vw, 18px);
   font-weight: 560;
   line-height: 1.72;
+}
+
+.task-map-project-story {
+  display: grid;
+  gap: clamp(96px, 9vw, 128px);
+  width: min(1200px, 100%);
+  margin: clamp(96px, 10vw, 132px) auto 0;
+}
+
+.task-map-project-section {
+  display: grid;
+  min-width: 0;
+}
+
+.task-map-project-copy {
+  display: grid;
+  gap: 18px;
+  max-width: 680px;
+}
+
+.task-map-project-copy h2,
+.task-map-project-status h2 {
+  margin: 0;
+  font-size: clamp(44px, 4.9vw, 68px);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.task-map-project-eyebrow {
+  margin: 0;
+  color: rgba(11, 11, 15, 0.48);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.task-map-project-copy p,
+.task-map-project-step__copy p,
+.task-map-project-status p,
+.task-map-project-why-grid p {
+  max-width: 680px;
+  margin: 0;
+  color: rgba(11, 11, 15, 0.66);
+  font-size: clamp(15px, 1.18vw, 16px);
+  line-height: 1.8;
+}
+
+.task-map-project-copy .task-map-project-lead {
+  color: #0b0b0f;
+  font-size: 20px;
+  font-weight: 620;
+  line-height: 1.72;
+}
+
+.task-map-project-overview {
+  grid-template-columns: minmax(320px, 0.86fr) minmax(380px, 0.92fr);
+  gap: clamp(54px, 6vw, 88px);
+  align-items: start;
+}
+
+.task-map-project-overview .task-map-project-copy h2 {
+  max-width: 8.2em;
+  font-size: clamp(44px, 4.1vw, 56px);
+}
+
+.task-map-project-copy--body {
+  padding-top: 10px;
+}
+
+.task-map-project-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-map-project-meta li {
+  min-height: 46px;
+  padding: 13px 14px;
+  border: 1px solid rgba(11, 11, 15, 0.12);
+  color: rgba(11, 11, 15, 0.72);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.task-map-project-why {
+  gap: clamp(30px, 5vw, 58px);
+}
+
+.task-map-project-why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.task-map-project-why-grid article {
+  display: grid;
+  gap: 12px;
+  min-height: 170px;
+  padding: clamp(22px, 3vw, 32px);
+  border-top: 1px solid rgba(11, 11, 15, 0.18);
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.task-map-project-why-grid h3,
+.task-map-project-step__copy h3 {
+  margin: 0;
+  color: #0b0b0f;
+}
+
+.task-map-project-why-grid h3 {
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.12;
+}
+
+.task-map-project-steps {
+  gap: clamp(86px, 8vw, 112px);
+}
+
+.task-map-project-step {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.52fr) minmax(360px, 1fr);
+  gap: clamp(30px, 6vw, 82px);
+  align-items: start;
+}
+
+.task-map-project-step__copy {
+  position: sticky;
+  top: 116px;
+  display: grid;
+  gap: 16px;
+  max-width: 460px;
+}
+
+.task-map-project-step__copy h3 {
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.08;
+  letter-spacing: -0.018em;
+}
+
+.task-map-project-step__figure {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 0;
+}
+
+.task-map-project-step__figure figcaption {
+  color: rgba(11, 11, 15, 0.54);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.task-map-project-step__figure img {
+  width: 100%;
+  max-height: 620px;
+  object-fit: contain;
+  border: 1px solid rgba(11, 11, 15, 0.12);
+  background: #f7f7f4;
+}
+
+.task-map-project-status {
+  gap: 16px;
+  max-width: 860px;
+  padding: clamp(26px, 4vw, 42px);
+  border-top: 1px solid rgba(11, 11, 15, 0.22);
+  border-bottom: 1px solid rgba(11, 11, 15, 0.12);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .task-map-shell {
@@ -3862,6 +4039,48 @@ a {
     gap: 10px;
   }
 
+  .task-map-project-story {
+    gap: 78px;
+    margin-top: 76px;
+  }
+
+  .task-map-project-overview,
+  .task-map-project-step {
+    grid-template-columns: 1fr;
+  }
+
+  .task-map-project-copy h2,
+  .task-map-project-status h2 {
+    font-size: clamp(38px, 12vw, 56px);
+    line-height: 1.02;
+  }
+
+  .task-map-project-copy .task-map-project-lead {
+    font-size: 18px;
+  }
+
+  .task-map-project-meta,
+  .task-map-project-why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .task-map-project-why-grid article {
+    min-height: 0;
+  }
+
+  .task-map-project-steps {
+    gap: 72px;
+  }
+
+  .task-map-project-step__copy {
+    position: static;
+    max-width: 680px;
+  }
+
+  .task-map-project-step__figure img {
+    max-height: none;
+  }
+
   .output-gallery {
     gap: 18px;
     margin-top: 34px;
@@ -4016,6 +4235,24 @@ a {
 
   .project-card__title {
     font-size: 12px;
+  }
+
+  .task-map-project-story {
+    gap: 66px;
+    margin-top: 66px;
+  }
+
+  .task-map-project-copy h2,
+  .task-map-project-status h2 {
+    font-size: clamp(34px, 12vw, 44px);
+  }
+
+  .task-map-project-step__copy h3 {
+    font-size: clamp(26px, 9vw, 34px);
+  }
+
+  .task-map-project-status {
+    padding: 22px 18px;
   }
 
   .embed-panel iframe {
