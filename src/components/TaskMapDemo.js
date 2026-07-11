@@ -10,6 +10,11 @@ export default {
       default: ""
     }
   },
+  data() {
+    return {
+      activeStepIndex: 0
+    };
+  },
   computed: {
     labels() {
       return this.lang === "zh"
@@ -149,6 +154,11 @@ export default {
           };
     }
   },
+  methods: {
+    setActiveStep(index) {
+      this.activeStepIndex = index;
+    }
+  },
   template: `
     <section class="task-map-project-story" aria-label="Task Map product story">
       <section class="task-map-project-section task-map-project-overview">
@@ -179,17 +189,44 @@ export default {
       </section>
 
       <section class="task-map-project-section task-map-project-steps" aria-label="Task Map workflow">
-        <article v-for="step in labels.steps" :key="step.index" class="task-map-project-step">
-          <div class="task-map-project-step__copy">
-            <p class="task-map-project-eyebrow">{{ step.index }}</p>
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.body }}</p>
+        <div class="task-map-project-step-nav" role="tablist" aria-label="Task Map steps">
+          <button
+            v-for="(step, index) in labels.steps"
+            :key="step.index"
+            type="button"
+            role="tab"
+            :aria-selected="activeStepIndex === index"
+            :class="{ active: activeStepIndex === index }"
+            @click="setActiveStep(index)"
+          >
+            <i aria-hidden="true"></i>
+            <span>{{ step.index }}</span>
+          </button>
+        </div>
+        <div class="task-map-project-step-carousel">
+          <div
+            class="task-map-project-step-track"
+            :style="{ transform: 'translateX(-' + activeStepIndex * 100 + '%)' }"
+          >
+            <article
+              v-for="(step, index) in labels.steps"
+              :key="step.index"
+              class="task-map-project-step"
+              :class="{ active: activeStepIndex === index }"
+              role="tabpanel"
+            >
+              <div class="task-map-project-step__copy">
+                <p class="task-map-project-eyebrow">{{ step.index }}</p>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.body }}</p>
+              </div>
+              <figure class="task-map-project-step__figure">
+                <figcaption>{{ step.title }}</figcaption>
+                <img :src="step.image" :alt="step.title" loading="lazy">
+              </figure>
+            </article>
           </div>
-          <figure class="task-map-project-step__figure">
-            <figcaption>{{ step.title }}</figcaption>
-            <img :src="step.image" :alt="step.title" loading="lazy">
-          </figure>
-        </article>
+        </div>
       </section>
 
       <section class="task-map-project-section task-map-project-status">
