@@ -12,7 +12,9 @@ export default {
   },
   data() {
     return {
-      activeStepIndex: 0
+      activeStepIndex: 0,
+      stepWheelLocked: false,
+      stepWheelTimer: null
     };
   },
   computed: {
@@ -157,6 +159,63 @@ export default {
   methods: {
     setActiveStep(index) {
       this.activeStepIndex = index;
+    },
+    getPhotoStackStyle(index) {
+      const total = this.labels.steps.length;
+      const distance = (index - this.activeStepIndex + total) % total;
+      const stackMap = [
+        {
+          transform: "translate3d(0, 0, 0) rotate(0deg) scale(1)",
+          opacity: 1,
+          zIndex: 4
+        },
+        {
+          transform: "translate3d(22px, 20px, 0) rotate(2.5deg) scale(0.94)",
+          opacity: 0.48,
+          zIndex: 3
+        },
+        {
+          transform: "translate3d(-24px, 34px, 0) rotate(-3.2deg) scale(0.89)",
+          opacity: 0.26,
+          zIndex: 2
+        },
+        {
+          transform: "translate3d(8px, 48px, 0) rotate(4deg) scale(0.84)",
+          opacity: 0.18,
+          zIndex: 1
+        }
+      ];
+
+      return stackMap[distance] || stackMap[stackMap.length - 1];
+    },
+    handleStepWheel(event) {
+      if (typeof window !== "undefined" && window.innerWidth <= 780) {
+        return;
+      }
+
+      if (Math.abs(event.deltaY) < 10 || this.stepWheelLocked) {
+        return;
+      }
+
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = this.activeStepIndex + direction;
+
+      if (nextIndex < 0 || nextIndex >= this.labels.steps.length) {
+        return;
+      }
+
+      event.preventDefault();
+      this.setActiveStep(nextIndex);
+      this.stepWheelLocked = true;
+      window.clearTimeout(this.stepWheelTimer);
+      this.stepWheelTimer = window.setTimeout(() => {
+        this.stepWheelLocked = false;
+      }, 720);
+    }
+  },
+  beforeUnmount() {
+    if (this.stepWheelTimer) {
+      window.clearTimeout(this.stepWheelTimer);
     }
   },
   template: `
@@ -203,29 +262,48 @@ export default {
             <span>{{ step.index }}</span>
           </button>
         </div>
-        <div class="task-map-project-step-carousel">
-          <div
-            class="task-map-project-step-track"
-            :style="{ transform: 'translateX(-' + activeStepIndex * 100 + '%)' }"
-          >
+
+        <div class="task-map-project-step-showcase" @wheel="handleStepWheel">
+          <div class="task-map-project-step-copy-stack">
             <article
               v-for="(step, index) in labels.steps"
-              :key="step.index"
-              class="task-map-project-step"
+              :key="'copy-' + step.index"
+              class="task-map-project-step__copy"
               :class="{ active: activeStepIndex === index }"
               role="tabpanel"
             >
-              <div class="task-map-project-step__copy">
-                <p class="task-map-project-eyebrow">{{ step.index }}</p>
-                <h3>{{ step.title }}</h3>
-                <p>{{ step.body }}</p>
-              </div>
-              <figure class="task-map-project-step__figure">
-                <figcaption>{{ step.title }}</figcaption>
-                <img :src="step.image" :alt="step.title" loading="lazy">
-              </figure>
+              <p class="task-map-project-eyebrow">{{ step.index }}</p>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.body }}</p>
             </article>
           </div>
+          <div class="task-map-project-photo-stack" aria-live="polite">
+            <figure
+              v-for="(step, index) in labels.steps"
+              :key="'photo-' + step.index"
+              class="task-map-project-step__figure"
+              :class="{ active: activeStepIndex === index }"
+              :style="getPhotoStackStyle(index)"
+              @click="setActiveStep(index)"
+            >
+              <figcaption>{{ step.title }}</figcaption>
+              <img :src="step.image" :alt="step.title" loading="lazy">
+            </figure>
+          </div>
+        </div>
+
+        <div class="task-map-project-step-mobile-list">
+          <article v-for="step in labels.steps" :key="'mobile-' + step.index" class="task-map-project-step">
+            <div class="task-map-project-step__copy active">
+              <p class="task-map-project-eyebrow">{{ step.index }}</p>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.body }}</p>
+            </div>
+            <figure class="task-map-project-step__figure active">
+              <figcaption>{{ step.title }}</figcaption>
+              <img :src="step.image" :alt="step.title" loading="lazy">
+            </figure>
+          </article>
         </div>
       </section>
 
