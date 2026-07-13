@@ -2389,7 +2389,8 @@ a {
 
 .task-map-project-step__figure {
   position: absolute;
-  inset: clamp(10px, 2vw, 24px) 0 auto;
+  inset: 50% 0 auto;
+  translate: 0 -50%;
   display: grid;
   gap: 12px;
   min-width: 0;
@@ -2410,10 +2411,10 @@ a {
 }
 
 .task-map-project-step__figure figcaption {
-  color: rgba(11, 11, 15, 0.54);
-  font-family: "JetBrains Mono", monospace;
+  color: rgba(11, 11, 15, 0.68);
+  font-family: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Segoe UI", sans-serif;
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 200;
   letter-spacing: 0.1em;
   line-height: 1.25;
   text-transform: uppercase;
@@ -4231,6 +4232,7 @@ a {
 
   .task-map-project-step__figure {
     position: static;
+    translate: none;
     cursor: default;
     opacity: 1 !important;
     transform: none !important;
