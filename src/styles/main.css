@@ -3637,9 +3637,17 @@ a {
 }
 
 .embed-panel h2 {
-  margin: 0 0 14px;
+  margin: 0;
   font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
   font-weight: 500;
+}
+
+.embed-panel__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
 }
 
 .embed-panel iframe {
@@ -3647,6 +3655,86 @@ a {
   height: min(78vh, 900px);
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: #fff;
+}
+
+.embed-panel--flow {
+  display: grid;
+  justify-items: center;
+}
+
+.embed-panel--flow .embed-panel__heading {
+  width: 100%;
+}
+
+.flow-experience-frame {
+  width: min(100%, 430px);
+  height: min(900px, 84vh);
+  min-height: 680px;
+  overflow: hidden;
+  border: 1px solid rgba(11, 11, 15, 0.14);
+  border-radius: 36px;
+  background: #fff;
+  box-shadow: 0 28px 80px rgba(11, 11, 15, 0.18);
+}
+
+.embed-panel--flow .flow-experience-frame iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+}
+
+.flow-experience-launch,
+.flow-experience-overlay__close {
+  min-height: 38px;
+  padding: 9px 13px;
+  border: 1px solid #0b0b0f;
+  background: #fff;
+  color: #0b0b0f;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.flow-experience-launch:hover,
+.flow-experience-overlay__close:hover {
+  background: #0b0b0f;
+  color: #fff;
+}
+
+.flow-experience-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: rgba(11, 11, 15, 0.92);
+}
+
+.flow-experience-overlay__iframe {
+  width: min(430px, 100vw);
+  height: min(900px, 100dvh);
+  border: 0;
+  border-radius: 36px;
+  background: #fff;
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.35);
+}
+
+.flow-experience-overlay__close {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 1;
+}
+
+.flow-experience-enter-active,
+.flow-experience-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.flow-experience-enter-from,
+.flow-experience-leave-to {
+  opacity: 0;
 }
 
 .figma-loader {
@@ -4321,6 +4409,42 @@ a {
   .embed-panel iframe {
     height: min(68vh, 620px);
     min-height: 420px;
+  }
+
+  .embed-panel--flow .flow-experience-frame {
+    display: none;
+  }
+
+  .flow-experience-launch {
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .embed-panel--flow .embed-panel__heading {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .flow-experience-overlay {
+    background: #fff;
+  }
+
+  .flow-experience-overlay__iframe {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .flow-experience-overlay__close {
+    top: max(8px, env(safe-area-inset-top));
+    right: max(8px, env(safe-area-inset-right));
+    min-height: 34px;
+    padding: 7px 10px;
+    border-color: rgba(11, 11, 15, 0.2);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(10px);
+    font-size: 11px;
   }
 }
 

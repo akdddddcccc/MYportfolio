@@ -216,7 +216,7 @@ export const projects = [
         "hero": "/images/study/flow/Group 217.png",
         "images": [],
         "iframes": [
-          "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1397-12&embed-host=share",
+          "https://akdddddcccc.github.io/flow-app/?embed=portfolio",
           "https://www.youtube.com/embed/3Z3pq_Rg00E?si=-CWsmOmNlEIHRwa4"
         ],
         "pdfs": [
@@ -233,7 +233,7 @@ export const projects = [
         "hero": "/images/study/flow/Group 217.png",
         "images": [],
         "iframes": [
-          "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1397-12&embed-host=share",
+          "https://akdddddcccc.github.io/flow-app/?embed=portfolio",
           "https://www.youtube.com/embed/3Z3pq_Rg00E?si=-CWsmOmNlEIHRwa4"
         ],
         "pdfs": [

@@ -23,7 +23,9 @@ export default {
       loadedEmbeds: {},
       loadingTimer: null,
       loadingWordIndex: 0,
-      lightboxImage: ""
+      lightboxImage: "",
+      flowExperienceOpen: false,
+      bodyOverflowBeforeFlow: ""
     };
   },
   mounted() {
@@ -31,10 +33,12 @@ export default {
       this.loadingWordIndex += 1;
     }, 1100);
     window.addEventListener("keydown", this.handleLightboxKeydown);
+    this.syncFlowExperience();
   },
   beforeUnmount() {
     window.clearInterval(this.loadingTimer);
     window.removeEventListener("keydown", this.handleLightboxKeydown);
+    this.restoreBodyOverflow();
   },
   computed: {
     detail() {
@@ -77,9 +81,13 @@ export default {
       return (this.detail.iframes || []).map((src, index) => ({
         label: this.embedLabel(src, index),
         src: src.startsWith("//") ? `https:${src}` : src,
+        isFlowApp: this.isFlowApp(src),
         requiresVpn: this.embedRequiresVpn(src),
         figmaUrl: this.figmaUrl(src)
       }));
+    },
+    flowExperienceUrl() {
+      return this.embeds.find((embed) => embed.isFlowApp)?.src || "";
     },
     loadingWords() {
       if (this.lang === "zh") return ["等待中···", "加载中···", "读取中···"];
@@ -94,6 +102,8 @@ export default {
       handler() {
         this.loadedEmbeds = {};
         this.lightboxImage = "";
+        this.closeFlowExperience();
+        this.$nextTick(() => this.syncFlowExperience());
       }
     },
     codeBlockRefs: {
@@ -105,11 +115,15 @@ export default {
   },
   methods: {
     embedLabel(src, index) {
+      if (this.isFlowApp(src)) return this.lang === "zh" ? "交互体验" : "Interactive Experience";
       if (src.includes("figma.com")) return "Figma";
       if (src.includes("bilibili.com")) return "Bilibili";
       if (src.includes("vimeo.com")) return "Vimeo";
       if (src.includes("youtube.com")) return "YouTube";
       return `${this.lang === "zh" ? "嵌入内容" : "Embed"} ${index + 1}`;
+    },
+    isFlowApp(src) {
+      return src.includes("akdddddcccc.github.io/flow-app");
     },
     embedRequiresVpn(src) {
       return ["youtube.com", "youtu.be", "vimeo.com"].some((domain) => src.includes(domain));
@@ -218,9 +232,32 @@ export default {
     closeOutputLightbox() {
       this.lightboxImage = "";
     },
+    syncFlowExperience() {
+      if (this.project?.slug !== "flow" || !this.flowExperienceUrl) return;
+      if (window.matchMedia("(max-width: 780px)").matches) {
+        this.openFlowExperience();
+      }
+    },
+    openFlowExperience() {
+      if (!this.flowExperienceUrl || this.flowExperienceOpen) return;
+      this.bodyOverflowBeforeFlow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      this.flowExperienceOpen = true;
+    },
+    closeFlowExperience() {
+      if (!this.flowExperienceOpen) return;
+      this.flowExperienceOpen = false;
+      this.restoreBodyOverflow();
+    },
+    restoreBodyOverflow() {
+      document.body.style.overflow = this.bodyOverflowBeforeFlow;
+      this.bodyOverflowBeforeFlow = "";
+    },
     handleLightboxKeydown(event) {
       if (event.key === "Escape" && this.lightboxImage) {
         this.closeOutputLightbox();
+      } else if (event.key === "Escape" && this.flowExperienceOpen) {
+        this.closeFlowExperience();
       }
     },
     disciplineLabel(key) {
@@ -311,6 +348,27 @@ export default {
         </div>
       </Transition>
 
+      <Transition name="flow-experience">
+        <div
+          v-if="flowExperienceOpen && flowExperienceUrl"
+          class="flow-experience-overlay"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="lang === 'zh' ? '流 App 全屏交互体验' : 'Flow App fullscreen experience'"
+        >
+          <iframe
+            class="flow-experience-overlay__iframe"
+            :src="flowExperienceUrl"
+            :title="lang === 'zh' ? '流 App 交互体验' : 'Flow App interactive experience'"
+            allow="fullscreen; autoplay"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+          <button type="button" class="flow-experience-overlay__close" @click="closeFlowExperience">
+            {{ lang === 'zh' ? '返回作品' : 'Back to project' }}
+          </button>
+        </div>
+      </Transition>
+
       <section v-if="loadedCodeBlocks.length" class="code-stack">
         <article v-for="block in loadedCodeBlocks" :key="block.src" class="code-panel">
           <header class="code-panel__header">
@@ -336,10 +394,21 @@ export default {
           class="embed-panel"
           :class="{
             'embed-panel--figma': embed.label === 'Figma',
+            'embed-panel--flow': embed.isFlowApp,
             'embed-panel--loading': embed.label === 'Figma' && isEmbedLoading(embed.src)
           }"
         >
-          <h2>{{ embed.label }}</h2>
+          <div class="embed-panel__heading">
+            <h2>{{ embed.label }}</h2>
+            <button
+              v-if="embed.isFlowApp"
+              type="button"
+              class="flow-experience-launch"
+              @click="openFlowExperience"
+            >
+              {{ lang === 'zh' ? '全屏体验' : 'Open fullscreen' }}
+            </button>
+          </div>
           <div
             v-if="embed.label === 'Figma' && isEmbedLoading(embed.src)"
             class="figma-loader"
@@ -350,14 +419,17 @@ export default {
             <span :key="loadingMessage" class="figma-loader__message">{{ loadingMessage }}</span>
             <span class="figma-loader__rule"></span>
           </div>
-          <iframe
-            :key="embed.src + '-' + project.slug"
-            :src="embed.src"
-            loading="lazy"
-            allowfullscreen
-            referrerpolicy="strict-origin-when-cross-origin"
-            @load="markEmbedLoaded(embed.src)"
-          ></iframe>
+          <div :class="{ 'flow-experience-frame': embed.isFlowApp }">
+            <iframe
+              :key="embed.src + '-' + project.slug"
+              :src="embed.src"
+              :title="embed.label"
+              loading="lazy"
+              allow="fullscreen; autoplay"
+              referrerpolicy="strict-origin-when-cross-origin"
+              @load="markEmbedLoaded(embed.src)"
+            ></iframe>
+          </div>
           <p v-if="embed.requiresVpn" class="embed-note">
             {{ lang === 'zh' ? '需 VPN 观看' : 'VPN required to view' }}
           </p>
