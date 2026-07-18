@@ -394,17 +394,22 @@ export default {
           class="flow-experience-overlay"
           role="dialog"
           aria-modal="true"
-          :aria-label="lang === 'zh' ? '流 App 全屏交互体验' : 'Flow App fullscreen experience'"
+          :aria-label="lang === 'zh' ? '流 App 专注交互体验' : 'Flow App focused experience'"
         >
-          <iframe
-            class="flow-experience-overlay__iframe"
-            :class="'flow-experience-overlay__iframe--' + flowOverlayFrameMode"
-            ref="flowExperienceOverlay"
-            :src="flowExperienceUrl"
-            :title="lang === 'zh' ? '流 App 交互体验' : 'Flow App interactive experience'"
-            allow="fullscreen; autoplay"
-            referrerpolicy="strict-origin-when-cross-origin"
-          ></iframe>
+          <div
+            class="flow-experience-overlay__stage"
+            :class="'flow-experience-overlay__stage--' + flowOverlayFrameMode"
+          >
+            <iframe
+              class="flow-experience-overlay__iframe"
+              :class="'flow-experience-overlay__iframe--' + flowOverlayFrameMode"
+              ref="flowExperienceOverlay"
+              :src="flowExperienceUrl"
+              :title="lang === 'zh' ? '流 App 交互体验' : 'Flow App interactive experience'"
+              allow="fullscreen; autoplay"
+              referrerpolicy="strict-origin-when-cross-origin"
+            ></iframe>
+          </div>
           <button type="button" class="flow-experience-overlay__close" @click="closeFlowExperience">
             {{ lang === 'zh' ? '返回作品' : 'Back to project' }}
           </button>
@@ -448,7 +453,7 @@ export default {
               class="flow-experience-launch"
               @click="openFlowExperience"
             >
-              {{ lang === 'zh' ? '全屏体验' : 'Open fullscreen' }}
+              {{ lang === 'zh' ? '专注体验' : 'Focused experience' }}
             </button>
           </div>
           <div

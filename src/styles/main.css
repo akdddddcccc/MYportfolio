@@ -3725,10 +3725,10 @@ a {
   background: rgba(11, 11, 15, 0.92);
 }
 
-.flow-experience-overlay__iframe {
+.flow-experience-overlay__stage {
   width: min(430px, 100vw);
   height: min(900px, 100dvh);
-  border: 0;
+  overflow: hidden;
   border-radius: 36px;
   background: #fff;
   box-shadow: 0 32px 100px rgba(0, 0, 0, 0.35);
@@ -3738,10 +3738,18 @@ a {
     border-radius 0.46s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.flow-experience-overlay__iframe--landscape {
+.flow-experience-overlay__stage--landscape {
   width: min(844px, 100vw);
   height: min(390px, 100dvh);
   border-radius: 28px;
+}
+
+.flow-experience-overlay__iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
 }
 
 .flow-experience-overlay__close {
@@ -4450,24 +4458,53 @@ a {
   }
 
   .flow-experience-overlay {
-    background: #fff;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 10px;
+    padding:
+      max(8px, env(safe-area-inset-top))
+      12px
+      max(8px, env(safe-area-inset-bottom));
+    overflow: hidden;
+    background: #f4f4f2;
   }
 
-  .flow-experience-overlay__iframe {
-    width: 100vw;
-    height: 100dvh;
-    border-radius: 0;
-    box-shadow: none;
+  .flow-experience-overlay__stage {
+    grid-row: 2;
+    align-self: center;
+    width: min(
+      calc(100vw - 24px),
+      calc((100vh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 390 / 844)
+    );
+    width: min(
+      calc(100vw - 24px),
+      calc((100dvh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 390 / 844)
+    );
+    height: auto;
+    max-height: calc(100vh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    max-height: calc(100dvh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    aspect-ratio: 390 / 844;
+    border: 1px solid rgba(11, 11, 15, 0.12);
+    border-radius: 28px;
+    box-shadow: 0 16px 46px rgba(11, 11, 15, 0.16);
   }
 
-  .flow-experience-overlay__iframe--landscape {
-    width: 100vw;
-    height: 100dvh;
+  .flow-experience-overlay__stage--landscape {
+    width: min(
+      calc(100vw - 24px),
+      calc((100vh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 844 / 390)
+    );
+    width: min(
+      calc(100vw - 24px),
+      calc((100dvh - 64px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 844 / 390)
+    );
+    aspect-ratio: 844 / 390;
+    border-radius: 22px;
   }
 
   .flow-experience-overlay__close {
-    top: max(8px, env(safe-area-inset-top));
-    right: max(8px, env(safe-area-inset-right));
+    position: static;
+    grid-row: 1;
+    justify-self: end;
     min-height: 34px;
     padding: 7px 10px;
     border-color: rgba(11, 11, 15, 0.2);
