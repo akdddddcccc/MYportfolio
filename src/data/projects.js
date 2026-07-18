@@ -217,6 +217,7 @@ export const projects = [
         "images": [],
         "iframes": [
           "https://akdddddcccc.github.io/flow-app/?embed=portfolio",
+          "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1397-12&embed-host=share",
           "https://www.youtube.com/embed/3Z3pq_Rg00E?si=-CWsmOmNlEIHRwa4"
         ],
         "pdfs": [
@@ -234,6 +235,7 @@ export const projects = [
         "images": [],
         "iframes": [
           "https://akdddddcccc.github.io/flow-app/?embed=portfolio",
+          "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1397-12&embed-host=share",
           "https://www.youtube.com/embed/3Z3pq_Rg00E?si=-CWsmOmNlEIHRwa4"
         ],
         "pdfs": [

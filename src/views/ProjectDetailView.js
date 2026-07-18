@@ -25,7 +25,11 @@ export default {
       loadingWordIndex: 0,
       lightboxImage: "",
       flowExperienceOpen: false,
-      bodyOverflowBeforeFlow: ""
+      bodyOverflowBeforeFlow: "",
+      htmlOverflowBeforeFlow: "",
+      htmlScrollbarGutterBeforeFlow: "",
+      flowInlineFrameMode: "portrait",
+      flowOverlayFrameMode: "portrait"
     };
   },
   mounted() {
@@ -33,11 +37,13 @@ export default {
       this.loadingWordIndex += 1;
     }, 1100);
     window.addEventListener("keydown", this.handleLightboxKeydown);
+    window.addEventListener("message", this.handleFlowFrameMessage);
     this.syncFlowExperience();
   },
   beforeUnmount() {
     window.clearInterval(this.loadingTimer);
     window.removeEventListener("keydown", this.handleLightboxKeydown);
+    window.removeEventListener("message", this.handleFlowFrameMessage);
     this.restoreBodyOverflow();
   },
   computed: {
@@ -102,6 +108,8 @@ export default {
       handler() {
         this.loadedEmbeds = {};
         this.lightboxImage = "";
+        this.flowInlineFrameMode = "portrait";
+        this.flowOverlayFrameMode = "portrait";
         this.closeFlowExperience();
         this.$nextTick(() => this.syncFlowExperience());
       }
@@ -240,8 +248,13 @@ export default {
     },
     openFlowExperience() {
       if (!this.flowExperienceUrl || this.flowExperienceOpen) return;
+      this.flowOverlayFrameMode = "portrait";
       this.bodyOverflowBeforeFlow = document.body.style.overflow;
+      this.htmlOverflowBeforeFlow = document.documentElement.style.overflow;
+      this.htmlScrollbarGutterBeforeFlow = document.documentElement.style.scrollbarGutter;
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.documentElement.style.scrollbarGutter = "auto";
       this.flowExperienceOpen = true;
     },
     closeFlowExperience() {
@@ -251,7 +264,27 @@ export default {
     },
     restoreBodyOverflow() {
       document.body.style.overflow = this.bodyOverflowBeforeFlow;
+      document.documentElement.style.overflow = this.htmlOverflowBeforeFlow;
+      document.documentElement.style.scrollbarGutter = this.htmlScrollbarGutterBeforeFlow;
       this.bodyOverflowBeforeFlow = "";
+      this.htmlOverflowBeforeFlow = "";
+      this.htmlScrollbarGutterBeforeFlow = "";
+    },
+    handleFlowFrameMessage(event) {
+      if (event.origin !== "https://akdddddcccc.github.io") return;
+      if (event.data?.type !== "flow-app:frame-mode") return;
+      if (!["portrait", "landscape"].includes(event.data.mode)) return;
+
+      const overlayFrame = this.$refs.flowExperienceOverlay;
+      if (overlayFrame?.contentWindow === event.source) {
+        this.flowOverlayFrameMode = event.data.mode;
+        return;
+      }
+
+      const inlineFrame = this.$el?.querySelector(".flow-experience-frame__iframe");
+      if (inlineFrame?.contentWindow === event.source) {
+        this.flowInlineFrameMode = event.data.mode;
+      }
     },
     handleLightboxKeydown(event) {
       if (event.key === "Escape" && this.lightboxImage) {
@@ -358,6 +391,8 @@ export default {
         >
           <iframe
             class="flow-experience-overlay__iframe"
+            :class="'flow-experience-overlay__iframe--' + flowOverlayFrameMode"
+            ref="flowExperienceOverlay"
             :src="flowExperienceUrl"
             :title="lang === 'zh' ? '流 App 交互体验' : 'Flow App interactive experience'"
             allow="fullscreen; autoplay"
@@ -419,11 +454,17 @@ export default {
             <span :key="loadingMessage" class="figma-loader__message">{{ loadingMessage }}</span>
             <span class="figma-loader__rule"></span>
           </div>
-          <div :class="{ 'flow-experience-frame': embed.isFlowApp }">
+          <div
+            :class="{
+              'flow-experience-frame': embed.isFlowApp,
+              'flow-experience-frame--landscape': embed.isFlowApp && flowInlineFrameMode === 'landscape'
+            }"
+          >
             <iframe
               :key="embed.src + '-' + project.slug"
               :src="embed.src"
               :title="embed.label"
+              :class="{ 'flow-experience-frame__iframe': embed.isFlowApp }"
               loading="lazy"
               allow="fullscreen; autoplay"
               referrerpolicy="strict-origin-when-cross-origin"
