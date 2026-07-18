@@ -138,7 +138,7 @@ export default {
       return `${this.lang === "zh" ? "嵌入内容" : "Embed"} ${index + 1}`;
     },
     isFlowApp(src) {
-      return src.includes("akdddddcccc.github.io/flow-app");
+      return src.includes("flow.muyang23333.top");
     },
     embedRequiresVpn(src) {
       return ["youtube.com", "youtu.be", "vimeo.com"].some((domain) => src.includes(domain));
