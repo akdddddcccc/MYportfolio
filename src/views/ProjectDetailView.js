@@ -95,6 +95,13 @@ export default {
     flowExperienceUrl() {
       return this.embeds.find((embed) => embed.isFlowApp)?.src || "";
     },
+    flowExperienceOrigin() {
+      try {
+        return new URL(this.flowExperienceUrl).origin;
+      } catch {
+        return "";
+      }
+    },
     loadingWords() {
       if (this.lang === "zh") return ["等待中···", "加载中···", "读取中···"];
       return ["Thinking···", "Reading···", "Loading···", "Working···"];
@@ -271,7 +278,7 @@ export default {
       this.htmlScrollbarGutterBeforeFlow = "";
     },
     handleFlowFrameMessage(event) {
-      if (event.origin !== "https://akdddddcccc.github.io") return;
+      if (!this.flowExperienceOrigin || event.origin !== this.flowExperienceOrigin) return;
       if (event.data?.type !== "flow-app:frame-mode") return;
       if (!["portrait", "landscape"].includes(event.data.mode)) return;
 
