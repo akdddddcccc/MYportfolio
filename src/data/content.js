@@ -72,7 +72,7 @@ export const content = {
         },
         {
           title: "技能工具",
-          body: "-Figma、AI、PS、codex   -Arduino、TouchDesigner\n-PR、AE   -Rhino、KeyShot\n-Procreate\n-Rap、篮球、摄影、产品摄影"
+          body: "-Figma、AI、PS、codex     -Arduino、TouchDesigner\n-PR、AE   -Rhino、KeyShot\n-Procreate\n-Rap、篮球、摄影、产品摄影"
         }
       ]
     }
