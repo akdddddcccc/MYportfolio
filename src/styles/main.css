@@ -635,9 +635,12 @@ a {
 
 .contact-board__gold {
   z-index: 1;
-  background: linear-gradient(135deg, #8e6417 0%, #d3a73c 42%, #f0d27a 64%, #a87618 100%);
-  clip-path: circle(0% at 50% 50%);
-  transition: clip-path 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  background:
+    radial-gradient(circle at var(--piece-ink-x) var(--piece-ink-y), rgba(255, 255, 255, 0.38), transparent 24%),
+    conic-gradient(from 36deg at var(--piece-ink-x) var(--piece-ink-y), var(--piece-ink-dark), var(--piece-ink-light), var(--piece-ink-dark));
+  clip-path: ellipse(0% 0% at var(--piece-ink-x) var(--piece-ink-y));
+  filter: saturate(0.88);
+  transition: clip-path 0.82s cubic-bezier(0.16, 1, 0.3, 1), filter 0.42s ease;
 }
 
 .contact-board__piece:is(:hover, :focus-visible) {
@@ -648,7 +651,22 @@ a {
 }
 
 .contact-board__piece:is(:hover, :focus-visible) .contact-board__gold {
-  clip-path: circle(76% at 50% 50%);
+  clip-path: ellipse(94% 86% at var(--piece-ink-x) var(--piece-ink-y));
+  filter: saturate(1);
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 781px) {
+  .contact-board__piece {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .contact-board__piece--dragging {
+    z-index: 5;
+    cursor: grabbing;
+    transition: none;
+  }
 }
 
 .contact-list {
@@ -660,8 +678,10 @@ a {
   gap: 16px;
   min-width: 280px;
   padding: 24px 28px;
-  background: rgba(245, 245, 245, 0.88);
-  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.58);
+  background: rgba(245, 245, 245, 0.72);
+  box-shadow: 0 18px 48px rgba(18, 17, 13, 0.08);
+  backdrop-filter: blur(18px) saturate(1.18);
 }
 
 .contact-list p {
