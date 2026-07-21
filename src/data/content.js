@@ -9,7 +9,7 @@ export const content = {
     zh: {
       label: "中文",
       href: "#/zh/projects/all",
-      line: "-很感激对设计的学习让我得以欣赏到如此多的艺术形式作品"
+      line: "很感激对设计的学习让我得以欣赏到如此多的艺术形式作品"
     }
   },
   nav: {
@@ -64,15 +64,15 @@ export const content = {
     zh: {
       name: "陈沐阳",
       romanName: "CHEN MUYANG",
-      sentence: "-很感激对设计的学习让我得以欣赏到如此多的艺术形式作品",
+      sentence: "“很感激对设计的学习让我得以欣赏到如此多的艺术形式作品”",
       sections: [
         {
           title: "经历",
-          body: "毕业于天津南开中学，就读于江南大学。"
+          body: "毕业于天津南开中学，于江南大学学习工业设计，现在去往北京师范大学深造。"
         },
         {
           title: "技能工具",
-          body: "-Figma、AI、PS   -Arduino、TouchDesigner\n-PR、AE   -Rhino、KeyShot\n-Procreate\n-Rap、篮球、摄影、产品摄影"
+          body: "-Figma、AI、PS、codex   -Arduino、TouchDesigner\n-PR、AE   -Rhino、KeyShot\n-Procreate\n-Rap、篮球、摄影、产品摄影"
         }
       ]
     }
