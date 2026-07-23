@@ -1,13 +1,15 @@
 import TaskMapDemo from "../components/TaskMapDemo.js";
 import AIWorkflowDemo from "../components/AIWorkflowDemo.js";
 import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
+import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
 
 export default {
   name: "ProjectDetailView",
   components: {
     TaskMapDemo,
     AIWorkflowDemo,
-    BeautyIndustryViz
+    BeautyIndustryViz,
+    SenseOfTimeDemo
   },
   props: {
     lang: {
@@ -360,6 +362,7 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
+      <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="outputImages.length" class="output-gallery">
