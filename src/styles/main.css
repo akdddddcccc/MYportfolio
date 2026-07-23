@@ -3554,6 +3554,213 @@ a {
   margin-top: 56px;
 }
 
+.beauty-viz {
+  margin-top: clamp(44px, 7vw, 96px);
+  border-top: 1px solid rgba(11, 11, 15, 0.16);
+  color: #353438;
+}
+
+.beauty-viz__heading,
+.beauty-viz__panel-head,
+.beauty-viz__sources {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.beauty-viz__heading {
+  align-items: end;
+  padding: 22px 0 34px;
+}
+
+.beauty-viz__heading h2,
+.beauty-viz__panel h3,
+.beauty-viz__heading p,
+.beauty-viz__panel p,
+.beauty-viz__sources {
+  margin: 0;
+}
+
+.beauty-viz__heading h2 {
+  max-width: 10em;
+  font-family: "MiSans", var(--font-ui);
+  font-size: clamp(31px, 4vw, 58px);
+  font-weight: 300;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.beauty-viz__heading > p,
+.beauty-viz__note,
+.beauty-viz__sources,
+.beauty-viz__panel-head > strong,
+.beauty-viz__panel-head > div > p {
+  font-family: "JetBrains Mono", "MiSans", monospace;
+}
+
+.beauty-viz__heading > p {
+  max-width: 18em;
+  color: rgba(53, 52, 56, 0.62);
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+.beauty-viz__eyebrow,
+.beauty-viz__panel-head > div > p {
+  margin-bottom: 8px !important;
+  color: #b87380;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.beauty-viz__grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 18px;
+}
+
+.beauty-viz__panel {
+  min-width: 0;
+  padding: clamp(18px, 2.5vw, 34px);
+  border: 1px solid rgba(11, 11, 15, 0.13);
+  background: #fcfcfa;
+}
+
+.beauty-viz__panel--procedures {
+  grid-column: 1 / -1;
+}
+
+.beauty-viz__panel-head {
+  align-items: flex-start;
+}
+
+.beauty-viz__panel h3 {
+  max-width: 17em;
+  font-family: "MiSans", var(--font-ui);
+  font-size: clamp(18px, 1.8vw, 26px);
+  font-weight: 400;
+  line-height: 1.24;
+}
+
+.beauty-viz__panel-head > strong {
+  color: #7084be;
+  font-size: clamp(17px, 2.2vw, 30px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+}
+
+.beauty-viz__retail-chart {
+  display: block;
+  width: 100%;
+  margin-top: 34px;
+  overflow: visible;
+}
+
+.beauty-viz__grid-line { stroke: rgba(53, 52, 56, 0.1); stroke-width: 1; }
+.beauty-viz__retail-path { fill: none; stroke: #d99296; stroke-width: 3; }
+.beauty-viz__retail-stem { stroke: rgba(121, 143, 202, 0.5); stroke-width: 2; }
+.beauty-viz__retail-point { cursor: crosshair; }
+.beauty-viz__retail-point circle { fill: #fcfcfa; stroke: #d99296; stroke-width: 3; transition: r 0.18s ease, fill 0.18s ease; }
+.beauty-viz__retail-point text { fill: #555158; font-family: "JetBrains Mono", monospace; font-size: 11px; }
+.beauty-viz__retail-point .beauty-viz__year { fill: #89838b; font-size: 10px; }
+.beauty-viz__retail-point:hover circle { r: 9; fill: #d99296; }
+
+.beauty-viz__note {
+  margin-top: 14px !important;
+  color: rgba(53, 52, 56, 0.64);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.beauty-viz__motivation-body { display: grid; justify-items: center; padding-top: 14px; }
+.beauty-viz__motivation-body > p { max-width: 27em; margin-top: 24px; color: rgba(53, 52, 56, 0.62); font-size: 12px; line-height: 1.6; text-align: center; }
+.beauty-viz__motivation-body > .beauty-viz__placeholder-note { margin-top: 8px; color: #b87380; font-family: "JetBrains Mono", "MiSans", monospace; font-size: 10px; }
+.beauty-viz__orbital { position: relative; width: 310px; height: 310px; --active-color: #d99296; }
+.beauty-viz__orbital-ring { position: absolute; inset: 50%; border: 1px solid; border-radius: 50%; transform: translate(-50%, -50%); transition: border-color 0.24s ease; }
+.beauty-viz__orbital-ring--1 { width: 156px; height: 156px; border-color: var(--active-color); }
+.beauty-viz__orbital-ring--2 { width: 236px; height: 236px; border-color: rgba(121, 143, 202, 0.58); }
+.beauty-viz__orbital-core { position: absolute; inset: 50%; display: grid; width: 94px; height: 94px; place-content: center; border-radius: 50%; background: var(--active-color); color: #fff; text-align: center; transform: translate(-50%, -50%); transition: background 0.24s ease; }
+.beauty-viz__orbital-core b { font-family: "JetBrains Mono", monospace; font-size: 21px; font-weight: 400; }
+.beauty-viz__orbital-core small { margin-top: 3px; font-size: 11px; }
+.beauty-viz__motivation-node { position: absolute; top: 50%; left: 50%; width: 88px; min-height: 38px; padding: 5px 7px; border: 0; border-left: 3px solid var(--node-color); background: transparent; color: #4c4950; font-family: "MiSans", var(--font-ui); font-size: 12px; line-height: 1.25; text-align: left; cursor: pointer; transform: translate(-50%, -50%) rotate(var(--node-angle)) translateY(calc(var(--node-distance) * -1)) rotate(calc(var(--node-angle) * -1)); transition: color 0.18s ease, transform 0.18s ease; }
+.beauty-viz__motivation-node.is-active { color: var(--node-color); font-weight: 500; }
+.beauty-viz__motivation-node:hover, .beauty-viz__motivation-node:focus-visible { color: var(--node-color); outline: none; transform: translate(-50%, -50%) rotate(var(--node-angle)) translateY(calc((var(--node-distance) + 8px) * -1)) rotate(calc(var(--node-angle) * -1)); }
+
+.beauty-viz__procedures-body { display: grid; grid-template-columns: minmax(260px, 0.84fr) minmax(220px, 0.5fr); align-items: center; gap: clamp(20px, 6vw, 90px); margin-top: 14px; }
+.beauty-viz__procedure-chart { width: min(100%, 420px); justify-self: center; overflow: visible; }
+.beauty-viz__procedure-ring { fill: none; stroke: rgba(111, 132, 186, 0.6); stroke-width: 1.4; }
+.beauty-viz__procedure-ring--light { stroke: rgba(217, 146, 150, 0.44); }
+.beauty-viz__procedure-link path { fill: none; stroke-linecap: round; transition: stroke-width 0.18s ease; }
+.beauty-viz__procedure-link:hover path { stroke-width: 34; }
+.beauty-viz__procedure-total { fill: #4b4b50; font-family: "JetBrains Mono", monospace; font-size: 29px; letter-spacing: -0.08em; }
+.beauty-viz__procedure-sub { fill: #8c858e; font-family: "JetBrains Mono", monospace; font-size: 8px; letter-spacing: 0.08em; }
+.beauty-viz__procedure-list { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+.beauty-viz__procedure-list li { display: flex; justify-content: space-between; gap: 20px; padding: 8px 0 8px 12px; border-bottom: 1px solid rgba(11, 11, 15, 0.1); border-left: 3px solid var(--procedure-color); font-size: 13px; }
+.beauty-viz__procedure-list b { color: #5b6ea7; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 400; }
+
+.beauty-viz__sources { flex-wrap: wrap; align-items: baseline; padding: 18px 0 0; color: rgba(53, 52, 56, 0.62); font-size: 10px; line-height: 1.6; }
+.beauty-viz__sources > span { color: #b87380; letter-spacing: 0.08em; }
+.beauty-viz__sources a { color: inherit; text-decoration-color: rgba(53, 52, 56, 0.3); text-underline-offset: 3px; }
+.beauty-viz__sources small { width: 100%; font-size: inherit; }
+
+.beauty-viz--poster {
+  padding: clamp(18px, 3vw, 44px);
+  border: 0;
+  background: #fcfcfb;
+}
+
+.beauty-viz--poster .beauty-viz__poster-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 16px;
+  padding: 0 0 28px;
+}
+
+.beauty-viz--poster .beauty-viz__poster-head p,
+.beauty-viz--poster .beauty-viz__poster-head span,
+.beauty-viz--poster .beauty-viz__radial-panel > p,
+.beauty-viz--poster header p,
+.beauty-viz--poster header span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.25;
+}
+
+.beauty-viz--poster .beauty-viz__poster-head h2 {
+  width: min-content;
+  margin: 0;
+  color: #3d3a3e;
+  font-family: "MiSans", var(--font-ui);
+  font-size: clamp(26px, 3.2vw, 52px);
+  font-weight: 300;
+  letter-spacing: -0.08em;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.beauty-viz--poster .beauty-viz__poster-head span { justify-self: end; color: #d99296; font-size: 22px; }
+.beauty-viz__poster-grid { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: clamp(18px, 3vw, 48px); align-items: stretch; }
+.beauty-viz__radial-panel { min-width: 0; padding: 0; }
+.beauty-viz__radial-chart { display: block; width: min(100%, 650px); margin: 0 auto; overflow: visible; }
+.beauty-viz__orbit { fill: none; stroke-width: 1.25; }
+.beauty-viz__orbit--pink { stroke: #f0bdc5; }.beauty-viz__orbit--blue { stroke: #7d91cc; }.beauty-viz__orbit--pale { stroke: #d7e9e7; }
+.beauty-viz__price-bar rect { opacity: 0.74; transition: opacity .18s ease, width .18s ease; }.beauty-viz__price-bar:hover rect { opacity: 1; width: 12px; }
+.beauty-viz__price-bar text { fill: rgba(55, 53, 58, .52); font-family: "JetBrains Mono", monospace; font-size: 6px; transform: rotate(90deg); transform-origin: 310px 310px; }
+.beauty-viz__radial-group { cursor: crosshair; }.beauty-viz__radial-group path { fill: none; stroke-width: 1.5; opacity: .36; transition: stroke-width .18s ease, opacity .18s ease; }.beauty-viz__radial-group.is-active path, .beauty-viz__radial-group:hover path { stroke-width: 3; opacity: 1; }
+.beauty-viz__radial-group > text { font-family: "MiSans", var(--font-ui); font-size: 11px; }.beauty-viz__radial-group .beauty-viz__leaf-label { fill: rgba(58, 56, 60, .57); font-family: "MiSans", var(--font-ui); font-size: 6.8px; }.beauty-viz__radial-group.is-active .beauty-viz__leaf-label { fill: #3d3a3e; }
+.beauty-viz__radial-core { fill: #fcfcfb; stroke: #bf7586; stroke-width: 5; }.beauty-viz__radial-core-title { fill: #484449; font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: .09em; }.beauty-viz__radial-core-sub { fill: #a09aa2; font-family: "JetBrains Mono", monospace; font-size: 7px; }
+
+.beauty-viz__treemap-panel { display: grid; grid-template-rows: auto 1fr auto; gap: 16px; min-height: 460px; padding: 18px; border-left: 1px solid rgba(11, 11, 15, .12); }.beauty-viz__treemap-panel h3 { max-width: 8em; margin: 7px 0 0; font-family: "MiSans", var(--font-ui); font-size: 22px; font-weight: 400; line-height: 1.1; }.beauty-viz__treemap { display: flex; min-height: 300px; overflow: hidden; }.beauty-viz__treemap button { display: flex; flex: 1; flex-direction: column; justify-content: flex-end; min-width: 0; padding: 12px 7px; border: 2px solid #fcfcfb; color: #fff; cursor: pointer; text-align: left; transition: flex .25s ease, filter .2s ease; }.beauty-viz__treemap button:hover, .beauty-viz__treemap button.is-active { flex: 1.45; filter: saturate(1.2) contrast(1.04); }.beauty-viz__treemap button span { font-family: "MiSans", var(--font-ui); font-size: 11px; line-height: 1.3; word-break: break-all; }.beauty-viz__treemap button b { margin-top: 6px; font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 400; }
+.beauty-viz--poster .beauty-viz__placeholder-note { max-width: none; margin: 0; color: #b87380; font-family: "JetBrains Mono", "MiSans", monospace; font-size: 9px; font-style: normal; line-height: 1.5; text-align: left; }
+
+.beauty-viz__lower-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); gap: clamp(22px, 4vw, 68px); margin-top: 38px; padding-top: 28px; border-top: 1px solid rgba(11, 11, 15, .12); }.beauty-viz__lower-grid article { min-width: 0; }.beauty-viz__lower-grid header { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 18px; }.beauty-viz__lower-grid header p { margin: 0; }.beauty-viz__lower-grid header span { color: #67636b; white-space: nowrap; }
+.beauty-viz__institution-list { display: grid; gap: 14px; }.beauty-viz__institution-row { display: grid; grid-template-columns: 86px minmax(0, 1fr) 45px; gap: 10px; align-items: center; }.beauty-viz__institution-row i { font-family: Georgia, serif; font-size: 11px; }.beauty-viz__institution-row b { color: #6e80b6; font-family: "JetBrains Mono", monospace; font-size: 10px; font-weight: 400; }.beauty-viz__institution-stack { display: flex; min-height: 22px; overflow: hidden; background: #edf0f2; }.beauty-viz__institution-stack span { min-width: 3px; border-right: 1px solid #fcfcfb; transition: filter .18s ease, transform .18s ease; }.beauty-viz__institution-stack span:hover { filter: saturate(1.25); transform: translateY(-3px); }
+.beauty-viz__flow-panel svg { display: block; width: 100%; overflow: visible; }.beauty-viz__flow-links path { fill: none; stroke-width: 3.5; stroke-linecap: round; opacity: .68; transition: opacity .18s ease, stroke-width .18s ease; }.beauty-viz__flow-links path:hover { opacity: 1; stroke-width: 7; }.beauty-viz__flow-panel text { fill: #5d5860; font-family: "MiSans", var(--font-ui); font-size: 8px; }
+
 .code-panel {
   border: 1px solid rgba(11, 11, 15, 0.16);
   background: #101114;
@@ -3593,6 +3800,30 @@ a {
   font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
   font-size: 12px;
   cursor: pointer;
+}
+
+.code-panel__actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.code-toggle {
+  min-height: 34px;
+  padding: 8px 12px;
+  border: 1px solid rgba(245, 245, 245, 0.36);
+  background: #f5f5f5;
+  color: #101114;
+  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.code-toggle:hover,
+.code-toggle:focus-visible {
+  background: transparent;
+  color: #f5f5f5;
 }
 
 .code-copy:hover {
@@ -4405,13 +4636,51 @@ a {
     line-height: 1.35;
   }
 
-  .code-copy,
-  .code-panel__body {
+  .code-panel__actions {
+    gap: 6px;
+  }
+
+  .code-copy {
     display: none;
+  }
+
+  .code-toggle {
+    min-height: 32px;
+    padding: 7px 9px;
+    font-size: 11px;
   }
 
   .code-mobile-note {
     display: block;
+  }
+
+  .beauty-viz__heading,
+  .beauty-viz__panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .beauty-viz__heading > p {
+    text-align: left;
+  }
+
+  .beauty-viz__grid,
+  .beauty-viz__procedures-body {
+    grid-template-columns: 1fr;
+  }
+
+  .beauty-viz__panel--procedures {
+    grid-column: auto;
+  }
+
+  .beauty-viz__orbital {
+    transform: scale(0.89);
+    margin: -17px 0;
+  }
+
+  .beauty-viz__procedure-chart {
+    width: min(100%, 340px);
   }
 
   .embed-stack {
@@ -4674,4 +4943,60 @@ a {
   .output-gallery__button:focus-visible .output-gallery__image {
     transform: none;
   }
+}
+
+@media (max-width: 780px) {
+  .beauty-viz--poster { padding: 18px 12px; }
+  .beauty-viz--poster .beauty-viz__poster-head { grid-template-columns: 1fr auto; padding-bottom: 20px; }
+  .beauty-viz--poster .beauty-viz__poster-head p { display: none; }
+  .beauty-viz--poster .beauty-viz__poster-head h2 { grid-column: 1; width: auto; font-size: 33px; white-space: normal; text-align: left; }
+  .beauty-viz--poster .beauty-viz__poster-head span { grid-column: 2; grid-row: 1; }
+  .beauty-viz__poster-grid,
+  .beauty-viz__lower-grid { grid-template-columns: 1fr; }
+  .beauty-viz__treemap-panel { min-height: 300px; border-top: 1px solid rgba(11, 11, 15, .12); border-left: 0; }
+  .beauty-viz__treemap { min-height: 180px; }
+  .beauty-viz__radial-group > text { font-size: 13px; }
+  .beauty-viz__radial-group .beauty-viz__leaf-label { font-size: 8px; }
+}
+
+.beauty-replica {
+  width: min(100%, 1100px);
+  margin: clamp(42px, 7vw, 92px) auto 0;
+  padding: clamp(12px, 2vw, 28px);
+}
+
+.beauty-replica__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.beauty-replica__canvas text {
+  fill: #313034;
+  font-family: "MiSans", "PingFang SC", sans-serif;
+  font-size: 10px;
+}
+
+.beauty-replica__title,
+.beauty-replica__small-heading,
+.beauty-replica__story-title,
+.beauty-replica__quote,
+.beauty-replica__story-copy,
+.beauty-replica .institution-name {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-style: italic;
+}
+
+.beauty-replica__title { font-size: 18px !important; font-weight: 600; letter-spacing: .02em; }
+.beauty-replica__legend circle { fill: none; stroke-width: 1.2; }.beauty-replica__legend .pink { stroke: #f1c1c7; }.beauty-replica__legend .blue { stroke: #7185c5; }.beauty-replica__legend .mint { stroke: #d5e9e9; }.beauty-replica__legend .sand { stroke: #e4e3d5; }.beauty-replica__legend text { fill: #8f8a90; font-size: 8px; }
+.beauty-replica__outer-prices rect { opacity: .88; transition: height 140ms ease-out, opacity 100ms ease-out; }.beauty-replica__bar-item { cursor: crosshair; transform-box: fill-box; transform-origin: center; transition: transform 100ms ease-out, filter 100ms ease-out, opacity 100ms ease-out; }.beauty-replica__bar-item.is-active { filter: drop-shadow(0 5px 4px rgba(82, 76, 88, .28)); opacity: 1; transform: translateY(-8px) scale(1.72); }
+.beauty-replica__ring { fill: none; stroke-width: 1.1; }.beauty-replica__ring.pink { stroke: #f1bfc6; }.beauty-replica__ring.blue { stroke: #7186c7; }.beauty-replica__ring.mint { stroke: #cee8e8; }.beauty-replica__ring.sand { stroke: #e6e5d8; }
+.beauty-replica__branch { cursor: crosshair; }.beauty-replica__branch path { fill: none; stroke-width: .9; opacity: .58; transition: stroke-width 100ms ease-out, opacity 100ms ease-out; }.beauty-replica__branch-connector { stroke-width: .8; opacity: .42; transition: stroke-width 100ms ease-out, opacity 100ms ease-out; }.beauty-replica__branch.is-active path, .beauty-replica__branch:hover path { stroke-width: 2.35; opacity: 1; }.beauty-replica__branch.is-active .beauty-replica__branch-connector, .beauty-replica__branch:hover .beauty-replica__branch-connector { stroke-width: 1.65; opacity: .92; }
+.beauty-replica__face-rings .pink-arc, .beauty-replica__face-rings .blue-arc { fill: none; stroke-linecap: butt; stroke-width: 8; }.beauty-replica__face-rings .pink-arc { stroke: #dc9fa8; stroke-dasharray: 175 478; stroke-dashoffset: 32; }.beauty-replica__face-rings .blue-arc { stroke: #8196ce; stroke-dasharray: 155 423; stroke-dashoffset: -115; }.beauty-replica__face-rings .ring-cover { fill: #fff; }.beauty-replica__face-rings .face-outline { fill: none; stroke: #fff; stroke-width: 3; }.beauty-replica__face-point { cursor: crosshair; transform-box: fill-box; transform-origin: center; transition: transform 100ms ease-out, filter 100ms ease-out; }.beauty-replica__face-point:hover { transform: scale(1.32); filter: drop-shadow(0 3px 3px rgba(89, 74, 91, .32)); }.beauty-replica__face-point circle:first-child { fill: rgba(224, 143, 158, .3); stroke: rgba(214, 119, 140, .75); stroke-width: 1; }.beauty-replica__face-point circle:not(:first-child) { fill: rgba(217, 113, 139, .58); }.beauty-replica__face-point.face-point--nose circle:first-child { fill: rgba(125, 152, 211, .28); stroke: rgba(109, 137, 199, .76); }.beauty-replica__face-point.face-point--nose circle:not(:first-child) { fill: rgba(100, 137, 211, .62); }
+.beauty-replica__year { font-family: Georgia, "Times New Roman", serif; font-size: 16px; font-style: italic; }.beauty-replica__small-heading { font-size: 12px !important; font-weight: 600; }.beauty-replica .institution-name { font-size: 9.5px; }.beauty-replica__contributor .grid { fill: none; stroke: #e9e7e4; stroke-width: 1; }.beauty-replica__contributor .contributor-line { fill: none; stroke: #d96f91; stroke-width: 1.2; }
+.beauty-replica__contributor-item, .beauty-replica__institution-item { cursor: crosshair; transform-box: fill-box; transform-origin: center; transition: transform 100ms ease-out, filter 100ms ease-out; }.beauty-replica__contributor-item:hover, .beauty-replica__institution-item:hover { transform: translateY(-5px) scale(1.18); filter: drop-shadow(0 4px 3px rgba(83, 76, 90, .25)); }.beauty-replica__block { cursor: crosshair; }.beauty-replica__block rect { transition: opacity 100ms ease-out; }.beauty-replica__block:hover rect { opacity: .48; }.beauty-replica__treemap-float { pointer-events: none; }.beauty-replica__treemap-float rect { filter: drop-shadow(0 9px 8px rgba(62, 56, 66, .32)); }.beauty-replica__institutions rect { transition: filter 100ms ease-out; }.beauty-replica__flows .flow-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; opacity: .58; cursor: crosshair; transition: opacity 100ms ease-out, stroke-width 100ms ease-out; }.beauty-replica__flows .flow-lines path:hover { opacity: 1; stroke-width: 4.5; }.beauty-replica__flows line { stroke: #b6bdcb; stroke-width: 1; }.beauty-replica__flows text { fill: #77727a; font-family: "JetBrains Mono", monospace; font-size: 7px; }.beauty-replica__detail-card { pointer-events: none; }.beauty-replica__detail-glass { width: 100%; height: 100%; box-sizing: border-box; border: 0; border-radius: 8px; background: rgba(255, 255, 255, .42); box-shadow: 0 8px 16px rgba(51, 48, 55, .12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }.beauty-replica__detail-card text:first-of-type { fill: #715663; font-size: 11px; font-weight: 600; }.beauty-replica__detail-card text:last-of-type { fill: #4e4a50; font-family: "JetBrains Mono", monospace; font-size: 9px; }
+
+@media (max-width: 780px) {
+  .beauty-replica { display: none; }
 }

@@ -1,11 +1,13 @@
 import TaskMapDemo from "../components/TaskMapDemo.js";
 import AIWorkflowDemo from "../components/AIWorkflowDemo.js";
+import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
 
 export default {
   name: "ProjectDetailView",
   components: {
     TaskMapDemo,
-    AIWorkflowDemo
+    AIWorkflowDemo,
+    BeautyIndustryViz
   },
   props: {
     lang: {
@@ -29,7 +31,8 @@ export default {
       htmlOverflowBeforeFlow: "",
       htmlScrollbarGutterBeforeFlow: "",
       flowInlineFrameMode: "portrait",
-      flowOverlayFrameMode: "portrait"
+      flowOverlayFrameMode: "portrait",
+      codeExpanded: {}
     };
   },
   mounted() {
@@ -219,6 +222,12 @@ export default {
       if (!navigator.clipboard || !block.code) return;
       await navigator.clipboard.writeText(block.code);
     },
+    isCodeExpanded(src) {
+      return Boolean(this.codeExpanded[src]);
+    },
+    toggleCode(src) {
+      this.codeExpanded = { ...this.codeExpanded, [src]: !this.codeExpanded[src] };
+    },
     isEmbedLoading(src) {
       return !this.loadedEmbeds[src];
     },
@@ -351,6 +360,7 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
+      <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="outputImages.length" class="output-gallery">
         <figure
@@ -423,14 +433,19 @@ export default {
               <h2>{{ block.title }}</h2>
               <span>{{ languageLabel(block.language) }}</span>
             </div>
-            <button type="button" class="code-copy" @click="copyCode(block)">
-              {{ lang === 'zh' ? '复制' : 'Copy' }}
-            </button>
+            <div class="code-panel__actions">
+              <button type="button" class="code-toggle" :aria-expanded="isCodeExpanded(block.src)" @click="toggleCode(block.src)">
+                {{ isCodeExpanded(block.src) ? (lang === 'zh' ? '收起源码' : 'Hide source') : (lang === 'zh' ? '展开源码' : 'Show source') }}
+              </button>
+              <button v-if="isCodeExpanded(block.src)" type="button" class="code-copy" @click="copyCode(block)">
+                {{ lang === 'zh' ? '复制' : 'Copy' }}
+              </button>
+            </div>
           </header>
-          <p class="code-mobile-note">
+          <p v-if="isCodeExpanded(block.src)" class="code-mobile-note">
             {{ lang === 'zh' ? '代码细节详见 PC 端网页' : 'Code details are available on the desktop site' }}
           </p>
-          <pre class="code-panel__body"><code :class="'language-' + block.language">{{ block.code }}</code></pre>
+          <pre v-if="isCodeExpanded(block.src)" class="code-panel__body"><code :class="'language-' + block.language">{{ block.code }}</code></pre>
         </article>
       </section>
 
