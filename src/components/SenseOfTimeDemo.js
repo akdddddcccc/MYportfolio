@@ -525,7 +525,10 @@ export default {
     async toggleAudio() {
       if (this.audioEnabled) return this.stopAudio();
       const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
+      if (!AudioContext) {
+        this.audioError = true;
+        return;
+      }
       try {
         const context = new AudioContext();
         await context.resume();
@@ -540,15 +543,17 @@ export default {
         for (let index = 0; index < noiseData.length; index += 1) noiseData[index] = Math.random() * 2 - 1;
         const noise = context.createBufferSource();
         noise.buffer = noiseBuffer; noise.loop = true;
-        master.gain.value = 0.3;
+        // Start audibly after the explicit click; the subtle texture is added afterwards.
+        master.gain.value = 0.52;
         filter.type = "lowpass"; filter.frequency.value = 6200;
         delay.delayTime.value = 0.12; feedback.gain.value = 0.12;
-        noiseFilter.type = "lowpass"; noiseFilter.frequency.value = 2400; noiseGain.gain.value = 0.001;
+        noiseFilter.type = "lowpass"; noiseFilter.frequency.value = 2400; noiseGain.gain.value = 0.002;
         master.connect(filter); filter.connect(context.destination); filter.connect(delay); delay.connect(feedback); feedback.connect(delay); delay.connect(context.destination);
         noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(master); noise.start();
-        this.audio = { context, master, filter, delay, feedback, noise, noiseGain, noiseFilter, nextBeat: context.currentTime + 0.05, beatIndex: 0, timer: null };
+        this.audio = { context, master, filter, delay, feedback, noise, noiseGain, noiseFilter, nextBeat: context.currentTime + 0.25, beatIndex: 1, timer: null };
         this.audioError = false;
         this.audioEnabled = true;
+        this.scheduleTone({ frequency: 329.63, start: context.currentTime + 0.01, duration: 0.42, gain: 0.19, type: "triangle" });
         this.audio.timer = window.setInterval(this.scheduleAmbient, 80);
         this.scheduleAmbient();
       } catch (error) {
@@ -591,7 +596,7 @@ export default {
         const harmony = [[220, 277.18, 329.63, 415.3], [196, 246.94, 293.66, 369.99], [174.61, 220, 261.63, 329.63], [164.81, 207.65, 246.94, 311.13]];
         const chord = harmony[Math.floor(this.audio.beatIndex / 4) % harmony.length];
         const noteIndex = [0, 2, 1, 3, 2, 1][this.audio.beatIndex % 6];
-        this.scheduleTone({ frequency: chord[noteIndex], start: this.audio.nextBeat, duration: interval * (0.94 + depth * 0.32), gain: 0.085, detune: depth * ((this.audio.beatIndex % 2 ? 1 : -1) * 23), type: depth > 0.45 ? "triangle" : "sine" });
+        this.scheduleTone({ frequency: chord[noteIndex], start: this.audio.nextBeat, duration: interval * (0.94 + depth * 0.32), gain: 0.14, detune: depth * ((this.audio.beatIndex % 2 ? 1 : -1) * 23), type: depth > 0.45 ? "triangle" : "sine" });
         this.audio.nextBeat += interval;
         this.audio.beatIndex += 1;
       }
@@ -610,7 +615,7 @@ export default {
       <div ref="stage" class="sense-time-demo__stage" :class="{ 'is-dragging': pointer.dragging, 'is-near-ring': pointer.nearRing, 'is-shaping': pointer.dragging && pointer.mode === 'shape' }" @pointermove="updatePointer" @pointerdown="startDrag" @pointerup="endDrag" @pointercancel="endDrag">
         <canvas ref="canvas" class="sense-time-demo__canvas sense-time-demo__canvas--fallback" :class="{ 'is-hidden': renderer === 'webgl' }" aria-hidden="true"></canvas>
         <canvas ref="webglCanvas" class="sense-time-demo__canvas sense-time-demo__canvas--webgl" :class="{ 'is-active': renderer === 'webgl' }" aria-hidden="true"></canvas>
-        <div class="sense-time-demo__controls"><button type="button" class="sense-time-demo__sound" :aria-pressed="audioEnabled" @click.stop="toggleAudio"><span class="sense-time-demo__sound-dot"></span>{{ audioEnabled ? copy.soundOff : copy.soundOn }}</button><p>{{ audioError ? copy.soundError : interactionHint }}</p></div>
+        <div class="sense-time-demo__controls"><button type="button" class="sense-time-demo__sound" :aria-pressed="audioEnabled" @pointerdown.stop @pointerup.stop @click.stop="toggleAudio"><span class="sense-time-demo__sound-dot"></span>{{ audioEnabled ? copy.soundOff : copy.soundOn }}</button><p>{{ audioError ? copy.soundError : interactionHint }}</p></div>
         <p class="sense-time-demo__readout"><span>{{ copy.state }}</span>{{ stateLabel }}</p>
       </div>
       <label class="sense-time-demo__slider"><span>{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider"><span>{{ copy.severe }}</span></label>
