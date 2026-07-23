@@ -373,7 +373,7 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
-      <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" />
+      <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">

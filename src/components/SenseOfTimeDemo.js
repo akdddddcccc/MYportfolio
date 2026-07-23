@@ -51,6 +51,11 @@ export default {
       audio: null
     };
   },
+  props: {
+    lang: { type: String, required: true },
+    detail: { type: Object, default: () => ({}) },
+    title: { type: String, default: "Sense of Time" }
+  },
   computed: {
     depressionDepth() { return this.depressionLevel / 100; },
     stateLabel() {
@@ -94,6 +99,7 @@ export default {
     this.$refs.webglCanvas.addEventListener("webglcontextlost", this.handleContextLost, false);
     this.$refs.webglCanvas.addEventListener("webglcontextrestored", this.handleContextRestored, false);
     this.frameId = window.requestAnimationFrame(this.renderFrame);
+    if (window.matchMedia("(min-width: 781px)").matches) window.setTimeout(() => this.startAudio({ silentFailure: true }), 0);
   },
   beforeUnmount() {
     window.cancelAnimationFrame(this.frameId);
@@ -268,6 +274,7 @@ export default {
       }
     },
     startDrag(event) {
+      if (!this.audioEnabled && window.matchMedia("(min-width: 781px)").matches) this.startAudio();
       this.updatePointer(event);
       this.pointer.dragging = true;
       this.pointer.mode = this.pointer.nearRing ? "shape" : "view";
@@ -524,14 +531,22 @@ export default {
     },
     async toggleAudio() {
       if (this.audioEnabled) return this.stopAudio();
+      return this.startAudio();
+    },
+    async startAudio({ silentFailure = false } = {}) {
+      if (this.audio?.context) {
+        try { await this.audio.context.resume(); this.audioEnabled = this.audio.context.state === "running"; return this.audioEnabled; }
+        catch { if (!silentFailure) this.audioError = true; return false; }
+      }
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) {
-        this.audioError = true;
-        return;
+        if (!silentFailure) this.audioError = true;
+        return false;
       }
       try {
         const context = new AudioContext();
         await context.resume();
+        if (context.state !== "running") { await context.close(); if (!silentFailure) this.audioError = true; return false; }
         const master = context.createGain();
         const filter = context.createBiquadFilter();
         const delay = context.createDelay(1.5);
@@ -550,15 +565,17 @@ export default {
         noiseFilter.type = "lowpass"; noiseFilter.frequency.value = 2400; noiseGain.gain.value = 0.002;
         master.connect(filter); filter.connect(context.destination); filter.connect(delay); delay.connect(feedback); feedback.connect(delay); delay.connect(context.destination);
         noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(master); noise.start();
-        this.audio = { context, master, filter, delay, feedback, noise, noiseGain, noiseFilter, nextBeat: context.currentTime + 0.25, beatIndex: 1, timer: null };
+        this.audio = { context, master, filter, delay, feedback, noise, noiseGain, noiseFilter, nextBeat: context.currentTime + 0.25, beatIndex: 0, timer: null };
         this.audioError = false;
         this.audioEnabled = true;
-        this.scheduleTone({ frequency: 329.63, start: context.currentTime + 0.01, duration: 0.42, gain: 0.19, type: "triangle" });
+        this.scheduleTone({ frequency: 293.66, start: context.currentTime + 0.01, duration: 0.45, gain: 0.19, piano: true });
         this.audio.timer = window.setInterval(this.scheduleAmbient, 80);
         this.scheduleAmbient();
+        return true;
       } catch (error) {
-        this.audioError = true;
+        if (!silentFailure) this.audioError = true;
         this.audioEnabled = false;
+        return false;
       }
     },
     stopAudio() {
@@ -568,9 +585,9 @@ export default {
       this.audio = null;
       this.audioEnabled = false;
     },
-    scheduleTone({ frequency, start, duration, gain, detune = 0, type = "sine" }) {
+    scheduleTone({ frequency, start, duration, gain, detune = 0, type = "sine", piano = false }) {
       if (!this.audio) return;
-      const partials = [{ ratio: 1, gain: 1, shape: type }, { ratio: 2.01, gain: 0.22, shape: "sine" }, { ratio: 3.04, gain: 0.09, shape: "triangle" }];
+      const partials = piano ? [{ ratio: 1, gain: 1, shape: "sine" }, { ratio: 2.01, gain: 0.34, shape: "sine" }, { ratio: 3.02, gain: 0.16, shape: "sine" }, { ratio: 4.07, gain: 0.07, shape: "triangle" }] : [{ ratio: 1, gain: 1, shape: type }, { ratio: 2.01, gain: 0.22, shape: "sine" }, { ratio: 3.04, gain: 0.09, shape: "triangle" }];
       partials.forEach((partial) => {
         const oscillator = this.audio.context.createOscillator();
         const envelope = this.audio.context.createGain();
@@ -587,16 +604,22 @@ export default {
       if (!this.audio) return;
       const { context } = this.audio;
       const depth = this.depressionDepth;
-      const interval = 60 / (100 - depth * 42) / 2;
-      this.audio.filter.frequency.setTargetAtTime(6200 - depth * 4700, context.currentTime, 0.12);
+      const baseInterval = 0.285;
+      const chaos = depth * depth;
+      this.audio.filter.frequency.setTargetAtTime(6500 - depth * 5400, context.currentTime, 0.12);
       this.audio.delay.delayTime.setTargetAtTime(0.16 + depth * 0.52, context.currentTime, 0.12);
-      this.audio.feedback.gain.setTargetAtTime(0.14 + depth * 0.4, context.currentTime, 0.12);
-      this.audio.noiseGain.gain.setTargetAtTime(0.001 + depth * depth * 0.045, context.currentTime, 0.16);
+      this.audio.feedback.gain.setTargetAtTime(0.14 + depth * 0.44, context.currentTime, 0.12);
+      this.audio.noiseGain.gain.setTargetAtTime(0.002 + chaos * 0.07, context.currentTime, 0.16);
       while (this.audio.nextBeat < context.currentTime + 0.15) {
-        const harmony = [[220, 277.18, 329.63, 415.3], [196, 246.94, 293.66, 369.99], [174.61, 220, 261.63, 329.63], [164.81, 207.65, 246.94, 311.13]];
-        const chord = harmony[Math.floor(this.audio.beatIndex / 4) % harmony.length];
-        const noteIndex = [0, 2, 1, 3, 2, 1][this.audio.beatIndex % 6];
-        this.scheduleTone({ frequency: chord[noteIndex], start: this.audio.nextBeat, duration: interval * (0.94 + depth * 0.32), gain: 0.14, detune: depth * ((this.audio.beatIndex % 2 ? 1 : -1) * 23), type: depth > 0.45 ? "triangle" : "sine" });
+        const canon = [[293.66, 369.99, 440, 587.33], [277.18, 329.63, 440, 554.37], [246.94, 293.66, 369.99, 493.88], [220, 277.18, 369.99, 440], [196, 246.94, 293.66, 392], [293.66, 369.99, 440, 587.33], [196, 246.94, 293.66, 392], [220, 277.18, 329.63, 440]];
+        const chord = canon[Math.floor(this.audio.beatIndex / 4) % canon.length];
+        const noteIndex = [0, 1, 2, 3, 2, 1, 2, 3][this.audio.beatIndex % 8];
+        const jitter = noiseValue(this.audio.beatIndex, 41) * chaos * 0.48;
+        const interval = baseInterval * (1 + jitter);
+        const skip = chaos > 0.28 && noiseValue(this.audio.beatIndex, 77) > 0.78 - chaos * 0.22;
+        const detune = noiseValue(this.audio.beatIndex, 19) * chaos * 150;
+        if (!skip) this.scheduleTone({ frequency: chord[noteIndex], start: this.audio.nextBeat, duration: interval * (1.15 + chaos * 0.65), gain: 0.12, detune, type: depth > 0.55 ? "triangle" : "sine", piano: depth < 0.66 });
+        if (chaos > 0.42 && noiseValue(this.audio.beatIndex, 91) > 0.45) this.scheduleTone({ frequency: chord[(noteIndex + 2) % chord.length] * (1 + noiseValue(this.audio.beatIndex, 12) * chaos * 0.09), start: this.audio.nextBeat + interval * 0.16, duration: interval * 0.64, gain: 0.035, detune: detune * 1.5, type: "triangle" });
         this.audio.nextBeat += interval;
         this.audio.beatIndex += 1;
       }
@@ -619,6 +642,10 @@ export default {
         <p class="sense-time-demo__readout"><span>{{ copy.state }}</span>{{ stateLabel }}</p>
         <label class="sense-time-demo__slider"><span class="sense-time-demo__slider-title">{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider" @pointerdown.stop @pointermove.stop @pointerup.stop><span>{{ copy.severe }}</span></label>
       </div>
+      <section class="sense-time-demo__archive" :aria-label="lang === 'zh' ? '项目档案' : 'Project archive'">
+        <img v-if="detail.hero" :src="detail.hero" :alt="title" />
+        <div><p>{{ lang === 'zh' ? '项目档案 / 原始材料' : 'Project archive / original material' }}</p><h3>{{ title }}</h3><span>{{ detail.description }}</span><nav v-if="detail.pdfs?.length || detail.iframes?.length" class="sense-time-demo__archive-links"><a v-for="pdf in detail.pdfs || []" :key="pdf" :href="pdf" target="_blank" rel="noreferrer">{{ lang === 'zh' ? '阅读项目 PDF' : 'Read project PDF' }}</a><a v-for="(frame, index) in detail.iframes || []" :key="frame" :href="frame" target="_blank" rel="noreferrer">{{ index === 0 ? 'Figma' : (lang === 'zh' ? '观看原展示视频' : 'Watch original showcase video') }}</a></nav></div>
+      </section>
     </section>
   `
 };
