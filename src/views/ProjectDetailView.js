@@ -44,16 +44,21 @@ export default {
     window.addEventListener("keydown", this.handleLightboxKeydown);
     window.addEventListener("message", this.handleFlowFrameMessage);
     this.syncFlowExperience();
+    this.syncSenseOfTimeImmersion();
   },
   beforeUnmount() {
     window.clearInterval(this.loadingTimer);
     window.removeEventListener("keydown", this.handleLightboxKeydown);
     window.removeEventListener("message", this.handleFlowFrameMessage);
     this.restoreBodyOverflow();
+    document.body.classList.remove("sense-of-time-immersive");
   },
   computed: {
     detail() {
       return this.project?.details?.[this.lang] || {};
+    },
+    isSenseOfTime() {
+      return this.project?.slug === "sense-of-time";
     },
     title() {
       return this.detail.title || this.project?.title?.[this.lang] || "";
@@ -123,7 +128,10 @@ export default {
         this.flowInlineFrameMode = "portrait";
         this.flowOverlayFrameMode = "portrait";
         this.closeFlowExperience();
-        this.$nextTick(() => this.syncFlowExperience());
+        this.$nextTick(() => {
+          this.syncFlowExperience();
+          this.syncSenseOfTimeImmersion();
+        });
       }
     },
     codeBlockRefs: {
@@ -134,6 +142,9 @@ export default {
     }
   },
   methods: {
+    syncSenseOfTimeImmersion() {
+      document.body.classList.toggle("sense-of-time-immersive", this.isSenseOfTime);
+    },
     embedLabel(src, index) {
       if (this.isFlowApp(src)) return this.lang === "zh" ? "交互体验" : "Interactive Experience";
       if (src.includes("figma.com")) return "Figma";
@@ -335,7 +346,7 @@ export default {
   },
   template: `
     <section v-if="project" class="project-detail" :class="'project-detail--' + project.slug">
-      <div class="project-hero">
+      <div v-if="!isSenseOfTime" class="project-hero">
         <img :src="hero" :alt="title" />
         <div class="project-copy">
           <p class="project-kicker">{{ disciplineLabel(project.discipline) }}</p>
@@ -354,7 +365,7 @@ export default {
         </div>
       </div>
 
-      <section v-if="pdfs.length" class="download-row">
+      <section v-if="!isSenseOfTime && pdfs.length" class="download-row">
         <a v-for="pdf in pdfs" :key="pdf" class="download-link" :href="pdf" target="_blank" rel="noreferrer">
           {{ lang === 'zh' ? '项目 PDF 下载' : 'Project PDF download' }}
         </a>
@@ -365,7 +376,7 @@ export default {
       <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
-      <section v-if="outputImages.length" class="output-gallery">
+      <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">
         <figure
           v-for="image in outputImages"
           :key="image"
@@ -429,7 +440,7 @@ export default {
         </div>
       </Transition>
 
-      <section v-if="loadedCodeBlocks.length" class="code-stack">
+      <section v-if="!isSenseOfTime && loadedCodeBlocks.length" class="code-stack">
         <article v-for="block in loadedCodeBlocks" :key="block.src" class="code-panel">
           <header class="code-panel__header">
             <div>
@@ -452,7 +463,7 @@ export default {
         </article>
       </section>
 
-      <section v-if="embeds.length" class="embed-stack">
+      <section v-if="!isSenseOfTime && embeds.length" class="embed-stack">
         <article
           v-for="embed in embeds"
           :key="embed.src"

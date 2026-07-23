@@ -1,93 +1,44 @@
-.sense-time-demo {
-  margin-top: clamp(54px, 8vw, 98px);
-  color: #0b0b0f;
-}
+body.sense-of-time-immersive,
+body.sense-of-time-immersive #app,
+body.sense-of-time-immersive .site-content { background: #050608; }
 
-.sense-time-demo__intro {
-  display: grid;
-  grid-template-columns: minmax(150px, 0.42fr) minmax(250px, 1fr) minmax(240px, 0.72fr);
-  gap: 24px;
-  align-items: end;
-  padding-bottom: 18px;
-}
-
-.sense-time-demo__intro p,
-.sense-time-demo__intro h2,
-.sense-time-demo__intro span { margin: 0; }
-.sense-time-demo__intro p,
-.sense-time-demo__controls,
-.sense-time-demo__readout { font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace; }
-.sense-time-demo__intro p { font-size: 11px; letter-spacing: .03em; text-transform: uppercase; }
-.sense-time-demo__intro h2 { font-size: clamp(34px, 5vw, 64px); font-weight: 500; line-height: .94; }
-.sense-time-demo__intro span { max-width: 30em; color: rgba(11, 11, 15, .66); font-size: 13px; line-height: 1.65; }
-
-.sense-time-demo__stage {
-  position: relative;
-  min-height: min(66vw, 650px);
-  overflow: hidden;
-  background: #050608;
-  cursor: crosshair;
-  touch-action: none;
-  user-select: none;
-}
-
+body.sense-of-time-immersive .site-header { background: rgba(5, 6, 8, .88); color: rgba(255, 255, 255, .9); border-bottom: 1px solid rgba(255, 255, 255, .1); }
+body.sense-of-time-immersive .return-button { border-color: rgba(255, 255, 255, .48); background: rgba(255, 255, 255, .03); color: #fff; }
+body.sense-of-time-immersive .return-button:hover { background: rgba(255, 255, 255, .14); border-color: #fff; }
+.project-detail--sense-of-time { width: 100%; margin: 0; }
+.sense-time-demo { color: #fff; background: #050608; }
+.sense-time-demo__stage { position: relative; min-height: max(680px, calc(100svh - 126px)); overflow: hidden; background: #050608; cursor: crosshair; touch-action: none; user-select: none; }
+.sense-time-demo__stage::after { position: absolute; inset: 0; z-index: 1; pointer-events: none; content: ""; box-shadow: inset 0 0 13vw rgba(0, 0, 0, .72); }
 .sense-time-demo__stage.is-near-ring { cursor: grab; }
 .sense-time-demo__stage.is-dragging { cursor: grabbing; }
 .sense-time-demo__stage.is-shaping { cursor: cell; }
-
 .sense-time-demo__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; min-height: inherit; }
 .sense-time-demo__canvas--webgl { display: none; }
 .sense-time-demo__canvas--webgl.is-active { display: block; }
 .sense-time-demo__canvas--fallback.is-hidden { display: none; }
-.sense-time-demo__controls { position: absolute; z-index: 3; bottom: 21px; left: 24px; display: grid; gap: 9px; color: rgba(255,255,255,.72); font-size: 11px; }
+.sense-time-demo__intro, .sense-time-demo__controls, .sense-time-demo__readout, .sense-time-demo__slider { position: absolute; z-index: 3; font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace; }
+.sense-time-demo__intro { top: clamp(28px, 4.2vw, 64px); left: clamp(24px, 4.7vw, 76px); right: clamp(24px, 4.7vw, 76px); display: grid; grid-template-columns: minmax(145px, .42fr) minmax(250px, .96fr) minmax(250px, .72fr); gap: 24px; align-items: end; }
+.sense-time-demo__intro p, .sense-time-demo__intro h2, .sense-time-demo__intro span { margin: 0; }
+.sense-time-demo__intro p { color: rgba(255,255,255,.6); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+.sense-time-demo__intro h2 { color: #fff; font-size: clamp(34px, 5vw, 64px); font-weight: 500; line-height: .94; letter-spacing: -.035em; }
+.sense-time-demo__intro span { max-width: 31em; color: rgba(255,255,255,.64); font-size: 12px; line-height: 1.68; }
+.sense-time-demo__controls { top: clamp(144px, 14vw, 212px); left: clamp(24px, 4.7vw, 76px); display: grid; gap: 9px; color: rgba(255,255,255,.64); font-size: 11px; }
 .sense-time-demo__controls p { max-width: 25em; margin: 0; line-height: 1.45; }
 .sense-time-demo__sound { display: inline-flex; align-items: center; width: fit-content; min-height: 34px; gap: 8px; padding: 8px 11px; border: 1px solid rgba(255,255,255,.52); background: rgba(0,0,0,.24); color: #fff; font: inherit; font-size: 11px; cursor: pointer; }
 .sense-time-demo__sound:hover, .sense-time-demo__sound:focus-visible { border-color: #fff; background: rgba(255,255,255,.12); outline: none; }
 .sense-time-demo__sound-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.54); box-shadow: 0 0 12px rgba(255,255,255,.38); }
 .sense-time-demo__sound[aria-pressed="true"] .sense-time-demo__sound-dot { background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.92); }
-.sense-time-demo__readout { position: absolute; z-index: 2; right: 24px; bottom: 24px; margin: 0; color: #fff; font-size: 11px; pointer-events: none; }
+.sense-time-demo__readout { right: clamp(24px, 4.7vw, 76px); top: clamp(146px, 14vw, 212px); margin: 0; color: #fff; font-size: 11px; pointer-events: none; }
 .sense-time-demo__readout span { margin-right: 9px; color: rgba(255,255,255,.52); }
-
-.sense-time-demo__slider {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 14px;
-  align-items: center;
-  margin-top: 16px;
-  color: rgba(11,11,15,.68);
-  font-family: "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
-  font-size: 11px;
-}
-
-.sense-time-demo__slider > span:first-child {
-  grid-column: 1 / -1;
-  color: #0b0b0f;
-  font-size: 12px;
-}
-
-.sense-time-demo__slider input {
-  width: 100%;
-  height: 18px;
-  margin: 0;
-  accent-color: #0b0b0f;
-  cursor: ew-resize;
-}
-
-.sense-time-demo__slider input::-webkit-slider-runnable-track { height: 1px; background: #0b0b0f; }
-.sense-time-demo__slider input::-webkit-slider-thumb { width: 14px; height: 14px; margin-top: -6px; border: 1px solid #0b0b0f; border-radius: 50%; background: #f5f5f5; appearance: none; }
-.sense-time-demo__slider input::-moz-range-track { height: 1px; background: #0b0b0f; }
-.sense-time-demo__slider input::-moz-range-thumb { width: 12px; height: 12px; border: 1px solid #0b0b0f; border-radius: 50%; background: #f5f5f5; }
-
-@media (max-width: 780px) {
-  .sense-time-demo { margin-top: 42px; }
-  .sense-time-demo__intro { grid-template-columns: 1fr; gap: 12px; padding-bottom: 14px; }
-  .sense-time-demo__intro h2 { font-size: clamp(34px, 11vw, 52px); }
-  .sense-time-demo__stage { min-height: 520px; }
-  .sense-time-demo__controls { bottom: 16px; left: 16px; }
-  .sense-time-demo__readout { right: 16px; bottom: 18px; font-size: 10px; }
-  .sense-time-demo__slider { gap: 10px; font-size: 10px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sense-time-demo__stage { cursor: default; }
-}
+.sense-time-demo__slider { right: clamp(24px, 4.7vw, 76px); bottom: clamp(34px, 5vw, 68px); left: clamp(24px, 4.7vw, 76px); display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; color: rgba(255,255,255,.66); font-size: 11px; }
+.sense-time-demo__slider-title { grid-column: 1 / -1; color: rgba(255,255,255,.94); font-size: 12px; letter-spacing: .04em; }
+.sense-time-demo__slider input { width: 100%; height: 76px; margin: 0; cursor: ew-resize; appearance: none; background: transparent; }
+.sense-time-demo__slider input::-webkit-slider-runnable-track { height: 2px; border: 0; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.72) 78%, #fff); }
+.sense-time-demo__slider input::-webkit-slider-thumb { width: 66px; height: 66px; margin-top: -32px; border: 4px solid rgba(255,255,255,.88); border-radius: 50%; background: #050608; appearance: none; box-shadow: 0 0 0 1px rgba(0,0,0,.7), 0 0 26px rgba(255,255,255,.08); transition: transform .18s ease, border-color .18s ease; }
+.sense-time-demo__slider input:hover::-webkit-slider-thumb { transform: scale(1.07); border-color: #fff; }
+.sense-time-demo__slider input:focus-visible { outline: none; }
+.sense-time-demo__slider input:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px #050608, 0 0 0 4px #fff; }
+.sense-time-demo__slider input::-moz-range-track { height: 2px; border: 0; border-radius: 999px; background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.72) 78%, #fff); }
+.sense-time-demo__slider input::-moz-range-thumb { width: 58px; height: 58px; border: 4px solid rgba(255,255,255,.88); border-radius: 50%; background: #050608; box-shadow: 0 0 0 1px rgba(0,0,0,.7), 0 0 26px rgba(255,255,255,.08); }
+@media (max-width: 780px) { .sense-time-demo__stage { min-height: max(650px, calc(100svh - 72px)); } .sense-time-demo__intro { grid-template-columns: 1fr; gap: 10px; } .sense-time-demo__intro h2 { font-size: clamp(36px, 12vw, 52px); } .sense-time-demo__intro span { max-width: 29em; font-size: 11px; } .sense-time-demo__controls { top: 240px; } .sense-time-demo__readout { top: 242px; font-size: 10px; } .sense-time-demo__slider { grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; bottom: 22px; font-size: 10px; } .sense-time-demo__slider input { height: 60px; } .sense-time-demo__slider input::-webkit-slider-thumb { width: 48px; height: 48px; margin-top: -23px; border-width: 3px; } .sense-time-demo__slider input::-moz-range-thumb { width: 42px; height: 42px; border-width: 3px; } }
+@media (prefers-reduced-motion: reduce) { .sense-time-demo__stage { cursor: default; } }

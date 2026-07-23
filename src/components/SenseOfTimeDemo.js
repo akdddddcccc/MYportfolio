@@ -611,14 +611,14 @@ export default {
   },
   template: `
     <section class="sense-time-demo" aria-labelledby="sense-time-demo-title">
-      <header class="sense-time-demo__intro"><p>{{ copy.kicker }}</p><h2 id="sense-time-demo-title">{{ copy.title }}</h2><span>{{ copy.lead }}</span></header>
       <div ref="stage" class="sense-time-demo__stage" :class="{ 'is-dragging': pointer.dragging, 'is-near-ring': pointer.nearRing, 'is-shaping': pointer.dragging && pointer.mode === 'shape' }" @pointermove="updatePointer" @pointerdown="startDrag" @pointerup="endDrag" @pointercancel="endDrag">
         <canvas ref="canvas" class="sense-time-demo__canvas sense-time-demo__canvas--fallback" :class="{ 'is-hidden': renderer === 'webgl' }" aria-hidden="true"></canvas>
         <canvas ref="webglCanvas" class="sense-time-demo__canvas sense-time-demo__canvas--webgl" :class="{ 'is-active': renderer === 'webgl' }" aria-hidden="true"></canvas>
+        <header class="sense-time-demo__intro"><p>{{ copy.kicker }}</p><h2 id="sense-time-demo-title">{{ copy.title }}</h2><span>{{ copy.lead }}</span></header>
         <div class="sense-time-demo__controls"><button type="button" class="sense-time-demo__sound" :aria-pressed="audioEnabled" @pointerdown.stop @pointerup.stop @click.stop="toggleAudio"><span class="sense-time-demo__sound-dot"></span>{{ audioEnabled ? copy.soundOff : copy.soundOn }}</button><p>{{ audioError ? copy.soundError : interactionHint }}</p></div>
         <p class="sense-time-demo__readout"><span>{{ copy.state }}</span>{{ stateLabel }}</p>
+        <label class="sense-time-demo__slider"><span class="sense-time-demo__slider-title">{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider" @pointerdown.stop @pointermove.stop @pointerup.stop><span>{{ copy.severe }}</span></label>
       </div>
-      <label class="sense-time-demo__slider"><span>{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider"><span>{{ copy.severe }}</span></label>
     </section>
   `
 };
