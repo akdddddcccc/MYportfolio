@@ -2,6 +2,7 @@ import TaskMapDemo from "../components/TaskMapDemo.js";
 import AIWorkflowDemo from "../components/AIWorkflowDemo.js";
 import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
 import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
+import ShaderCopilotDemo from "../components/ShaderCopilotDemo.js";
 
 export default {
   name: "ProjectDetailView",
@@ -9,7 +10,8 @@ export default {
     TaskMapDemo,
     AIWorkflowDemo,
     BeautyIndustryViz,
-    SenseOfTimeDemo
+    SenseOfTimeDemo,
+    ShaderCopilotDemo
   },
   props: {
     lang: {
@@ -91,6 +93,7 @@ export default {
       return this.detail.demo?.productUrl || "";
     },
     productLinkLabel() {
+      if (this.project?.slug === "ai-shader-copilot") return this.lang === "zh" ? "下载 Blender 插件" : "Download Blender add-on";
       return this.lang === "zh" ? "进入正式版工作台" : "Open full workbench";
     },
     embeds() {
@@ -358,7 +361,7 @@ export default {
           </h1>
           <p>{{ description }}</p>
           <div v-if="productUrl" class="project-hero-actions">
-            <a class="project-product-link" :href="productUrl" target="_blank" rel="noreferrer">
+            <a class="project-product-link" :href="productUrl" :download="project.slug === 'ai-shader-copilot' ? 'ai-shader-copilot-blender-addon.zip' : null" target="_blank" rel="noreferrer">
               {{ productLinkLabel }}
             </a>
           </div>
@@ -373,6 +376,7 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
+      <ShaderCopilotDemo v-if="demoType === 'shader-copilot'" :lang="lang" />
       <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 

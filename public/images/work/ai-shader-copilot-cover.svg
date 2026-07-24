@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1110" y2="1160" gradientUnits="userSpaceOnUse"><stop stop-color="#F8F2E8"/><stop offset="1" stop-color="#D9E3EC"/></linearGradient>
+    <radialGradient id="metal" cx="0" cy="0" r="1" gradientTransform="translate(438 458) rotate(48) scale(205)"><stop stop-color="#F0F5F4"/><stop offset=".33" stop-color="#78848A"/><stop offset=".72" stop-color="#28333A"/><stop offset="1" stop-color="#11191F"/></radialGradient>
+    <radialGradient id="glass" cx="0" cy="0" r="1" gradientTransform="translate(737 444) rotate(40) scale(196)"><stop stop-color="#F9FFFF" stop-opacity=".95"/><stop offset=".37" stop-color="#A8D0E8" stop-opacity=".7"/><stop offset=".72" stop-color="#4E84B5" stop-opacity=".55"/><stop offset="1" stop-color="#2D5A8D" stop-opacity=".5"/></radialGradient>
+    <radialGradient id="polymer" cx="0" cy="0" r="1" gradientTransform="translate(487 753) rotate(45) scale(182)"><stop stop-color="#FFFDF7"/><stop offset=".48" stop-color="#DDD5C8"/><stop offset="1" stop-color="#A79C8E"/></radialGradient>
+    <linearGradient id="toon" x1="730" y1="650" x2="900" y2="920" gradientUnits="userSpaceOnUse"><stop stop-color="#E27A65"/><stop offset=".49" stop-color="#E27A65"/><stop offset=".5" stop-color="#7F93B8"/><stop offset="1" stop-color="#7F93B8"/></linearGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="18"/></filter>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <ellipse cx="610" cy="953" rx="405" ry="88" fill="#4F5C66" fill-opacity=".18" filter="url(#blur)"/>
+  <path d="M361 465C400 284 674 236 763 416C841 575 717 721 599 685" stroke="#8295A8" stroke-width="3" stroke-dasharray="9 13" opacity=".75"/>
+  <path d="M346 733C486 561 740 818 896 676" stroke="#C67C69" stroke-width="3" stroke-dasharray="9 13" opacity=".75"/>
+  <circle cx="424" cy="476" r="156" fill="url(#metal)"/><circle cx="742" cy="458" r="151" fill="url(#glass)" stroke="#F9FFFF" stroke-opacity=".75" stroke-width="8"/>
+  <circle cx="488" cy="764" r="139" fill="url(#polymer)"/><circle cx="797" cy="760" r="138" fill="url(#toon)"/>
+  <path d="M670 1004H939L1011 870H742L670 1004Z" fill="#F7F1E8" fill-opacity=".74" stroke="#8295A8" stroke-width="3"/>
+  <path d="M730 942H950M774 900H988M816 858H1025" stroke="#8295A8" stroke-width="3" opacity=".6"/>
+  <circle cx="404" cy="423" r="34" fill="#FFF" fill-opacity=".44"/><circle cx="726" cy="405" r="30" fill="#FFF" fill-opacity=".68"/>
+</svg>
