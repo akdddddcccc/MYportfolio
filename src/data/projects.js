@@ -927,6 +927,36 @@ export const projects = [
     "legacy": {}
   },
   {
+    "slug": "ai-shader-copilot",
+    "sourceFile": "AI Shader Copilot - Blender Add-on",
+    "category": "vibe-coding",
+    "discipline": "vibe-coding",
+    "image": "/images/work/ai-shader-copilot-cover.svg",
+    "title": {
+      "en": "AI Shader Copilot - Reference-to-material Blender Add-on",
+      "zh": "AI Shader Copilot - 从参考图到 Blender 材质"
+    },
+    "details": {
+      "en": {
+        "title": "AI Shader Copilot - Reference-to-material Blender Add-on",
+        "description": "A portfolio prototype that translates product and animation references into editable material directions. Upload a reference, inspect the detected material hypotheses, and preview their PBR response before continuing in Blender.",
+        "hero": "/images/work/ai-shader-copilot-cover.svg",
+        "images": [], "iframes": [], "pdfs": [],
+        "demo": { "type": "shader-copilot", "productUrl": "/downloads/ai-shader-copilot-blender-addon.zip" },
+        "sectionLabels": ["browser material lab", "shader recipes", "Blender add-on"]
+      },
+      "zh": {
+        "title": "AI Shader Copilot - 从参考图到 Blender 材质",
+        "description": "一个面向作品集的 AI 材质逆向原型：上传产品或动画参考图，网页端将它拆解为多种可编辑材质方向，并以 PBR 材质球实时预览；下载 Blender 插件后，可生成对应的 Shader Node 模板继续调整。",
+        "hero": "/images/work/ai-shader-copilot-cover.svg",
+        "images": [], "iframes": [], "pdfs": [],
+        "demo": { "type": "shader-copilot", "productUrl": "/downloads/ai-shader-copilot-blender-addon.zip" },
+        "sectionLabels": ["网页材质实验室", "节点配方", "Blender 插件"]
+      }
+    },
+    "legacy": {}
+  },
+  {
     "slug": "ai-mcp-workflow",
     "sourceFile": "AI 工作流.pdf",
     "category": "vibe-coding",
