@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://muyang23333.top/sitemap.xml
