@@ -15,6 +15,7 @@ export const projects = [
         "description": "A series of related product designs targeting the popular Guandan craze within the system, from a visual perspective, using a service design approach to address pain points in the game rules and processes.",
         "hero": "/images/study/poke.png",
         "images": [],
+        "demo": { "type": "guandan-table" },
         "iframes": [
           "https://embed.figma.com/design/vAxS5vrwBhfRnQiT7VIE3M/%E5%8C%97%E5%B8%88%E5%A4%A7%EF%BC%88%E8%80%83%E7%A0%94%E4%BD%9C%E5%93%81%E9%9B%86%EF%BC%89?node-id=19-9&embed-host=share"
         ],
@@ -26,6 +27,7 @@ export const projects = [
         "description": "针对体制内流行的掼蛋热，从视觉层面，运用服务设计视角，进行的一系列切中游戏规则已经流程痛点的相关产品设计",
         "hero": "/images/study/poke.png",
         "images": [],
+        "demo": { "type": "guandan-table" },
         "iframes": [
           "https://embed.figma.com/design/vAxS5vrwBhfRnQiT7VIE3M/%E5%8C%97%E5%B8%88%E5%A4%A7%EF%BC%88%E8%80%83%E7%A0%94%E4%BD%9C%E5%93%81%E9%9B%86%EF%BC%89?node-id=19-9&embed-host=share"
         ],
