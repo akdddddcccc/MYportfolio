@@ -496,6 +496,28 @@ export default {
             <span class="figma-loader__rule"></span>
           </div>
           <div
+            v-if="embed.label === 'Figma'"
+            class="device-mockup device-mockup--responsive"
+          >
+            <div class="device-mockup__desktop-bar" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="device-mockup__camera" aria-hidden="true"></span>
+            <div class="device-mockup__screen">
+              <iframe
+                :key="embed.src + '-' + project.slug"
+                :src="embed.src"
+                :title="embed.label"
+                loading="lazy"
+                allow="fullscreen; autoplay"
+                referrerpolicy="strict-origin-when-cross-origin"
+                @load="markEmbedLoaded(embed.src)"
+              ></iframe>
+            </div>
+            <span class="device-mockup__home-indicator" aria-hidden="true"></span>
+          </div>
+          <div
+            v-else
             :class="{
               'flow-experience-frame': embed.isFlowApp,
               'flow-experience-frame--landscape': embed.isFlowApp && flowInlineFrameMode === 'landscape'
