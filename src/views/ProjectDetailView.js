@@ -95,7 +95,8 @@ export default {
     },
     embeds() {
       return (this.detail.iframes || []).map((src, index) => ({
-        label: this.embedLabel(src, index),
+        title: this.embedTitle(src, index),
+        platform: this.embedPlatform(src),
         src: src.startsWith("//") ? `https:${src}` : src,
         isFlowApp: this.isFlowApp(src),
         requiresVpn: this.embedRequiresVpn(src),
@@ -145,13 +146,22 @@ export default {
     syncSenseOfTimeImmersion() {
       document.body.classList.toggle("sense-of-time-immersive", this.isSenseOfTime);
     },
-    embedLabel(src, index) {
-      if (this.isFlowApp(src)) return this.lang === "zh" ? "交互体验" : "Interactive Experience";
+    embedPlatform(src) {
+      if (this.isFlowApp(src)) return this.lang === "zh" ? "在线体验" : "Live demo";
       if (src.includes("figma.com")) return "Figma";
-      if (src.includes("bilibili.com")) return "Bilibili";
+      if (src.includes("bilibili.com")) return "哔哩哔哩";
       if (src.includes("vimeo.com")) return "Vimeo";
       if (src.includes("youtube.com")) return "YouTube";
-      return `${this.lang === "zh" ? "嵌入内容" : "Embed"} ${index + 1}`;
+      return this.lang === "zh" ? "外部内容" : "External";
+    },
+    embedTitle(src, index) {
+      if (this.isFlowApp(src)) return this.lang === "zh" ? "可交互产品体验" : "Interactive product experience";
+      if (src.includes("figma.com")) return this.lang === "zh" ? "完整项目设计方案" : "Complete project design";
+      if (src.includes("bilibili.com")) return this.lang === "zh" ? "交互原型演示" : "Interactive prototype demo";
+      if (src.includes("vimeo.com") || src.includes("youtube.com")) {
+        return this.lang === "zh" ? "项目展示视频" : "Project showcase video";
+      }
+      return `${this.lang === "zh" ? "补充项目内容" : "Additional project content"} ${index + 1}`;
     },
     isFlowApp(src) {
       return src.includes("apps-demo.muyang23333.top/flow/");
@@ -469,13 +479,16 @@ export default {
           :key="embed.src"
           class="embed-panel"
           :class="{
-            'embed-panel--figma': embed.label === 'Figma',
+            'embed-panel--figma': embed.platform === 'Figma',
             'embed-panel--flow': embed.isFlowApp,
-            'embed-panel--loading': embed.label === 'Figma' && isEmbedLoading(embed.src)
+            'embed-panel--loading': embed.platform === 'Figma' && isEmbedLoading(embed.src)
           }"
         >
           <div class="embed-panel__heading">
-            <h2>{{ embed.label }}</h2>
+            <div class="embed-panel__title">
+              <h2>{{ embed.title }}</h2>
+              <span class="embed-panel__platform">{{ embed.platform }}</span>
+            </div>
             <button
               v-if="embed.isFlowApp"
               type="button"
@@ -486,7 +499,7 @@ export default {
             </button>
           </div>
           <div
-            v-if="embed.label === 'Figma' && isEmbedLoading(embed.src)"
+            v-if="embed.platform === 'Figma' && isEmbedLoading(embed.src)"
             class="figma-loader"
             role="status"
             aria-live="polite"
@@ -496,7 +509,7 @@ export default {
             <span class="figma-loader__rule"></span>
           </div>
           <div
-            v-if="embed.label === 'Figma'"
+            v-if="embed.platform === 'Figma'"
             class="device-mockup device-mockup--responsive"
           >
             <div class="device-mockup__desktop-bar" aria-hidden="true">
@@ -507,7 +520,7 @@ export default {
               <iframe
                 :key="embed.src + '-' + project.slug"
                 :src="embed.src"
-                :title="embed.label"
+                :title="embed.title"
                 loading="lazy"
                 allow="fullscreen; autoplay"
                 referrerpolicy="strict-origin-when-cross-origin"
@@ -526,7 +539,7 @@ export default {
             <iframe
               :key="embed.src + '-' + project.slug"
               :src="embed.src"
-              :title="embed.label"
+              :title="embed.title"
               :class="{ 'flow-experience-frame__iframe': embed.isFlowApp }"
               loading="lazy"
               allow="fullscreen; autoplay"
