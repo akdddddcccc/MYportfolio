@@ -1,5 +1,7 @@
 import TaskMapDemo from "../components/TaskMapDemo.js";
 import AIWorkflowDemo from "../components/AIWorkflowDemo.js";
+import GuandanTableDemo from "../components/GuandanTableDemo.js";
+import GuandanPackagingExplorer from "../components/GuandanPackagingExplorer.js";
 import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
 import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
 
@@ -8,6 +10,8 @@ export default {
   components: {
     TaskMapDemo,
     AIWorkflowDemo,
+    GuandanTableDemo,
+    GuandanPackagingExplorer,
     BeautyIndustryViz,
     SenseOfTimeDemo
   },
@@ -383,7 +387,9 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
-      <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
+          <GuandanTableDemo v-if="demoType === 'guandan-table'" :lang="lang" />
+          <GuandanPackagingExplorer v-if="demoType === 'guandan-table'" :lang="lang" />
+          <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">
