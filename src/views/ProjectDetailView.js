@@ -7,6 +7,11 @@ import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
 import SundialCloudDemo from "../components/SundialCloudDemo.js";
 import DriverMaterialPreview from "../components/DriverMaterialPreview.js";
 import DriverCloudDemo from "../components/DriverCloudDemo.js";
+import MusicSideTableCloudDemo from "../components/MusicSideTableCloudDemo.js";
+import RoadMachineCloudDemo from "../components/RoadMachineCloudDemo.js";
+import MusicaLeisureCloudDemo from "../components/MusicaLeisureCloudDemo.js";
+import ShakerCloudDemo from "../components/ShakerCloudDemo.js";
+import FlowerStandCloudDemo from "../components/FlowerStandCloudDemo.js";
 
 export default {
   name: "ProjectDetailView",
@@ -19,7 +24,12 @@ export default {
     SenseOfTimeDemo,
     SundialCloudDemo,
     DriverMaterialPreview,
-    DriverCloudDemo
+    DriverCloudDemo,
+    MusicSideTableCloudDemo,
+    RoadMachineCloudDemo,
+    MusicaLeisureCloudDemo,
+    ShakerCloudDemo,
+    FlowerStandCloudDemo
   },
   props: {
     lang: {
@@ -399,6 +409,11 @@ export default {
           <SundialCloudDemo v-if="project.slug === 'sundial-clock'" :lang="lang" />
           <DriverCloudDemo v-if="project.slug === 'drivers-handle'" :lang="lang" />
           <DriverMaterialPreview v-if="project.slug === 'drivers-handle'" :lang="lang" />
+          <MusicSideTableCloudDemo v-if="project.slug === 'music-side-table'" :lang="lang" />
+          <RoadMachineCloudDemo v-if="project.slug === 'road-machine'" :lang="lang" />
+          <MusicaLeisureCloudDemo v-if="project.slug === 'musica-leisure'" :lang="lang" />
+          <ShakerCloudDemo v-if="project.slug === 'shaker'" :lang="lang" />
+          <FlowerStandCloudDemo v-if="project.slug === 'flower-stand'" :lang="lang" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">
