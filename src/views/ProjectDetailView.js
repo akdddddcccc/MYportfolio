@@ -4,6 +4,7 @@ import GuandanTableDemo from "../components/GuandanTableDemo.js";
 import GuandanPackagingExplorer from "../components/GuandanPackagingExplorer.js";
 import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
 import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
+import SundialCloudDemo from "../components/SundialCloudDemo.js";
 
 export default {
   name: "ProjectDetailView",
@@ -13,7 +14,8 @@ export default {
     GuandanTableDemo,
     GuandanPackagingExplorer,
     BeautyIndustryViz,
-    SenseOfTimeDemo
+    SenseOfTimeDemo,
+    SundialCloudDemo
   },
   props: {
     lang: {
@@ -390,6 +392,7 @@ export default {
           <GuandanTableDemo v-if="demoType === 'guandan-table'" :lang="lang" />
           <GuandanPackagingExplorer v-if="demoType === 'guandan-table'" :lang="lang" />
           <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
+          <SundialCloudDemo v-if="project.slug === 'sundial-clock'" :lang="lang" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">
