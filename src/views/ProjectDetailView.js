@@ -5,6 +5,8 @@ import GuandanPackagingExplorer from "../components/GuandanPackagingExplorer.js"
 import BeautyIndustryViz from "../components/BeautyIndustryViz.js";
 import SenseOfTimeDemo from "../components/SenseOfTimeDemo.js";
 import SundialCloudDemo from "../components/SundialCloudDemo.js";
+import DriverMaterialPreview from "../components/DriverMaterialPreview.js";
+import DriverCloudDemo from "../components/DriverCloudDemo.js";
 
 export default {
   name: "ProjectDetailView",
@@ -15,7 +17,9 @@ export default {
     GuandanPackagingExplorer,
     BeautyIndustryViz,
     SenseOfTimeDemo,
-    SundialCloudDemo
+    SundialCloudDemo,
+    DriverMaterialPreview,
+    DriverCloudDemo
   },
   props: {
     lang: {
@@ -393,6 +397,8 @@ export default {
           <GuandanPackagingExplorer v-if="demoType === 'guandan-table'" :lang="lang" />
           <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />
           <SundialCloudDemo v-if="project.slug === 'sundial-clock'" :lang="lang" />
+          <DriverCloudDemo v-if="project.slug === 'drivers-handle'" :lang="lang" />
+          <DriverMaterialPreview v-if="project.slug === 'drivers-handle'" :lang="lang" />
       <BeautyIndustryViz v-if="project.slug === 'beauty-information-visualisation'" :lang="lang" />
 
       <section v-if="!isSenseOfTime && outputImages.length" class="output-gallery">
