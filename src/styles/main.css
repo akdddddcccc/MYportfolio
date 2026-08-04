@@ -5166,3 +5166,10 @@ a {
 @media (max-width: 780px) {
   .beauty-replica { display: none; }
 }
+
+/* Sundial desktop point-cloud study */
+.sundial-cloud-demo { width:min(1180px,100%); margin:clamp(54px,9vw,118px) auto 0; }
+.sundial-cloud-demo__heading { display:flex; align-items:center; gap:13px; margin:0 0 20px; }.sundial-cloud-demo__heading h2 { margin:0; color:#202020; font-size:clamp(24px,2.3vw,34px); font-weight:600; letter-spacing:-.04em; }.sundial-cloud-demo__heading span { padding:4px 10px; border:1px solid rgba(32,32,32,.22); border-radius:999px; color:rgba(32,32,32,.58); font:10px "JetBrains Mono",monospace; letter-spacing:.04em; }
+.sundial-cloud-demo__stage { position:relative; height:clamp(440px,63vw,690px); overflow:hidden; background:#080808; cursor:grab; isolation:isolate; }.sundial-cloud-demo__stage:active { cursor:grabbing; }.sundial-cloud-demo canvas { display:block; width:100%; height:100%; }
+.sundial-cloud-demo__meta,.sundial-cloud-demo__hint,.sundial-cloud-demo__loading { position:absolute; z-index:1; color:rgba(255,255,255,.62); font:10px "JetBrains Mono",monospace; letter-spacing:.1em; pointer-events:none; }.sundial-cloud-demo__meta { top:18px; left:19px; display:flex; gap:8px; align-items:center; text-transform:uppercase; }.sundial-cloud-demo__meta span { width:6px; height:6px; border-radius:50%; background:#dbe8d2; box-shadow:0 0 9px #dbe8d2; }.sundial-cloud-demo__hint { right:19px; bottom:18px; color:rgba(255,255,255,.38); font-size:9px; }.sundial-cloud-demo__loading { top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,.78); }
+@media (max-width:899px), (pointer:coarse) { .sundial-cloud-demo { display:none; } }
