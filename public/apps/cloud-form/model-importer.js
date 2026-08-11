@@ -115,6 +115,11 @@
 
   function attachRhinoStructure(model, structure) {
     if (!structure) return model;
+    const vectorBetween = (end, start) => [
+      end[0] - start[0],
+      end[1] - start[1],
+      end[2] - start[2]
+    ];
     const allPoints = model.vertices;
     const low = [Infinity, Infinity, Infinity], high = [-Infinity, -Infinity, -Infinity];
     allPoints.forEach(point => point.forEach((value, axis) => { low[axis] = Math.min(low[axis], value); high[axis] = Math.max(high[axis], value); }));
@@ -148,8 +153,8 @@
     };
     structurePaths.forEach(path => {
       if (path[0] === path[path.length - 1]) return; // closed curves have no endpoints
-      addDirection(path[0], sub(allPoints[path[1]], allPoints[path[0]]));
-      addDirection(path[path.length - 1], sub(allPoints[path[path.length - 2]], allPoints[path[path.length - 1]]));
+      addDirection(path[0], vectorBetween(allPoints[path[1]], allPoints[path[0]]));
+      addDirection(path[path.length - 1], vectorBetween(allPoints[path[path.length - 2]], allPoints[path[path.length - 1]]));
     });
     const structureVertices = [];
     endpointDirections.forEach((directions, index) => {
