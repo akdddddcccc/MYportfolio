@@ -70,8 +70,14 @@
   const sharpenOutput = $('#sharpen-level-output');
   const modeNote = $('#mode-note');
   const fileInput = $('#file-input');
+  const importOptions = $('#import-options');
+  const uploadButton = document.querySelector('.upload-button');
   const sourceLoader = window.loadMeshFile;
   let cloudMode = 'normal';
+
+  // Keep the sidebar quiet for the built-in studies. Choosing to import opens
+  // the model-specific options before the browser file picker appears.
+  uploadButton.addEventListener('click', () => { importOptions.hidden = false; });
 
   function setCloudMode(mode) {
     cloudMode = mode;

@@ -43,6 +43,7 @@
           </label>
           <input id="file-input" type="file" accept=".obj,.fbx,.3dm,.3ds" hidden />
 
+          <div id="import-options" class="import-options" hidden>
           <div class="mode-group" aria-label="导入模式">
             <span class="sample-group__label">IMPORT MODE</span>
             <div class="mode-grid" role="group" aria-label="导入模式选择">
@@ -58,6 +59,7 @@
             <label class="range-label" for="sharpen-level">锐化尺度 <output id="sharpen-level-output">中等</output></label>
             <input id="sharpen-level" type="range" min="1" max="8" step="1" value="3" />
             <p class="sample-note">用于压低小圆角与碎面造成的噪声，让主体硬边更清晰；只影响当前展示，不修改源模型。</p>
+          </div>
           </div>
 
           <div class="control-group">
@@ -93,6 +95,9 @@
     <script src="./model-importer.js"></script>
     </main>
     <script>
+      document.querySelector('.upload-button').addEventListener('click', () => {
+        document.querySelector('#import-options').hidden = false;
+      });
       const particleMode = new URLSearchParams(location.search).get('mode') !== 'skeleton';
       document.write(`<script src="./renderer${particleMode ? '-particles' : ''}.js"><\/script>`);
     </script>
