@@ -981,7 +981,7 @@ export const projects = [
     "sourceFile": "Cloud Form point cloud renderer",
     "category": "vibe-coding",
     "discipline": "vibe-coding",
-    "image": "/images/work/cloud-form-cover.svg",
+    "image": "/images/work/cloud-form-cover.png",
     "title": {
       "en": "Cloud Form — Interactive Point Cloud Renderer",
       "zh": "Cloud Form — 交互式点云形体渲染器"
@@ -990,7 +990,7 @@ export const projects = [
       "en": {
         "title": "Cloud Form — Interactive Point Cloud Renderer",
         "description": "A local-first industrial-form study. Import an OBJ, FBX, Rhino 3DM or 3DS file and explore a layered particle interpretation of its surfaces, edges and nodes.",
-        "hero": "/images/work/cloud-form-cover.svg",
+        "hero": "/images/work/cloud-form-cover.png",
         "images": [],
         "iframes": [],
         "pdfs": [],
@@ -1000,7 +1000,7 @@ export const projects = [
       "zh": {
         "title": "Cloud Form — 交互式点云形体渲染器",
         "description": "一个本地优先的工业形体研究工具：导入 OBJ、FBX、Rhino 3DM 或 3DS，观察由面、边与节点构成的分层颗粒形体。",
-        "hero": "/images/work/cloud-form-cover.svg",
+        "hero": "/images/work/cloud-form-cover.png",
         "images": [],
         "iframes": [],
         "pdfs": [],

@@ -32,16 +32,17 @@ body.cloud-form-immersive .site-header { display: none; }
   position: fixed;
   z-index: 40;
   top: 16px;
-  left: 18px;
+  left: 50%;
   padding: 8px 10px;
   color: rgba(244, 243, 239, .72);
   border: 1px solid rgba(244, 243, 239, .18);
   background: rgba(7, 7, 7, .42);
   backdrop-filter: blur(10px);
-  font: 10px/1 "Courier New", monospace;
+  font: 10px/1 "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
   letter-spacing: .06em;
   text-decoration: none;
-  transition: .18s ease;
+  transform: translateX(-50%);
+  transition: color .18s ease, border-color .18s ease, background .18s ease;
 }
 
 .cloud-form-demo__back:hover {
@@ -51,5 +52,5 @@ body.cloud-form-immersive .site-header { display: none; }
 }
 
 @media (max-width: 720px) {
-  .cloud-form-demo__back { top: 12px; left: 12px; }
+  .cloud-form-demo__back { top: 12px; }
 }
