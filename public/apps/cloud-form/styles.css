@@ -14,8 +14,8 @@ h1 { margin: 0; font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
 .upload-button small { opacity: .56; font-size: 10px; }
 .sample-group { display: grid; gap: 9px; }
 .sample-group__label { color: #b0b0aa; font: 10px/1 "JetBrains Mono", "MiSans", monospace; letter-spacing: .1em; }
-.mode-group { display: grid; gap: 9px; padding-top: 2px; border-top: 1px solid #262624; }
-.import-options { display: grid; gap: 25px; overflow: hidden; }
+.mode-group { display: grid; gap: 12px; padding-top: 15px; border-top: 1px solid #262624; }
+.import-options { display: grid; gap: 30px; overflow: hidden; }
 .import-options[hidden] { display: none; }
 .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mode-button { min-height: 31px; border: 1px solid #363633; background: transparent; color: #bfbfb9; cursor: pointer; font: 11px/1 "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", sans-serif; transition: border-color .18s ease, background .18s ease, color .18s ease; }
@@ -24,7 +24,7 @@ h1 { margin: 0; font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
 .sample-button { min-height: 31px; border: 1px solid #363633; background: transparent; color: #bfbfb9; cursor: pointer; font: 11px/1 "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", sans-serif; transition: border-color .18s ease, background .18s ease, color .18s ease; }
 .sample-button:hover, .sample-button.is-active { border-color: #e7e6df; background: #e7e6df; color: #0a0a0a; }
 .sample-note { margin: 1px 0 0; color: #767670; font-size: 10px; line-height: 1.55; }
-.sharpen-controls { padding-top: 2px; border-top: 1px solid #262624; }
+.sharpen-controls { gap: 15px; padding-top: 15px; border-top: 1px solid #262624; }
 .group-heading em { color: #8fdca2; font-size: 8px; font-style: normal; letter-spacing: .08em; }
 .control-group { display: grid; gap: 13px; }
 .group-heading { font: 10px/1 "JetBrains Mono", "MiSans", monospace; letter-spacing: .1em; color: #b0b0aa; }
