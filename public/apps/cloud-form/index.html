@@ -12,7 +12,7 @@
         document.documentElement.classList.add("portfolio-embed");
       }
     </script>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=20260811-3" />
   </head>
   <body>
     <main class="app-shell">
@@ -92,14 +92,14 @@
         </section>
       </section>
 
-    <script src="./model-importer.js"></script>
+    <script src="./model-importer.js?v=20260811-3"></script>
     </main>
     <script>
       document.querySelector('.upload-button').addEventListener('click', () => {
         document.querySelector('#import-options').hidden = false;
       });
       const particleMode = new URLSearchParams(location.search).get('mode') !== 'skeleton';
-      document.write(`<script src="./renderer${particleMode ? '-particles' : ''}.js"><\/script>`);
+      document.write(`<script src="./renderer${particleMode ? '-particles' : ''}.js?v=20260811-3"><\/script>`);
     </script>
   </body>
 </html>
