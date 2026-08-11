@@ -246,7 +246,9 @@
       const point = add(A, add(mul(sub(B, A), u), mul(sub(C, A), v)));
       // Triangles only provide an area sampler. Their internal diagonals are
       // never structural edges, so face particles must not brighten near them.
-      put(add(point, sphere(.012 + rnd() * .023)), .038 + rnd() * .068, .62 + rnd() * .46, 0, .3 + rnd() * .75);
+      // Keep a clearly legible, evenly distributed surface field. The contrast
+      // belongs to structural edges, never to the temporary triangle seams.
+      put(add(point, sphere(.012 + rnd() * .023)), .095 + rnd() * .115, .86 + rnd() * .72, 0, .3 + rnd() * .75);
     }
     const pathMetrics = structuralPaths.map(path => {
       const lengths = path.slice(1).map((end, index) => Math.hypot(...sub(model.vertices[end], model.vertices[path[index]])));
