@@ -33,10 +33,14 @@ body.cloud-form-immersive .site-header { display: none; }
   z-index: 40;
   top: 16px;
   left: 50%;
-  padding: 8px 10px;
-  color: rgba(244, 243, 239, .72);
-  border: 1px solid rgba(244, 243, 239, .18);
-  background: rgba(7, 7, 7, .42);
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 11px 16px;
+  color: #dff8e2;
+  border: 1px solid rgba(143, 220, 162, .8);
+  background: rgba(16, 43, 24, .7);
+  box-shadow: 0 0 0 1px rgba(143, 220, 162, .12), 0 0 18px rgba(103, 224, 139, .14);
   backdrop-filter: blur(10px);
   font: 10px/1 "JetBrains Mono", "MiSans", "Alibaba PuHuiTi", monospace;
   letter-spacing: .06em;
@@ -47,8 +51,9 @@ body.cloud-form-immersive .site-header { display: none; }
 
 .cloud-form-demo__back:hover {
   color: #fff;
-  border-color: rgba(244, 243, 239, .72);
-  background: rgba(7, 7, 7, .82);
+  border-color: #c8ffd3;
+  background: rgba(24, 70, 36, .92);
+  box-shadow: 0 0 0 1px rgba(190, 255, 205, .2), 0 0 24px rgba(103, 224, 139, .28);
 }
 
 @media (max-width: 720px) {
