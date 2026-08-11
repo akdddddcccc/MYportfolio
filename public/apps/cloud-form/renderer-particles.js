@@ -244,8 +244,9 @@
       const [ia, ib, ic] = triangles[low], A = model.vertices[ia], B = model.vertices[ib], C = model.vertices[ic];
       let u = rnd(), v = rnd(); if (u + v > 1) { u = 1 - u; v = 1 - v; }
       const point = add(A, add(mul(sub(B, A), u), mul(sub(C, A), v)));
-      const border = Math.min(u, v, 1 - u - v), glow = Math.exp(-Math.pow(border / .12, 2));
-      put(add(point, sphere(.012 + rnd() * .023)), .025 + rnd() * .06 + glow * (.13 + rnd() * .15), .55 + glow * .8 + rnd() * .42, 0, .3 + rnd() * .75);
+      // Triangles only provide an area sampler. Their internal diagonals are
+      // never structural edges, so face particles must not brighten near them.
+      put(add(point, sphere(.012 + rnd() * .023)), .038 + rnd() * .068, .62 + rnd() * .46, 0, .3 + rnd() * .75);
     }
     const pathMetrics = structuralPaths.map(path => {
       const lengths = path.slice(1).map((end, index) => Math.hypot(...sub(model.vertices[end], model.vertices[path[index]])));
