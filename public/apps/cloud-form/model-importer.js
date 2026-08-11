@@ -8,7 +8,6 @@
   const getThree = () => (threePromise ||= import(versioned(`${THREE_BASE}/build/three.module.js`)));
   const loaderUrls = {
     fbx: versioned(`${THREE_BASE}/examples/jsm/loaders/FBXLoader.js`),
-    "3dm": versioned(`${THREE_BASE}/examples/jsm/loaders/3DMLoader.js`),
     "3ds": versioned(`${THREE_BASE}/examples/jsm/loaders/TDSLoader.js`)
   };
   // Kept beside the tool so 3DM import works offline and never relies on the
@@ -43,7 +42,13 @@
       const geometry = object.geometry();
       const convertedExtrusion = geometry?.objectType === rhino.ObjectType.Extrusion;
       const brep = convertedExtrusion ? geometry.toBrep(true) : geometry;
-      if (brep?.objectType === rhino.ObjectType.Brep) {
+      if (geometry?.objectType === rhino.ObjectType.Mesh) {
+        // Some Rhino documents contain native Mesh objects alongside Breps.
+        // Read them through Rhino's local WASM bridge so importing them never
+        // falls back to Three's dynamic 3DMLoader module.
+        const buffers = geometry.toThreejsBuffers(false);
+        if (buffers?.position?.length && buffers?.index?.length) faceMeshes.push(buffers);
+      } else if (brep?.objectType === rhino.ObjectType.Brep) {
         // Keep triangulation only for surface sampling. Structural particles are
         // intentionally read from the Brep below, never from these triangles.
         const brepFaces = brep.faces();
@@ -86,7 +91,7 @@
       object.delete();
     }
     doc.delete();
-    return paths.length ? { paths, nodes, faceMeshes } : null;
+    return paths.length || faceMeshes.length ? { paths, nodes, faceMeshes } : null;
   }
 
   function rhinoStructureToModel(structure) {
@@ -215,36 +220,26 @@
     const ext = file.name.split(".").pop().toLowerCase();
     if (ext === "json") return parseCloudFormData(await file.text());
     if (ext === "obj") return parseObjModel(await file.text());
-    if (!loaderUrls[ext]) throw new Error("Only OBJ, FBX, Rhino 3DM, and 3DS files are supported.");
+    if (ext !== "3dm" && !loaderUrls[ext]) throw new Error("Only OBJ, FBX, Rhino 3DM, and 3DS files are supported.");
     // For a real Rhino Brep, use Rhino's own face meshes plus exact Brep
     // topology. This skips Three's generic 3DM loader, which discards the
     // Brep graph and can stall on some CAD exports.
-    let nativeRhinoStructure = null;
     if (ext === "3dm") {
       try {
-        nativeRhinoStructure = await readRhinoStructure(file);
+        const nativeRhinoStructure = await readRhinoStructure(file);
         const nativeModel = rhinoStructureToModel(nativeRhinoStructure);
         if (nativeModel) return attachRhinoStructure(nativeModel, nativeRhinoStructure);
       } catch (error) {
-        // A Brep should never wait forever while the WASM runtime is loading.
-        // Do not silently leave the previous demo in view: report a recoverable
-        // import error instead, then let the user retry once connectivity returns.
-        if (/could not start within/i.test(error.message)) throw error;
-        console.warn("Native Rhino Brep import unavailable; using mesh fallback.", error);
+        throw new Error(`Rhino 3DM local parsing failed: ${error?.message || "unknown error"}`);
       }
+      throw new Error("This 3DM does not contain a readable Brep, Extrusion, or Mesh object.");
     }
-    // Load only the loader the selected file needs. A Rhino/WASM loader issue
-    // must not prevent an OBJ or FBX from being imported.
+    // Load only the loader the selected file needs. Rhino 3DM is handled above
+    // by its bundled local WASM parser and never requests Three's 3DMLoader.
     const [THREE, loaderModule] = await Promise.all([getThree(), import(loaderUrls[ext])]);
     let root;
     if (ext === "fbx") root = new loaderModule.FBXLoader().parse(await file.arrayBuffer(), "");
-    else if (ext === "3dm") {
-      const loader = new loaderModule.Rhino3dmLoader();
-      loader.setLibraryPath(`${THREE_BASE}/examples/jsm/libs/rhino3dm/`);
-      const data = await file.arrayBuffer();
-      root = await new Promise((resolve, reject) => loader.parse(data, resolve, reject));
-      loader.dispose?.();
-    } else if (ext === "3ds") root = new loaderModule.TDSLoader().parse(await file.arrayBuffer(), "");
+    else if (ext === "3ds") root = new loaderModule.TDSLoader().parse(await file.arrayBuffer(), "");
 
     root.updateMatrixWorld(true);
     const meshes = [];
