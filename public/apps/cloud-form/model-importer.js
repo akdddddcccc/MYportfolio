@@ -4,11 +4,11 @@
   const THREE_BASE = "./vendor/three";
   const CLOUD_FORM_ASSET_VERSION = "20260811-2";
   const versioned = path => `${path}?v=${CLOUD_FORM_ASSET_VERSION}`;
-  const threePromise = import(versioned(`${THREE_BASE}/build/three.module.js`));
+  let threePromise;
+  const getThree = () => (threePromise ||= import(versioned(`${THREE_BASE}/build/three.module.js`)));
   const loaderUrls = {
     fbx: versioned(`${THREE_BASE}/examples/jsm/loaders/FBXLoader.js`),
     "3dm": versioned(`${THREE_BASE}/examples/jsm/loaders/3DMLoader.js`),
-    obj: versioned(`${THREE_BASE}/examples/jsm/loaders/OBJLoader.js`),
     "3ds": versioned(`${THREE_BASE}/examples/jsm/loaders/TDSLoader.js`)
   };
   // Kept beside the tool so 3DM import works offline and never relies on the
@@ -194,9 +194,27 @@
     };
   }
 
+  function parseObjModel(text) {
+    const vertices = [], faces = [];
+    text.split(/\r?\n/).forEach(line => {
+      const parts = line.trim().split(/\s+/);
+      if (parts[0] === "v" && parts.length >= 4) vertices.push([Number(parts[1]), Number(parts[2]), Number(parts[3])]);
+      if (parts[0] === "f" && parts.length >= 4) {
+        const face = parts.slice(1).map(token => {
+          const index = Number(token.split("/")[0]);
+          return index < 0 ? vertices.length + index : index - 1;
+        }).filter(index => Number.isInteger(index) && index >= 0 && index < vertices.length);
+        if (face.length >= 3) faces.push(face);
+      }
+    });
+    if (vertices.length < 3 || !faces.length) throw new Error("No usable OBJ vertices or faces were found.");
+    return { vertices, faces, format: "OBJ", sourceTriangles: faces.reduce((total, face) => total + face.length - 2, 0), simplified: false };
+  }
+
   window.loadMeshFile = async file => {
     const ext = file.name.split(".").pop().toLowerCase();
     if (ext === "json") return parseCloudFormData(await file.text());
+    if (ext === "obj") return parseObjModel(await file.text());
     if (!loaderUrls[ext]) throw new Error("Only OBJ, FBX, Rhino 3DM, and 3DS files are supported.");
     // For a real Rhino Brep, use Rhino's own face meshes plus exact Brep
     // topology. This skips Three's generic 3DM loader, which discards the
@@ -217,7 +235,7 @@
     }
     // Load only the loader the selected file needs. A Rhino/WASM loader issue
     // must not prevent an OBJ or FBX from being imported.
-    const [THREE, loaderModule] = await Promise.all([threePromise, import(loaderUrls[ext])]);
+    const [THREE, loaderModule] = await Promise.all([getThree(), import(loaderUrls[ext])]);
     let root;
     if (ext === "fbx") root = new loaderModule.FBXLoader().parse(await file.arrayBuffer(), "");
     else if (ext === "3dm") {
@@ -226,8 +244,7 @@
       const data = await file.arrayBuffer();
       root = await new Promise((resolve, reject) => loader.parse(data, resolve, reject));
       loader.dispose?.();
-    } else if (ext === "obj") root = new loaderModule.OBJLoader().parse(await file.text());
-    else if (ext === "3ds") root = new loaderModule.TDSLoader().parse(await file.arrayBuffer(), "");
+    } else if (ext === "3ds") root = new loaderModule.TDSLoader().parse(await file.arrayBuffer(), "");
 
     root.updateMatrixWorld(true);
     const meshes = [];
