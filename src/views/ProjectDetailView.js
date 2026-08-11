@@ -12,6 +12,7 @@ import RoadMachineCloudDemo from "../components/RoadMachineCloudDemo.js";
 import MusicaLeisureCloudDemo from "../components/MusicaLeisureCloudDemo.js";
 import ShakerCloudDemo from "../components/ShakerCloudDemo.js";
 import FlowerStandCloudDemo from "../components/FlowerStandCloudDemo.js";
+import CloudFormDemo from "../components/CloudFormDemo.js";
 
 export default {
   name: "ProjectDetailView",
@@ -29,7 +30,8 @@ export default {
     RoadMachineCloudDemo,
     MusicaLeisureCloudDemo,
     ShakerCloudDemo,
-    FlowerStandCloudDemo
+    FlowerStandCloudDemo,
+    CloudFormDemo
   },
   props: {
     lang: {
@@ -79,6 +81,9 @@ export default {
     },
     isSenseOfTime() {
       return this.project?.slug === "sense-of-time";
+    },
+    isCloudForm() {
+      return this.project?.slug === "cloud-form";
     },
     title() {
       return this.detail.title || this.project?.title?.[this.lang] || "";
@@ -376,6 +381,8 @@ export default {
   },
   template: `
     <section v-if="project" class="project-detail" :class="'project-detail--' + project.slug">
+      <CloudFormDemo v-if="isCloudForm" :lang="lang" />
+      <template v-else>
       <div v-if="!isSenseOfTime" class="project-hero">
         <img :src="hero" :alt="title" />
         <div class="project-copy">
@@ -582,6 +589,7 @@ export default {
           </p>
         </article>
       </section>
+      </template>
     </section>
     <section v-else class="project-detail project-detail--empty">
       <h1>{{ lang === 'zh' ? '作品未找到' : 'Project not found' }}</h1>

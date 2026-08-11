@@ -1,0 +1,20 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" fill="#070707"/>
+  <g stroke="#EDEDE8" stroke-width="2" opacity=".75">
+    <path d="M342 286 607 161 862 294 862 597 601 737 342 595Z"/>
+    <path d="M342 286 601 435 862 294M601 435V737M342 595 601 435"/>
+  </g>
+  <g fill="#F6F6EF">
+    <circle cx="342" cy="286" r="7"/><circle cx="607" cy="161" r="8"/><circle cx="862" cy="294" r="7"/><circle cx="862" cy="597" r="7"/><circle cx="601" cy="737" r="8"/><circle cx="342" cy="595" r="7"/><circle cx="601" cy="435" r="8"/>
+  </g>
+  <g fill="#F6F6EF" opacity=".74">
+    <circle cx="389" cy="264" r="2"/><circle cx="432" cy="244" r="2"/><circle cx="477" cy="223" r="2"/><circle cx="523" cy="201" r="2"/><circle cx="566" cy="181" r="2"/>
+    <circle cx="657" cy="187" r="2"/><circle cx="709" cy="214" r="2"/><circle cx="758" cy="239" r="2"/><circle cx="810" cy="266" r="2"/>
+    <circle cx="382" cy="330" r="2"/><circle cx="425" cy="354" r="2"/><circle cx="472" cy="382" r="2"/><circle cx="519" cy="408" r="2"/>
+    <circle cx="642" cy="462" r="2"/><circle cx="689" cy="489" r="2"/><circle cx="735" cy="516" r="2"/><circle cx="784" cy="543" r="2"/><circle cx="828" cy="569" r="2"/>
+    <circle cx="412" cy="636" r="2"/><circle cx="455" cy="659" r="2"/><circle cx="501" cy="684" r="2"/><circle cx="550" cy="711" r="2"/>
+  </g>
+  <text x="58" y="70" fill="#C9C9C2" font-family="monospace" font-size="18" letter-spacing="4">INDUSTRIAL FORM STUDY</text>
+  <text x="58" y="118" fill="#F6F6EF" font-family="Arial, sans-serif" font-size="44">Cloud Form</text>
+  <text x="58" y="842" fill="#A5A59E" font-family="monospace" font-size="15" letter-spacing="2">POINT CLOUD / EDGE / NODE / SURFACE</text>
+</svg>
