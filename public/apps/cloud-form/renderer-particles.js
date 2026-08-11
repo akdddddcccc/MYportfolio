@@ -2,9 +2,12 @@
   const $ = s => document.querySelector(s), canvas = $('#viewport'), gl = canvas.getContext('webgl', { alpha:false, antialias:false });
   if (!gl) return alert('此浏览器需要 WebGL。');
   const ui={faces:$('#show-faces'),edges:$('#show-edges'),nodes:$('#show-nodes'),density:$('#density'),pointSize:$('#point-size'),inertia:$('#inertia'),densityOut:$('#density-output'),sizeOut:$('#point-size-output'),inertiaOut:$('#inertia-output')};
-  ui.density.min=10000;ui.density.max=100000;ui.density.step=5000;ui.density.value=60000;ui.densityOut.value='60,000';
+  ui.density.min=10000;ui.density.max=100000;ui.density.step=5000;ui.density.value=35000;ui.densityOut.value='35,000';ui.pointSize.min=.4;ui.pointSize.max=1.8;ui.pointSize.step=.1;ui.pointSize.value=.6;ui.sizeOut.value='.6';ui.inertia.value=8;ui.inertiaOut.value='轻微';
   const s={yaw:-.58,pitch:.38,zoom:1,drag:false,x:0,y:0,last:0,frame:0,settle:true,model:null,data:null};let program,buffers;const rnd=seeded(501);
   function seeded(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+  function syncControlLabels(){ui.densityOut.value=(+ui.density.value).toLocaleString();ui.sizeOut.value=(+ui.pointSize.value).toFixed(1);ui.inertiaOut.value=+ui.inertia.value<25?'轻微':+ui.inertia.value<70?'中等':'强烈';}
+  function useBuiltInPreset(){ui.density.min=10000;ui.density.max=100000;ui.density.step=5000;ui.density.value=35000;ui.pointSize.min=.4;ui.pointSize.max=1.8;ui.pointSize.step=.1;ui.pointSize.value=.6;ui.inertia.value=8;syncControlLabels();}
+  function useImportedPreset(model){const faces=model.sourceTriangles||model.faces?.length||0,detail=Math.max(0,Math.min(1,Math.log2(Math.max(1,faces)/1800)/6)),density=Math.round((65000+detail*70000)/5000)*5000;ui.density.min=30000+Math.round(detail*20000/5000)*5000;ui.density.max=120000+Math.round(detail*80000/5000)*5000;ui.density.step=5000;ui.density.value=Math.min(ui.density.max,density);ui.pointSize.min=.3;ui.pointSize.max=2.4;ui.pointSize.step=.1;ui.pointSize.value=(.85-detail*.22).toFixed(1);ui.inertia.value=16;syncControlLabels();}
   function cube(){return normalise({vertices:[[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],faces:[[0,1,2,3],[4,7,6,5],[0,4,5,1],[1,5,6,2],[2,6,7,3],[4,0,3,7]]});}
   function parseOBJ(text){const v=[],f=[];text.split(/\r?\n/).forEach(line=>{const p=line.trim().split(/\s+/);if(p[0]==='v'&&p.length>3)v.push([+p[1],+p[2],+p[3]]);if(p[0]==='f'&&p.length>3){const a=p.slice(1).map(x=>{const n=+x.split('/')[0];return n<0?v.length+n:n-1;}).filter(Number.isFinite);if(a.length>2)f.push(a);}});if(v.length<3||!f.length)throw Error('未找到有效的 OBJ 顶点和面。');return normalise({vertices:v,faces:f});}
   function normalise(m){const lo=[Infinity,Infinity,Infinity],hi=[-Infinity,-Infinity,-Infinity];m.vertices.forEach(p=>p.forEach((x,i)=>{lo[i]=Math.min(lo[i],x);hi[i]=Math.max(hi[i],x);}));const c=lo.map((x,i)=>(x+hi[i])/2),span=Math.max(...hi.map((x,i)=>x-lo[i]))||1;m.vertices=m.vertices.map(p=>p.map((x,i)=>(x-c[i])*2/span));return m;}
@@ -56,6 +59,7 @@
     button.addEventListener('click', () => {
       const name = button.dataset.sample;
       s.sourceModel = null;
+      useBuiltInPreset();
       s.model = sampleModel(name);
       build();
       document.querySelectorAll('.sample-button').forEach(item => item.classList.toggle('is-active', item === button));
@@ -200,6 +204,7 @@
       throw new Error('Professional mode accepts only the .cloudform.json exported from Rhino.');
     }
     const model = await sourceLoader(file);
+    useImportedPreset(model);
     s.sourceModel = cloneModel(model);
     return sharpenToggle.checked ? sharpenModel(s.sourceModel, sharpenLevel.value) : model;
   };
