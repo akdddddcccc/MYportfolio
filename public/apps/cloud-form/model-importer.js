@@ -2,12 +2,14 @@
   // Keep the import pipeline self-contained so the tool also works after it is
   // copied into a static portfolio deployment with no third-party CDN request.
   const THREE_BASE = "./vendor/three";
-  const threePromise = import(`${THREE_BASE}/build/three.module.js`);
+  const CLOUD_FORM_ASSET_VERSION = "20260811-2";
+  const versioned = path => `${path}?v=${CLOUD_FORM_ASSET_VERSION}`;
+  const threePromise = import(versioned(`${THREE_BASE}/build/three.module.js`));
   const loaderUrls = {
-    fbx: `${THREE_BASE}/examples/jsm/loaders/FBXLoader.js`,
-    "3dm": `${THREE_BASE}/examples/jsm/loaders/3DMLoader.js`,
-    obj: `${THREE_BASE}/examples/jsm/loaders/OBJLoader.js`,
-    "3ds": `${THREE_BASE}/examples/jsm/loaders/TDSLoader.js`
+    fbx: versioned(`${THREE_BASE}/examples/jsm/loaders/FBXLoader.js`),
+    "3dm": versioned(`${THREE_BASE}/examples/jsm/loaders/3DMLoader.js`),
+    obj: versioned(`${THREE_BASE}/examples/jsm/loaders/OBJLoader.js`),
+    "3ds": versioned(`${THREE_BASE}/examples/jsm/loaders/TDSLoader.js`)
   };
   // Kept beside the tool so 3DM import works offline and never relies on the
   // Rhino installation (or a CDN) on the visitor's computer.
@@ -24,8 +26,8 @@
 
   function getRhino() {
     if (!rhinoPromise) {
-      rhinoPromise = import(`${RHINO_ASSET_PATH}rhino3dm.module.js`)
-        .then(({ default: initRhino }) => initRhino({ locateFile: file => `${RHINO_ASSET_PATH}${file}` }));
+      rhinoPromise = import(versioned(`${RHINO_ASSET_PATH}rhino3dm.module.js`))
+        .then(({ default: initRhino }) => initRhino({ locateFile: file => versioned(`${RHINO_ASSET_PATH}${file}`) }));
     }
     return rhinoPromise;
   }
