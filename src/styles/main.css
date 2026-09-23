@@ -3908,6 +3908,15 @@ a {
   background: #fff;
 }
 
+/* 元白体验使用暗色舞台，并保留足够高度给长按录音与楼体动画。 */
+.embed-panel--yuanbai iframe {
+  min-height: 680px;
+  border-color: rgba(82, 27, 24, 0.28);
+  border-radius: 18px;
+  background: #180506;
+  box-shadow: 0 28px 70px rgba(38, 8, 7, 0.16);
+}
+
 .device-mockup {
   --device-shell: #17171a;
   --device-edge: rgba(255, 255, 255, 0.16);
@@ -4865,6 +4874,11 @@ a {
   .embed-panel iframe {
     height: min(68vh, 620px);
     min-height: 420px;
+  }
+
+  .embed-panel--yuanbai iframe {
+    min-height: 560px;
+    border-radius: 12px;
   }
 
   .embed-panel--flow .flow-experience-frame {
