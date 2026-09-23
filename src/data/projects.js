@@ -255,6 +255,45 @@ export const projects = [
     }
   },
   {
+    "slug": "yuanbai-ai",
+    "sourceFile": "元白长者AI.html",
+    "category": "school",
+    "discipline": "ui",
+    "image": "/images/study/yuanbai-ai-cover.png",
+    "title": {
+      "en": "Yuanbai Elder—Voice Architecture AI",
+      "zh": "元白长者—语音建筑 AI"
+    },
+    "details": {
+      "en": {
+        "title": "Yuanbai Elder—A Building That Responds",
+        "description": "An AI personality prototype for Yuanbai Building. Hold to speak, then cloud speech recognition, DeepSeek dialogue and a custom CosyVoice voice turn the building into a conversational character. Speech rhythm drives the internal light, angular brick masses and pauses, while the waiting state dissolves into a rotating white particle cloud.",
+        "hero": "/images/study/yuanbai-ai-cover.png",
+        "images": [],
+        "iframes": [
+          "https://apps-demo.muyang23333.top/yuanbai/?embed=portfolio"
+        ],
+        "pdfs": [],
+        "sectionLabels": [
+          "Interactive voice prototype"
+        ]
+      },
+      "zh": {
+        "title": "元白长者—一座会回应你的楼",
+        "description": "一个面向元白楼的建筑人格 AI 原型。长按说话后，云端语音识别、DeepSeek 对话与专属 CosyVoice 音色共同生成回答；语调、重音和停顿会驱动楼体内部灯光与红砖体块，等待阶段则溶解为缓慢旋转的白色粒子云。",
+        "hero": "/images/study/yuanbai-ai-cover.png",
+        "images": [],
+        "iframes": [
+          "https://apps-demo.muyang23333.top/yuanbai/?embed=portfolio"
+        ],
+        "pdfs": [],
+        "sectionLabels": [
+          "语音交互原型"
+        ]
+      }
+    }
+  },
+  {
     "slug": "sundial-clock",
     "sourceFile": "日晷钟.html",
     "category": "school",
