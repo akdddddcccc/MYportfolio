@@ -1,5 +1,43 @@
 export const projects = [
   {
+    "slug": "yuanbai",
+    "sourceFile": "",
+    "category": "school",
+    "discipline": "ui",
+    "image": "/images/study/yuanbai-cover.webp",
+    "title": {
+      "zh": "感知元白 · 游戏与对话 Agent",
+      "en": "Sensing Yuanbai · Game & Conversational Agent"
+    },
+    "details": {
+      "zh": {
+        "title": "感知元白 — 在探索与对话中重新认识建筑",
+        "description": "围绕北京师范大学珠海校区未来设计学院元白楼的团队感知地图项目。通过探索游戏与建筑人格对话 Agent，把建筑的空间体验、感知与校园记忆转化为可参与的网页交互。",
+        "hero": "/images/study/yuanbai-cover.webp",
+        "images": [],
+        "iframes": [],
+        "pdfs": [],
+        "demo": {
+          "type": "yuanbai",
+          "productUrl": "https://apps-demo.muyang23333.top/yuanbai/"
+        }
+      },
+      "en": {
+        "title": "Sensing Yuanbai — Discovering Architecture through Play and Conversation",
+        "description": "A collaborative perception-map project around Yuanbai Building at the School of Future Design, Beijing Normal University at Zhuhai. An exploration game and a conversational building persona turn spatial perception and campus memories into participatory web experiences.",
+        "hero": "/images/study/yuanbai-cover.webp",
+        "images": [],
+        "iframes": [],
+        "pdfs": [],
+        "demo": {
+          "type": "yuanbai",
+          "productUrl": "https://apps-demo.muyang23333.top/yuanbai/"
+        }
+      }
+    },
+    "legacy": {}
+  },
+  {
     "slug": "guandan-poker",
     "sourceFile": "惯蛋扑克.html",
     "category": "school",

@@ -13,6 +13,7 @@ import MusicaLeisureCloudDemo from "../components/MusicaLeisureCloudDemo.js";
 import ShakerCloudDemo from "../components/ShakerCloudDemo.js";
 import FlowerStandCloudDemo from "../components/FlowerStandCloudDemo.js";
 import CloudFormDemo from "../components/CloudFormDemo.js";
+import YuanbaiExperience from "../components/YuanbaiExperience.js";
 
 export default {
   name: "ProjectDetailView",
@@ -31,7 +32,8 @@ export default {
     MusicaLeisureCloudDemo,
     ShakerCloudDemo,
     FlowerStandCloudDemo,
-    CloudFormDemo
+    CloudFormDemo,
+    YuanbaiExperience
   },
   props: {
     lang: {
@@ -510,6 +512,7 @@ export default {
         </article>
       </section>
 
+      <YuanbaiExperience v-if="project.slug === 'yuanbai'" :lang="lang" />
       <section v-if="!isSenseOfTime && embeds.length" class="embed-stack">
         <article
           v-for="embed in embeds"
