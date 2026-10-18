@@ -1,0 +1,18 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="43.0614" height="31.8234" viewBox="0 0 43.0614 31.8234" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 105">
+<foreignObject x="-1.26033" y="-1.26033" width="45.582" height="34.3441"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(0.63px);clip-path:url(#bgblur_0_0_42_clip_path);height:100%;width:100%"></div></foreignObject><g id="Vector" data-figma-bg-blur-radius="1.26033">
+<path d="M17.0145 0H26.0469V31.8234H17.0145V0Z" fill="#D9D9D9" fill-opacity="0.8"/>
+<path d="M14.2838 15.9642C14.2838 19.9086 11.0862 23.1061 7.14188 23.1061C3.19753 23.1061 0 19.9086 0 15.9642C0 12.0199 3.19753 8.82233 7.14188 8.82233C11.0862 8.82233 14.2838 12.0199 14.2838 15.9642Z" fill="#D9D9D9" fill-opacity="0.8"/>
+<path d="M43.0614 15.9642C43.0614 19.9086 39.8638 23.1061 35.9195 23.1061C31.9751 23.1061 28.7776 19.9086 28.7776 15.9642C28.7776 12.0199 31.9751 8.82233 35.9195 8.82233C39.8638 8.82233 43.0614 12.0199 43.0614 15.9642Z" fill="#D9D9D9" fill-opacity="0.8"/>
+</g>
+<g id="Intersect">
+</g>
+<circle id="Ellipse 21" cx="7.14207" cy="15.9639" r="4.30614" fill="#010004" fill-opacity="0.6"/>
+<circle id="Ellipse 22" cx="35.9194" cy="15.9639" r="4.30614" fill="#010004" fill-opacity="0.6"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_0_42_clip_path" transform="translate(1.26033 1.26033)"><path d="M17.0145 0H26.0469V31.8234H17.0145V0Z"/>
+<path d="M14.2838 15.9642C14.2838 19.9086 11.0862 23.1061 7.14188 23.1061C3.19753 23.1061 0 19.9086 0 15.9642C0 12.0199 3.19753 8.82233 7.14188 8.82233C11.0862 8.82233 14.2838 12.0199 14.2838 15.9642Z"/>
+<path d="M43.0614 15.9642C43.0614 19.9086 39.8638 23.1061 35.9195 23.1061C31.9751 23.1061 28.7776 19.9086 28.7776 15.9642C28.7776 12.0199 31.9751 8.82233 35.9195 8.82233C39.8638 8.82233 43.0614 12.0199 43.0614 15.9642Z"/>
+</clipPath></defs>
+</svg>

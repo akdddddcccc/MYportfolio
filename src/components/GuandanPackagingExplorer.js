@@ -64,7 +64,7 @@ export default {
         <aside class="guandan-packaging__detail" aria-live="polite">
           <p class="guandan-demo__eyebrow">{{ selected.vector ? copy.vector : copy.render }}</p>
           <h3>{{ selectedCopy.name }}</h3><p class="guandan-packaging__idea">{{ selectedCopy.idea }}</p>
-          <div v-if="selected.assets" class="guandan-packaging__asset-tabs"><button type="button" :class="{ active: boxVariant === 0 }" @click="setBoxVariant(0)">{{ copy.black }}</button><button type="button" :class="{ active: boxVariant === 1 }" @click="setBoxVariant(1)">{{ copy.white }}</button></div>
+          <div class="guandan-packaging__asset-tabs"><template v-if="selected.assets"><button type="button" :class="{ active: boxVariant === 0 }" @click="setBoxVariant(0)">{{ copy.black }}</button><button type="button" :class="{ active: boxVariant === 1 }" @click="setBoxVariant(1)">{{ copy.white }}</button></template></div>
           <div class="guandan-packaging__asset" :class="{ 'guandan-packaging__asset--render': !selected.vector, 'guandan-packaging__asset--tall': selected.tall, 'guandan-packaging__asset--board': selected.id === 'board' }">
             <img :src="activeAsset" :alt="selectedCopy.name" />
           </div>

@@ -1,0 +1,40 @@
+.shaker-story { width:min(1200px,100%); margin:48px auto 80px; }
+.shaker-structure { margin:0; }
+.shaker-structure-stage { position:relative; aspect-ratio:646/527; max-width:1000px; margin:auto; background:#fff; overflow:hidden; }
+.shaker-structure-product { position:absolute; left:50%; top:50%; width:33.84%; height:101.51%; transform:translate(-50%,-50%) rotate(75.1deg); overflow:hidden; }
+.shaker-structure-product img { position:absolute; width:152.98%; height:100.11%; max-width:none; left:-37.64%; top:-.06%; }
+.shaker-structure-lines { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.shaker-structure-lines line { stroke:#747b80; stroke-width:1; vector-effect:non-scaling-stroke; }
+.shaker-structure-lines circle { fill:#555; }
+.shaker-structure-label { position:absolute; transform:translate(-50%,-50%); display:flex; gap:8px; align-items:center; padding:6px 8px; background:#fffffff0; font-size:15px; white-space:nowrap; color:#24282c; }
+.shaker-structure-label b,.shaker-structure-key b { font:11px monospace; color:#777; }
+.shaker-structure-key { display:none; }
+@media(max-width:750px) { .shaker-structure-label { padding:4px; }.shaker-structure-label>span { display:none; }.shaker-structure-key { display:grid; grid-template-columns:1fr 1fr; list-style:none; gap:14px 10px; padding:18px 0; margin:0; }.shaker-structure-key li { display:flex; align-items:center; gap:8px; font-size:13px; line-height:1.5; } }
+.shaker-chapters { display:flex; flex-wrap:wrap; gap:8px; padding:20px 0; border-block:1px solid #d4d4d4; }
+.shaker-chapters button { background:none; border:0; padding:12px 18px; cursor:pointer; color:inherit; font:inherit; }
+.shaker-chapters small { margin-right:12px; color:#888; }
+.shaker-part { padding:70px 0; scroll-margin-top:80px; border-bottom:1px solid #ddd; }
+.shaker-part header { display:grid; grid-template-columns:1fr 1fr; gap:20px 55px; margin-bottom:38px; }
+.shaker-part header>small { grid-column:1/-1; color:#888; font:12px monospace; letter-spacing:.12em; }
+.shaker-part h2 { font-size:clamp(26px,3vw,42px); line-height:1.4; margin:0; }
+.shaker-part p { line-height:1.9; color:#666; margin:0; }
+.shaker-figures { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+.shaker-figures--single { grid-template-columns:1fr; }
+.shaker-figures figure { margin:0; min-width:0; }
+.shaker-story figure button { display:block; width:100%; padding:0; border:0; background:#fff; cursor:zoom-in; }
+.shaker-figures img { display:block; width:100%; height:420px; object-fit:contain; padding:24px; box-sizing:border-box; }
+.shaker-figures--single img { height:560px; }
+.shaker-story figcaption { display:flex; justify-content:space-between; padding:14px 0; color:#777; font-size:13px; }
+.shaker-part--dark { background:#101112; color:#f4f4f4; padding:48px 32px; margin-top:40px; }
+.shaker-part--dark p,.shaker-part--dark figcaption { color:#aaa; }
+.shaker-part--dark figure button { background:#101112; }
+.shaker-part--dark img { padding:0; height:500px; }
+.shaker-concept { margin:36px 0 0; }
+.shaker-concept img { display:block; width:100%; height:auto; }
+.shaker-viewer { width:min(1200px,94vw); max-height:94dvh; padding:50px 20px 20px; border:0; background:#f6f6f6; box-sizing:border-box; }
+.shaker-viewer::backdrop { background:#000b; backdrop-filter:blur(8px); }
+.shaker-viewer img { display:block; width:100%; height:75dvh; object-fit:contain; }
+.shaker-viewer p { text-align:center; }
+.shaker-viewer-close { position:absolute; right:16px; top:12px; padding:8px 12px; border:0; cursor:pointer; }
+@media(max-width:750px) { .shaker-part { padding:40px 0; }.shaker-part header { grid-template-columns:1fr; gap:16px; }.shaker-figures { grid-template-columns:1fr; }.shaker-figures img,.shaker-figures--single img { height:auto; max-height:500px; padding:12px; }.shaker-part--dark { padding:28px 16px; }.shaker-chapters button { padding:10px 8px; font-size:13px; }.shaker-part--dark img { max-height:500px; padding:0; } }
+@media(prefers-reduced-motion:reduce) { .shaker-story { scroll-behavior:auto; } }

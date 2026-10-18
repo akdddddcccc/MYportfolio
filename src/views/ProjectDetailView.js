@@ -14,6 +14,12 @@ import ShakerCloudDemo from "../components/ShakerCloudDemo.js";
 import FlowerStandCloudDemo from "../components/FlowerStandCloudDemo.js";
 import CloudFormDemo from "../components/CloudFormDemo.js";
 import YuanbaiExperience from "../components/YuanbaiExperience.js";
+import GuandanStory from "../components/GuandanStory.js";
+import ShakerStory from "../components/ShakerStory.js";
+import DriversStory from "../components/DriversStory.js";
+import MusicTableStory from "../components/MusicTableStory.js";
+import FlowStory from "../components/FlowStory.js";
+import "../styles/guandan-responsive.css";
 
 export default {
   name: "ProjectDetailView",
@@ -33,7 +39,8 @@ export default {
     ShakerCloudDemo,
     FlowerStandCloudDemo,
     CloudFormDemo,
-    YuanbaiExperience
+    YuanbaiExperience,
+    GuandanStory, ShakerStory, DriversStory, MusicTableStory, FlowStory
   },
   props: {
     lang: {
@@ -121,7 +128,7 @@ export default {
       return this.lang === "zh" ? "进入正式版工作台" : "Open full workbench";
     },
     embeds() {
-      return (this.detail.iframes || []).map((src, index) => ({
+      return (this.detail.iframes || []).filter(src => !(['guandan-poker', 'shaker', 'drivers-handle', 'music-side-table', 'flow'].includes(this.project?.slug) && src.includes('figma.com'))).map((src, index) => ({
         title: this.embedTitle(src, index),
         platform: this.embedPlatform(src),
         src: src.startsWith("//") ? `https:${src}` : src,
@@ -388,7 +395,10 @@ export default {
       <div v-if="!isSenseOfTime" class="project-hero">
         <img :src="hero" :alt="title" />
         <div class="project-copy">
-          <p class="project-kicker">{{ disciplineLabel(project.discipline) }}</p>
+          <div v-if="project.tags?.length" class="project-tags" aria-label="项目标签">
+            <span v-for="tag in project.tags" :key="tag.key" class="project-tag">{{ tag[lang] }}</span>
+          </div>
+          <p v-else class="project-kicker">{{ disciplineLabel(project.discipline) }}</p>
           <h1>
             <template v-for="(part, index) in titleParts" :key="index">
               <span v-if="part.type === 'separator'" class="title-separator">{{ part.value }}</span>
@@ -412,6 +422,11 @@ export default {
 
       <TaskMapDemo v-if="demoType === 'task-map'" :lang="lang" :product-url="detail.demo?.productUrl || ''" />
       <AIWorkflowDemo v-if="demoType === 'ai-workflow'" :lang="lang" />
+      <GuandanStory v-if="demoType === 'guandan-table'" :lang="lang" />
+      <ShakerStory v-if="project.slug === 'shaker'" :lang="lang" />
+      <DriversStory v-if="project.slug === 'drivers-handle'" :lang="lang" />
+      <MusicTableStory v-if="project.slug === 'music-side-table'" :lang="lang" />
+      <FlowStory v-if="project.slug === 'flow'" :lang="lang" />
           <GuandanTableDemo v-if="demoType === 'guandan-table'" :lang="lang" />
           <GuandanPackagingExplorer v-if="demoType === 'guandan-table'" :lang="lang" />
           <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />

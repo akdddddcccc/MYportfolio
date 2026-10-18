@@ -1,0 +1,9 @@
+.drivers-status { padding:14px 18px; border-left:2px solid #888; background:#eeedeb; font-size:14px; margin:0 0 24px!important; }
+.drivers-materials { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin-top:32px; }
+.drivers-materials div { border-top:1px solid #ccc; padding:20px 0; }
+.drivers-materials dt { font-weight:600; margin-bottom:12px; }.drivers-materials dd { margin:0; color:#666; line-height:1.6; }
+.drivers-view-controls { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 24px; }
+.drivers-view-controls button { padding:12px 18px; border:1px solid #ccc; background:none; color:inherit; cursor:pointer; font:inherit; }
+.drivers-view-controls button[aria-pressed=true] { background:#25282a; border-color:#25282a; color:#fff; }
+.drivers-gallery { margin:0; }.drivers-gallery img { display:block; width:100%; height:600px; object-fit:contain; background:#eaeae8; }
+@media(max-width:750px) { .drivers-materials { grid-template-columns:1fr; gap:0; }.drivers-gallery img { height:340px; }.drivers-view-controls button { padding:10px 12px; font-size:13px; } }

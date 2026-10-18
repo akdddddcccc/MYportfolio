@@ -1,48 +1,40 @@
 export const projects = [
   {
-    "slug": "yuanbai",
-    "sourceFile": "",
-    "category": "school",
-    "discipline": "ui",
-    "image": "/images/study/yuanbai-cover.webp",
-    "title": {
-      "zh": "感知元白 · 游戏与对话 Agent",
-      "en": "Sensing Yuanbai · Game & Conversational Agent"
-    },
-    "details": {
-      "zh": {
-        "title": "感知元白 — 在探索与对话中重新认识建筑",
-        "description": "围绕北京师范大学珠海校区未来设计学院元白楼的团队感知地图项目。通过探索游戏与建筑人格对话 Agent，把建筑的空间体验、感知与校园记忆转化为可参与的网页交互。",
-        "hero": "/images/study/yuanbai-cover.webp",
-        "images": [],
-        "iframes": [],
-        "pdfs": [],
-        "demo": {
-          "type": "yuanbai",
-          "productUrl": "https://apps-demo.muyang23333.top/yuanbai/"
-        }
+    slug: "yuanbai",
+    tags: [
+      { key: "ui", zh: "UI 设计", en: "UI Design" },
+      { key: "ai", zh: "AI 设计", en: "AI Design" },
+      { key: "game", zh: "游戏设计", en: "Game Design" }
+    ],
+    sourceFile: "",
+    category: "school",
+    discipline: "ui",
+    image: "/images/study/yuanbai-photo.webp",
+    title: { zh: "感知元白 · 游戏与对话 Agent", en: "Sensing Yuanbai · Game & Conversational Agent" },
+    details: {
+      zh: {
+        title: "感知元白 — 在探索与对话中重新认识建筑",
+        description: "围绕北京师范大学珠海校区未来设计学院元白楼的团队感知地图项目。通过探索游戏与建筑人格对话 Agent，把建筑的空间体验、感知与校园记忆转化为可参与的网页交互。",
+        hero: "/images/study/yuanbai-photo.webp",
+        images: [], iframes: [], pdfs: [],
+        demo: { type: "yuanbai", productUrl: "https://apps-demo.muyang23333.top/yuanbai/" }
       },
-      "en": {
-        "title": "Sensing Yuanbai — Discovering Architecture through Play and Conversation",
-        "description": "A collaborative perception-map project around Yuanbai Building at the School of Future Design, Beijing Normal University at Zhuhai. An exploration game and a conversational building persona turn spatial perception and campus memories into participatory web experiences.",
-        "hero": "/images/study/yuanbai-cover.webp",
-        "images": [],
-        "iframes": [],
-        "pdfs": [],
-        "demo": {
-          "type": "yuanbai",
-          "productUrl": "https://apps-demo.muyang23333.top/yuanbai/"
-        }
+      en: {
+        title: "Sensing Yuanbai — Discovering Architecture through Play and Conversation",
+        description: "A collaborative perception-map project around Yuanbai Building at the School of Future Design, Beijing Normal University at Zhuhai. An exploration game and a conversational building persona turn spatial perception and campus memories into participatory web experiences.",
+        hero: "/images/study/yuanbai-photo.webp",
+        images: [], iframes: [], pdfs: [],
+        demo: { type: "yuanbai", productUrl: "https://apps-demo.muyang23333.top/yuanbai/" }
       }
     },
-    "legacy": {}
+    legacy: {}
   },
   {
     "slug": "guandan-poker",
     "sourceFile": "惯蛋扑克.html",
     "category": "school",
     "discipline": "visual",
-    "image": "/images/study/-1.png",
+    "image": "/images/work/guandan-story/cover-studio-v2.webp",
     "title": {
       "en": "Special product design for Chinese hot poke game",
       "zh": "惯蛋专用产品设计"
@@ -51,7 +43,7 @@ export const projects = [
       "en": {
         "title": "Special product design for Guandan",
         "description": "A series of related product designs targeting the popular Guandan craze within the system, from a visual perspective, using a service design approach to address pain points in the game rules and processes.",
-        "hero": "/images/study/poke.png",
+        "hero": "/images/work/guandan-story/cover-studio-v2.webp",
         "images": [],
         "demo": { "type": "guandan-table" },
         "iframes": [
@@ -63,7 +55,7 @@ export const projects = [
       "zh": {
         "title": "惯蛋专用产品设计",
         "description": "针对体制内流行的掼蛋热，从视觉层面，运用服务设计视角，进行的一系列切中游戏规则已经流程痛点的相关产品设计",
-        "hero": "/images/study/poke.png",
+        "hero": "/images/work/guandan-story/cover-studio-v2.webp",
         "images": [],
         "demo": { "type": "guandan-table" },
         "iframes": [
@@ -83,7 +75,7 @@ export const projects = [
     "sourceFile": "shaker.html",
     "category": "school",
     "discipline": "product",
-    "image": "/images/study/0.webp",
+    "image": "/images/study/shaker/story/cover-soft-v3.webp",
     "title": {
       "en": "SHAKER—Intelligent Product Design",
       "zh": "《SHAKER》—智能产品设计"
@@ -92,7 +84,7 @@ export const projects = [
       "en": {
         "title": "SHAKER Interactive Luminaire Fixtures",
         "description": "Reduce the sense of social barrier between people and bring them closer together. Visualising the atmosphere of a conversation can also create a one-on-one social space where the atmosphere of two people talking can be known to the outside world, while the light can be used as a psychological cue to influence the content and mood of the communicator's conversation to a certain extent.",
-        "hero": "/images/study/shaker/h 1.webp",
+        "hero": "/images/study/shaker/story/cover-soft-v3.webp",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1648-22&embed-host=share",
@@ -117,7 +109,7 @@ export const projects = [
       "zh": {
         "title": "SHAKER交互灯具装置",
         "description": "减少人与人的社交障碍感，拉近心理距离。将谈话氛围可视化，同时可以营造单对单的社交空间，两个人谈话的氛围可以为外界所知，同时灯光也可以作为心理暗示，对交流者的交谈内容和情绪进行一定程度影响。",
-        "hero": "/images/study/shaker/h 1.webp",
+        "hero": "/images/study/shaker/story/cover-soft-v3.webp",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1648-22&embed-host=share",
@@ -158,7 +150,7 @@ export const projects = [
     "details": {
       "en": {
         "title": "Future Driving Behaviour Gamification Peripherals",
-        "description": "Steering wheel peripherals have an extremely strong impact on the feel of driving games, and there are very few related products on the market. There are fewer manufacturers that make game steering wheels, and players have fewer options to choose from. Existing designs on the market are very monotonous and crude, and can even be said to be too straightforward. The product takes into account the unity of style with the home environment, and set up a fixed hud table of the product",
+        "description": "A home driving-game controller concept combining a fixed HUD console and a detachable handheld controller. The project explores form, storage and multi-channel feedback through sketches, simulations and product renders.",
         "hero": "/images/study/驾驶产品/产品结合场景延申.png",
         "images": [],
         "iframes": [
@@ -173,7 +165,7 @@ export const projects = [
       },
       "zh": {
         "title": "未来驾驶行为游戏化外设",
-        "description": "方向盘外设对于驾驶类游戏的感受影响极为强烈，市面的相关产品极少。做游戏方向盘的厂家本来就较少，玩家的可选择就不多了。市面现有的外观设计非常单调和粗狂，甚至可以说是过于直白。产品兼顾与家居环境的风格统一性，并设置了产品的固定hud台面",
+        "description": "面向家庭娱乐场景的驾驶游戏外设概念，将固定 HUD 交互台与可拆卸手柄组合，通过草图、模拟与产品渲染，探索驾驶操作、日常收纳、家居融合和多通道反馈之间的关系。",
         "hero": "/images/study/驾驶产品/产品结合场景延申.png",
         "images": [],
         "iframes": [

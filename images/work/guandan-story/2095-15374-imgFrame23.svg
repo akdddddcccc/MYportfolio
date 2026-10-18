@@ -1,0 +1,17 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="339.5" height="17.5" viewBox="0 0 339.5 17.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 23">
+<path id="Rectangle 18" d="M1.25 2.5C1.25 1.80964 1.80964 1.25 2.5 1.25H43.75C47.8921 1.25 51.25 4.60786 51.25 8.75V8.75C51.25 12.8921 47.8921 16.25 43.75 16.25H2.5C1.80964 16.25 1.25 15.6904 1.25 15V2.5Z" fill="#020293" stroke-width="2.5" stroke="white"/>
+<path id="Rectangle 75" d="M51.25 2.5C51.25 1.80964 51.8096 1.25 52.5 1.25H143.75C147.892 1.25 151.25 4.60786 151.25 8.75C151.25 12.8921 147.892 16.25 143.75 16.25H52.5C51.8096 16.25 51.25 15.6904 51.25 15V2.5Z" fill="#020293" stroke-width="2.5" stroke="white"/>
+<path id="Rectangle 17" d="M151.25 2.5C151.25 1.80964 151.81 1.25 152.5 1.25H271.75C275.892 1.25 279.25 4.60786 279.25 8.75C279.25 12.8921 275.892 16.25 271.75 16.25H152.5C151.81 16.25 151.25 15.6904 151.25 15V2.5Z" fill="url(#paint0_linear_0_49)" stroke-width="2.5" stroke="white"/>
+<path id="Rectangle 20" d="M279.25 2.5C279.25 1.80964 279.81 1.25 280.5 1.25H330.75C334.892 1.25 338.25 4.60786 338.25 8.75C338.25 12.8921 334.892 16.25 330.75 16.25H280.5C279.81 16.25 279.25 15.6904 279.25 15V2.5Z" fill="#020293" stroke-width="2.5" stroke="white"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_49" x1="142.76" y1="8.75" x2="280.75" y2="8.75" gradientUnits="userSpaceOnUse">
+<stop offset="0.0336538" stop-color="#020293"/>
+<stop offset="0.355769" stop-color="#EF0C4A"/>
+<stop offset="0.527427" stop-color="#EF0C4A"/>
+<stop offset="0.68808" stop-color="#EF0C4A"/>
+<stop offset="1" stop-color="#08088C"/>
+</linearGradient>
+</defs>
+</svg>

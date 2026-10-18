@@ -1,4 +1,5 @@
 import "../styles/sense-of-time-demo.css";
+import TimeStory from "./TimeStory.js";
 
 const TAU = Math.PI * 2;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -23,6 +24,7 @@ const loopNoise = (position, period, seed) => {
 
 export default {
   name: "SenseOfTimeDemo",
+  components: { TimeStory },
   props: { lang: { type: String, required: true } },
   data() {
     return {
@@ -99,7 +101,9 @@ export default {
     this.$refs.webglCanvas.addEventListener("webglcontextlost", this.handleContextLost, false);
     this.$refs.webglCanvas.addEventListener("webglcontextrestored", this.handleContextRestored, false);
     this.frameId = window.requestAnimationFrame(this.renderFrame);
-    if (window.matchMedia("(min-width: 781px)").matches) window.setTimeout(() => this.startAudio({ silentFailure: true }), 0);
+    if (window.matchMedia("(min-width: 781px)").matches) {
+      window.setTimeout(() => this.startAudio({ silentFailure: true }), 0);
+    }
   },
   beforeUnmount() {
     window.cancelAnimationFrame(this.frameId);
@@ -535,8 +539,14 @@ export default {
     },
     async startAudio({ silentFailure = false } = {}) {
       if (this.audio?.context) {
-        try { await this.audio.context.resume(); this.audioEnabled = this.audio.context.state === "running"; return this.audioEnabled; }
-        catch { if (!silentFailure) this.audioError = true; return false; }
+        try {
+          await this.audio.context.resume();
+          this.audioEnabled = this.audio.context.state === "running";
+          return this.audioEnabled;
+        } catch {
+          if (!silentFailure) this.audioError = true;
+          return false;
+        }
       }
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) {
@@ -546,7 +556,11 @@ export default {
       try {
         const context = new AudioContext();
         await context.resume();
-        if (context.state !== "running") { await context.close(); if (!silentFailure) this.audioError = true; return false; }
+        if (context.state !== "running") {
+          await context.close();
+          if (!silentFailure) this.audioError = true;
+          return false;
+        }
         const master = context.createGain();
         const filter = context.createBiquadFilter();
         const delay = context.createDelay(1.5);
@@ -587,7 +601,9 @@ export default {
     },
     scheduleTone({ frequency, start, duration, gain, detune = 0, type = "sine", piano = false }) {
       if (!this.audio) return;
-      const partials = piano ? [{ ratio: 1, gain: 1, shape: "sine" }, { ratio: 2.01, gain: 0.34, shape: "sine" }, { ratio: 3.02, gain: 0.16, shape: "sine" }, { ratio: 4.07, gain: 0.07, shape: "triangle" }] : [{ ratio: 1, gain: 1, shape: type }, { ratio: 2.01, gain: 0.22, shape: "sine" }, { ratio: 3.04, gain: 0.09, shape: "triangle" }];
+      const partials = piano
+        ? [{ ratio: 1, gain: 1, shape: "sine" }, { ratio: 2.01, gain: 0.34, shape: "sine" }, { ratio: 3.02, gain: 0.16, shape: "sine" }, { ratio: 4.07, gain: 0.07, shape: "triangle" }]
+        : [{ ratio: 1, gain: 1, shape: type }, { ratio: 2.01, gain: 0.22, shape: "sine" }, { ratio: 3.04, gain: 0.09, shape: "triangle" }];
       partials.forEach((partial) => {
         const oscillator = this.audio.context.createOscillator();
         const envelope = this.audio.context.createGain();
@@ -642,9 +658,18 @@ export default {
         <p class="sense-time-demo__readout"><span>{{ copy.state }}</span>{{ stateLabel }}</p>
         <label class="sense-time-demo__slider"><span class="sense-time-demo__slider-title">{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider" @pointerdown.stop @pointermove.stop @pointerup.stop><span>{{ copy.severe }}</span></label>
       </div>
+      <TimeStory :lang="lang" />
       <section class="sense-time-demo__archive" :aria-label="lang === 'zh' ? '项目档案' : 'Project archive'">
         <img v-if="detail.hero" :src="detail.hero" :alt="title" />
-        <div><p>{{ lang === 'zh' ? '项目档案 / 原始材料' : 'Project archive / original material' }}</p><h3>{{ title }}</h3><span>{{ detail.description }}</span><nav v-if="detail.pdfs?.length || detail.iframes?.length" class="sense-time-demo__archive-links"><a v-for="pdf in detail.pdfs || []" :key="pdf" :href="pdf" target="_blank" rel="noreferrer">{{ lang === 'zh' ? '阅读项目 PDF' : 'Read project PDF' }}</a><a v-for="(frame, index) in detail.iframes || []" :key="frame" :href="frame" target="_blank" rel="noreferrer">{{ index === 0 ? 'Figma' : (lang === 'zh' ? '观看原展示视频' : 'Watch original showcase video') }}</a></nav></div>
+        <div>
+          <p>{{ lang === 'zh' ? '项目档案 / 原始材料' : 'Project archive / original material' }}</p>
+          <h3>{{ title }}</h3>
+          <span>{{ detail.description }}</span>
+          <nav v-if="detail.pdfs?.length || detail.iframes?.length" class="sense-time-demo__archive-links">
+            <a v-for="pdf in detail.pdfs || []" :key="pdf" :href="pdf" target="_blank" rel="noreferrer">{{ lang === 'zh' ? '阅读项目 PDF' : 'Read project PDF' }}</a>
+            <a v-for="frame in (detail.iframes || []).filter(src => !src.includes('figma.com'))" :key="frame" :href="frame" target="_blank" rel="noreferrer">{{ lang === 'zh' ? '观看原展示视频' : 'Watch original showcase video' }}</a>
+          </nav>
+        </div>
       </section>
     </section>
   `
