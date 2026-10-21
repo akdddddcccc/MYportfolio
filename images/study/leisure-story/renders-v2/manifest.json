@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-19",
+  "route": "built-in-imagegen",
+  "reviewStatus": "provisional-only-revisit-after-all-projects",
+  "originalsPreserved": true,
+  "encoding": "Proportional WebP quality 94, no further upscaling",
+  "limitations": "AI-assisted concept refinements, not lossless restoration. Small mixer controls and low-resolution human silhouettes were reconstructed. Refer to original drawings for exact geometry.",
+  "direction": "Preserve each source view and product silhouette. Refine silver-white satin metal, glass, soft lighting and charcoal campus paving; reduce grain and overexposure. No new decorations or text.",
+  "assets": [
+    { "file": "private-mode.webp", "source": "../1156-imgUntitled7.webp", "size": [1402,1122] },
+    { "file": "sharing-mode.webp", "source": "../1156-imgUntitled6.webp", "size": [1403,1121] },
+    { "file": "live-mode.webp", "source": "../1156-img61.webp", "size": [1206,1305] },
+    { "file": "light-plan.webp", "source": "../1156-img16564803898452.webp", "size": [1594,987] },
+    { "file": "exterior.webp", "source": "../../音乐空间/1.png", "alsoReplaces": "../1292-imgImage183.webp", "size": [1515,1038] },
+    { "file": "overhead.webp", "source": "../1293-imgUntitled9.webp", "size": [1402,1122] },
+    { "file": "interior-high.webp", "source": "../1294-imgUntitled4.webp", "size": [1448,1086] },
+    { "file": "interior-low.webp", "source": "../1287-imgUntitled11.webp", "size": [1448,1086] }
+  ]
+}

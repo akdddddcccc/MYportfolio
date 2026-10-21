@@ -1,0 +1,435 @@
+{
+  "fileKey": "5tIz6mwR7uarGjbtAGxpga",
+  "page": "1111:2658",
+  "sourceSlides": [
+    "1111:2663",
+    "1111:2669",
+    "1111:2710",
+    "1111:2738",
+    "1111:2774",
+    "1111:2815",
+    "1111:2841",
+    "1111:3514",
+    "1111:3527"
+  ],
+  "notes": [
+    "Original assets retained in originals/.",
+    "Raster web versions are lossless; source proportions and transparency retained.",
+    "No generative edits, invented labels or outcome claims.",
+    "Repeated brand footers, decorative arrows and occluded duplicate layers are not repeated in the article.",
+    "Source palette text and fill values differ: HTML swatches follow the explicit text labels, not an assumed production color."
+  ],
+  "assets": {
+    "brand-symbol": {
+      "file": "brand-symbol.svg",
+      "original": "1111-2663-imgVector.svg",
+      "type": "svg"
+    },
+    "brand-chinese": {
+      "file": "brand-chinese.svg",
+      "original": "1111-2663-imgVector2.svg",
+      "type": "svg"
+    },
+    "brand-english": {
+      "file": "brand-english.svg",
+      "original": "1111-2663-imgVector1.svg",
+      "type": "svg"
+    },
+    "reference-tesla": {
+      "file": "reference-tesla.webp",
+      "original": "1111-2669-imgImage13.png",
+      "size": [
+        1920,
+        1920
+      ],
+      "originalSize": [
+        1920,
+        1920
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-huawei": {
+      "file": "reference-huawei.webp",
+      "original": "1111-2669-imgImage14.png",
+      "size": [
+        698,
+        698
+      ],
+      "originalSize": [
+        698,
+        698
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-yangwang": {
+      "file": "reference-yangwang.webp",
+      "original": "1111-2669-imgImage15.png",
+      "size": [
+        899,
+        451
+      ],
+      "originalSize": [
+        899,
+        451
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-marks": {
+      "file": "reference-marks.webp",
+      "original": "1111-2669-imgImage16.png",
+      "size": [
+        1080,
+        1080
+      ],
+      "originalSize": [
+        1080,
+        1080
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "direct-construction": {
+      "file": "direct-construction.svg",
+      "original": "1111-2738-imgGroup17.svg",
+      "type": "svg"
+    },
+    "direct-brand": {
+      "file": "direct-brand.svg",
+      "original": "1111-2738-imgGroup16.svg",
+      "type": "svg"
+    },
+    "direct-application": {
+      "file": "direct-application.webp",
+      "original": "1111-2738-img12.png",
+      "size": [
+        1213,
+        2442
+      ],
+      "originalSize": [
+        1213,
+        2442
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "character-construction": {
+      "file": "character-construction.svg",
+      "original": "1111-2710-imgGroup18.svg",
+      "type": "svg"
+    },
+    "character-brand": {
+      "file": "character-brand.svg",
+      "original": "1111-2710-imgGroup13.svg",
+      "type": "svg"
+    },
+    "character-application": {
+      "file": "character-application.webp",
+      "original": "1111-2710-img11.png",
+      "size": [
+        1213,
+        2442
+      ],
+      "originalSize": [
+        1213,
+        2442
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "seal-construction": {
+      "file": "seal-construction.svg",
+      "original": "1111-2774-imgGroup12.svg",
+      "type": "svg"
+    },
+    "seal-brand": {
+      "file": "seal-brand.svg",
+      "original": "1111-2774-imgGroup14.svg",
+      "type": "svg"
+    },
+    "seal-brand-alt": {
+      "file": "seal-brand-alt.svg",
+      "original": "1111-2774-imgGroup15.svg",
+      "type": "svg"
+    },
+    "seal-application": {
+      "file": "seal-application.webp",
+      "original": "1111-2774-img13.png",
+      "size": [
+        1213,
+        2442
+      ],
+      "originalSize": [
+        1213,
+        2442
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "original-product": {
+      "file": "original-product.webp",
+      "original": "1111-2815-imgImage6.png",
+      "size": [
+        186,
+        400
+      ],
+      "originalSize": [
+        186,
+        400
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-handle": {
+      "file": "reference-handle.webp",
+      "original": "1111-2815-imgImage7.png",
+      "size": [
+        246,
+        530
+      ],
+      "originalSize": [
+        246,
+        530
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-mask": {
+      "file": "reference-mask.webp",
+      "original": "1111-2815-imgImage8.png",
+      "size": [
+        474,
+        433
+      ],
+      "originalSize": [
+        474,
+        433
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-ding": {
+      "file": "reference-ding.webp",
+      "original": "1111-2815-imgImage9.png",
+      "size": [
+        928,
+        876
+      ],
+      "originalSize": [
+        928,
+        876
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-mask-line": {
+      "file": "reference-mask-line.webp",
+      "original": "1111-2815-imgImage10.png",
+      "size": [
+        1309,
+        652
+      ],
+      "originalSize": [
+        1309,
+        652
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "reference-base": {
+      "file": "reference-base.webp",
+      "original": "1111-2815-imgImage13.png",
+      "size": [
+        459,
+        1024
+      ],
+      "originalSize": [
+        459,
+        1024
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "model-outline": {
+      "file": "model-outline.webp",
+      "original": "1111-2845-imgImage17.png",
+      "size": [
+        725,
+        1304
+      ],
+      "originalSize": [
+        3200,
+        2400
+      ],
+      "crop": [
+        1215,
+        509,
+        1940,
+        1813
+      ],
+      "type": "raster"
+    },
+    "model-workspace": {
+      "file": "model-workspace.webp",
+      "original": "1111-2846-imgImage18.png",
+      "size": [
+        2560,
+        1356
+      ],
+      "originalSize": [
+        2560,
+        1356
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-angle": {
+      "file": "render-angle.webp",
+      "original": "1111-3514-imgRemix108.png",
+      "size": [
+        1024,
+        640
+      ],
+      "originalSize": [
+        1024,
+        640
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-front": {
+      "file": "render-front.webp",
+      "original": "1111-3514-imgRemix109.png",
+      "size": [
+        640,
+        1024
+      ],
+      "originalSize": [
+        640,
+        1024
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-top": {
+      "file": "render-top.webp",
+      "original": "1111-3514-imgRemix110.png",
+      "size": [
+        640,
+        1024
+      ],
+      "originalSize": [
+        640,
+        1024
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-upper": {
+      "file": "render-upper.webp",
+      "original": "1111-3514-imgRemix113.png",
+      "size": [
+        1024,
+        626
+      ],
+      "originalSize": [
+        1024,
+        626
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-lower": {
+      "file": "render-lower.webp",
+      "original": "1111-3514-imgRemix114.png",
+      "size": [
+        1024,
+        927
+      ],
+      "originalSize": [
+        1024,
+        927
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "motif-top": {
+      "file": "motif-top.webp",
+      "original": "1111-3527-img1.png",
+      "size": [
+        2560,
+        453
+      ],
+      "originalSize": [
+        4096,
+        725
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "motif-base": {
+      "file": "motif-base.webp",
+      "original": "1111-3527-img2.png",
+      "size": [
+        753,
+        168
+      ],
+      "originalSize": [
+        753,
+        168
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "motif-mask": {
+      "file": "motif-mask.webp",
+      "original": "1111-3527-img41.png",
+      "size": [
+        2560,
+        1214
+      ],
+      "originalSize": [
+        4096,
+        1942
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "pattern-workspace": {
+      "file": "pattern-workspace.webp",
+      "original": "1111-3527-imgImage23.png",
+      "size": [
+        2560,
+        1368
+      ],
+      "originalSize": [
+        2560,
+        1368
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "render-on": {
+      "file": "render-on.webp",
+      "original": "1111-3527-imgRemix111.png",
+      "size": [
+        1024,
+        768
+      ],
+      "originalSize": [
+        1024,
+        768
+      ],
+      "crop": null,
+      "type": "raster"
+    },
+    "technical-drawing": {
+      "file": "technical-drawing.svg",
+      "node": "1111:2849",
+      "type": "svg",
+      "characters": 114214
+    }
+  }
+}

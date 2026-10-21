@@ -1,0 +1,38 @@
+{
+  "fileKey": "5tIz6mwR7uarGjbtAGxpga",
+  "verifiedAt": "2026-10-19",
+  "pages": [
+    {
+      "name": "时感",
+      "id": "1110:2",
+      "slug": "sense-of-time",
+      "status": "Local preview approved"
+    },
+    {
+      "name": "乐憩",
+      "id": "1111:528",
+      "slug": "musica-leisure",
+      "status": "Provisionally passed; not final approval. Revisit render quality after all projects are reviewed.",
+      "reviewBacklog": "docs/portfolio-review-backlog.md"
+    },
+    {
+      "name": "花架子",
+      "id": "1111:2041",
+      "slug": "flower-stand",
+      "status": "First draft rejected. Revision 2: home-context renders and original SVG composition selector ready for local review. Point-cloud demo preserved. Not approved or published.",
+      "sourceNotes": "docs/flower-story-local-preview.md"
+    },
+    {
+      "name": "道路机",
+      "id": "1111:2658",
+      "slug": "road-machine",
+      "status": "Page located; content not yet reviewed"
+    }
+  ],
+  "notes": [
+    "Use page-specific IDs or use_figma root.children to discover pages; get_metadata without nodeId returned only Page 1.",
+    "No changes made to Figma. No commit, push or deployment.",
+    "Musica Leisure preview includes 23 original images in five responsive chapters; original point-cloud demo remains.",
+    "Verified desktop 1440x1000 and mobile 390x844, image dialogs, Escape, stable mode-switch height, no horizontal overflow and no console errors."
+  ]
+}

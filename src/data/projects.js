@@ -300,7 +300,7 @@ export const projects = [
         "description": "Extracting the semantics and principles of ancient sundial shapes and giving modern clocks and watches a sense of life.",
         "hero": "/images/study/日晷/压缩版.gif",
         "images": [
-          "/images/study/日晷/日晷渲染带环境.34.webp",
+          "/images/study/日晷/sundial-relief-capped-v2.png",
           "/images/study/日晷/日晷渲染带环境.37.webp"
         ],
         "iframes": [],
@@ -312,7 +312,7 @@ export const projects = [
         "description": "提取古代日晷造型语义和原理，赋予现代钟表以生活意趣",
         "hero": "/images/study/日晷/压缩版.gif",
         "images": [
-          "/images/study/日晷/日晷渲染带环境.34.webp",
+          "/images/study/日晷/sundial-relief-capped-v2.png",
           "/images/study/日晷/日晷渲染带环境.37.webp"
         ],
         "iframes": [],
@@ -381,7 +381,7 @@ export const projects = [
     "sourceFile": "乐憩空间.html",
     "category": "school",
     "discipline": "product",
-    "image": "/images/study/4.webp",
+    "image": "/images/study/leisure-story/renders-v2/exterior.webp",
     "title": {
       "en": "Musica Leisure-Environmental Facilities",
       "zh": "《乐憩》—环境设施"
@@ -390,7 +390,7 @@ export const projects = [
       "en": {
         "title": "乐·憩",
         "description": "Street Music Facility, a spatial installation that hosts music events within the campus and realises the interaction between the internal and external atmosphere, with the transparency of the external glass and the light level organically adjusting and transforming in response to the heat of the crowd and the music atmosphere.",
-        "hero": "/images/study/音乐空间/1.png",
+        "hero": "/images/study/leisure-story/renders-v2/exterior.webp",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1780-1341&embed-host=share"
@@ -401,7 +401,7 @@ export const projects = [
       "zh": {
         "title": "乐·憩",
         "description": "街头音乐设施，在校院内承接音乐活动，实现内外氛围互动的空间装置，外部玻璃透明度和光阶随人群热度和音乐氛围进行有机的调整转变。",
-        "hero": "/images/study/音乐空间/1.png",
+        "hero": "/images/study/leisure-story/renders-v2/exterior.webp",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/LjTsDNKfAmwMH1LyGM8IDW/look-for-job?node-id=1780-1341&embed-host=share"
@@ -529,9 +529,9 @@ export const projects = [
     },
     "details": {
       "en": {
-        "title": "花架子——Parametrization and heliophobia",
-        "description": "A combination of parametric design and traditional design styles. From the Suzhou flower window, we extracted begonia pattern, edge decoration, staggered straight line strips, centre symmetry geometric aesthetics, and anamorphic Japanese texture. And through the grasshopper to achieve both order rules of generative art of the beauty of the proposed Japanese texture",
-        "hero": "/images/study/花架子/1.png",
+        "title": "Flower Stand — Parametric Design & the Sun Motif",
+        "description": "Inspired by Suzhou garden windows, begonia outlines and intersecting lines meet a parametric sun motif. Wooden and 3D-printed stand prototypes explore the form, now envisioned as an ornamental object for the home.",
+        "hero": "/images/study/flower-story/home-oak-v2.webp",
         "images": [
           "/images/study/花架子/2.png",
           "/images/study/花架子/4.png",
@@ -549,8 +549,8 @@ export const projects = [
       },
       "zh": {
         "title": "花架子——参数化与拟日纹",
-        "description": "参数化设计和传统设计风格的结合。从苏州花窗中提取到海棠花纹、边角装饰、交错直线条、中心对称几何美学、拟日纹。并通过grasshopper实现兼具秩序规则的生成艺术之美的拟日文文理",
-        "hero": "/images/study/花架子/1.png",
+        "description": "从苏州园林花窗中提取海棠轮廓、交错直线与中心对称关系，将拟日纹与 Grasshopper 参数化方法结合。通过木质模型与 3D 打印验证支架造型，进一步探索它作为家居摆件的陈设表达。",
+        "hero": "/images/study/flower-story/home-oak-v2.webp",
         "images": [
           "/images/study/花架子/2.png",
           "/images/study/花架子/4.png",
@@ -664,7 +664,7 @@ export const projects = [
       "en": {
         "title": "Temporary optimisation of the interface of the company's hardware products",
         "description": "Upgrade the ui without changing the page layout and internal logic of the system, and increase the resolution of the interactive page, provided that the front-end kernel is not changed.",
-        "hero": "/images/work/页面优化/1.png",
+        "hero": "/images/work/page-optimization-cover.png",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/72nWkl42XoSs7HZVlOHJyM/%E5%B7%A5%E4%BD%9C%E7%94%A8?node-id=369-900&embed-host=share"
@@ -675,7 +675,7 @@ export const projects = [
       "zh": {
         "title": "公司硬件产品界面临时优化",
         "description": "页面布局与系统内部逻辑不改动的情况下升级ui，提高交互页面分辨率，前提是前端内核不发生改动",
-        "hero": "/images/work/页面优化/1.png",
+        "hero": "/images/work/page-optimization-cover.png",
         "images": [],
         "iframes": [
           "https://embed.figma.com/design/72nWkl42XoSs7HZVlOHJyM/%E5%B7%A5%E4%BD%9C%E7%94%A8?node-id=369-900&embed-host=share"

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-21",
+  "route": "Built-in ImageGen; source-preserving edits; no image-generation API or CLI",
+  "status": "Current presentation accepted; publication authorized on 2026-10-21. AI refinements remain visual studies, not manufacturing evidence.",
+  "webConversion": "Pillow WebP quality 92, method 6; no resizing, color alteration or retouching",
+  "assets": [
+    {
+      "file": "home-oak-v2.png",
+      "web": "../home-oak-v2.webp",
+      "dimensions": [1536, 1024],
+      "source": "../../花架子/3.png",
+      "attempts": 1,
+      "prompt": "Use case: precise-object-edit. Create one clean photorealistic home-interior product photograph by editing the supplied image. The white intricate tabletop object is the exact product to preserve, not inspiration for a redesign. Replace the ENTIRE dirty dark office desk environment with a serene real domestic living room: product displayed as a small decorative design object on a pale natural oak sideboard, warm very light limestone/plaster wall, soft side daylight and realistic quiet shadows, a subtly lived-in but restrained setting, softly out of focus. NO office desk screen/backboard, no chair, no computer, phone, headphones or office equipment. Product geometry invariants: preserve exact complete outer silhouette and front/slightly elevated camera view; white multi-layer geometric Chinese flower-window lattice, four circular clover arcs, ALL intersecting fine straight rods and their relative positions; large central SIX-petal swirling solar medallion with six curling recessed swirls and its round open center hole. Keep the broad black horizontal rounded rectangular piece at lower LEFT, the matching black horizontal piece at upper RIGHT, the small dark angular upper-left and lower-right corners, and the original feet/support details. Do not simplify the intricate lattice, mirror, rotate, change count, thicken rods, fill open holes, add a frame, plant, vase or flower, remove any black parts, or change the design. Make materials believable: refined matte warm-white coated surface with extremely subtle grain, gentle edge highlights and layered depth; satin-black components with soft reflections; faithful dimensional separation between overlapping parts, contact shadow onto the oak. This is a material/lighting/background refinement only. Keep the product centered, fully visible, occupying approximately half of the landscape composition width, with an approximately 3:2 aspect ratio and enough breathing room. Quiet natural domestic styling, not dark dramatic studio, not automotive ad, not neon, no overexposed plastic whiteness. No text or watermark, no collage, one finished photograph.",
+      "qa": "Main lattice, six-lobed medallion, circular opening, asymmetric black blocks and feet remain recognizable. Product occupies about 31 percent of width, smaller than requested. Added domestic props remain outside the product. AI visualization, not manufacturing-accurate evidence."
+    },
+    {
+      "file": "home-walnut-v2.png",
+      "web": "../home-walnut-v2.webp",
+      "dimensions": [1586, 992],
+      "source": "../../花架子/3.png",
+      "attempts": 2,
+      "prompts": [
+        "Use case: precise-object-edit. Edit the existing product in Image 1 into a refined realistic HOME interior still-life scene. Image 1 is the sole geometry edit target, NOT merely inspiration. Preserve the exact original white-and-black ornamental Chinese-window small sculptural object, at the original near-frontal slightly downward camera angle: identical full silhouette and proportions; the central six-lobed swirling sun/floral white medallion with its round through-hole; all six raised spiral curls; the four overlapping round window arcs; every thin straight and crossed bar; asymmetric black horizontal rounded blocks at upper-right and lower-left; black triangular corner elements at upper-left and lower-right; original little feet. Do not simplify, add or delete any product geometry. No phone or other item covering the pattern. Improve only materials, lighting, and surrounding setting: fine matte white resin/ceramic-like surface with controlled highlights and clearly legible relief, finely satin black components, physically believable soft contact shadows. Stand this same small object on the top of a real walnut home entryway sideboard against a warm off-white subtly textured limewash wall. Frame wider and more relaxed than a catalogue close-up, horizontal approximately 16:10, show some sideboard front and warm residential relationship, keep the complete product at approximately 38-45 percent of image width with generous breathing room. No office desk, no office furniture, no computer, no phone, no headphones. Warm soft natural side window illumination, realistic wood grain, subtle depth, refined calm domestic editorial product photography, adequate contrast on the white relief, no clipped whites. A single tiny understated ceramic vessel far in the background on the sideboard may be softly out of focus, must not overlap or obscure the product; otherwise keep decor minimal. Preserve the product's pose rather than inventing a new view. No dark car-ad style, no neon, no metallic recoloring of white product, no logos, no text, no watermark, no collage. Output one finished image.",
+        "Make ONLY a very localized background-decor cleanup to this supplied home product photograph. Remove the green plant/leaves along the left edge, leaving the same plain window and soft daylight. Remove all dried stems and flowers sticking out of the ceramic vase at the far right; leave just that one empty small ceramic vessel in the same place, slightly softly out of focus. Everything else must remain identical: framing, camera, walnut sideboard, warm wall, natural sunlight, and especially the central white-and-black ornamental product with ALL its exact existing geometry, six curled petals, central hole, four round corner arcs, thin line lattice, two asymmetric black horizontal blocks, triangular black corners, and feet. Do not regenerate or redesign any of the product. No additional props, no books, no greenery, no office equipment. Preserve landscape 16:10 and the full original composition. One final image, no captions."
+      ],
+      "qa": "Unobscured residential context, near-source camera and recognizable product form. Product occupies about 28 percent of width; suitable for environment view. Original render retained."
+    },
+    {
+      "file": "motif-green-v2.png",
+      "web": "../motif-green-v2.webp",
+      "dimensions": [1672, 941],
+      "source": "../motif-green.webp",
+      "attempts": 1,
+      "prompt": "Use case: precise-object-edit. The input is the sole EDIT TARGET, original dark green six-petalled ornamental product component lying on a dark surface. Improve only material finish, illumination and surface environment. Preserve EXACT original low oblique camera angle, perspective, composition with component offset left and empty area right, six rounded lobes, six continuous spiral relief grooves/ridges with their original handedness and connectivity, center circular through-hole and original thin thickness, proportions and silhouette. Do NOT redesign, alter petal count, invent extra grooves, reshape hole, add a stand, frame, hardware or props. Replace underexposed rendering with clearly legible refined deep teal-green glazed ceramic, soft low-gloss glaze, nuanced dark-green colour, fine smooth fired surface and broad controlled highlights showing all spiral relief, not plastic, no excessive shine or rough grain. Replace black ground with warm pale grey fine limestone surface, very subtle texture and no strong veins. Soft side daylight, gentle realistic contact shadows beneath original thin component, quiet still-life natural materials and restrained premium craftsmanship. All six spiral motifs and central hole must remain distinctly visible. Preserve original full component, angle and widescreen 16:9 aspect ratio. No black background, show-car lighting, dramatic neon, text, watermark, extra objects or collage.",
+      "qa": "Substantially improved dark-motif visibility. Six lobes and opening preserved. Slightly rounder edge and mottled glaze are generative changes, not confirmed production material."
+    }
+  ],
+  "notUsed": {
+    "asset": "AI-edited transparent white motif",
+    "attempts": 2,
+    "reason": "Alpha-edge debris remained after cleanup. Rejected both outputs; website retains the original white motif.",
+    "generatedPath": "C:/Users/27851/.codex/generated_images/01a15211-dd17-7f61-b2a2-d845631a6b3a/call_06c8f57c7dab47c8b5dd53b2b0c3584c.png"
+  },
+  "vectors": [
+    {"file":"../window-vector-white.svg","fileKey":"5tIz6mwR7uarGjbtAGxpga","pageId":"1111:2041","nodeId":"1111:2306","method":"Read-only SVG_STRING export; original paths and colors unchanged"},
+    {"file":"../window-vector-green.svg","fileKey":"5tIz6mwR7uarGjbtAGxpga","pageId":"1111:2041","nodeId":"1111:2143","method":"Read-only SVG_STRING export; original paths and colors unchanged"}
+  ]
+}

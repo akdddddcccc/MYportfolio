@@ -1,0 +1,177 @@
+{
+  "fileKey": "5tIz6mwR7uarGjbtAGxpga",
+  "pageId": "1111:2041",
+  "designUrl": "https://www.figma.com/design/5tIz6mwR7uarGjbtAGxpga/test_function?node-id=1111-2041",
+  "notes": [
+    "Original Figma image fills downloaded and aspect-preserving WebP derivatives created. No generated replacement imagery.",
+    "render-product.webp uses the matching, higher-resolution image already in images/study/花架子/3.png.",
+    "mood-form.webp trims transparent canvas margins only, with 32px padding; all visible artwork is retained.",
+    "Figma frame screenshots were used for design reference only, not as webpage assets.",
+    "Reference photos and artworks are identified as collected references, not original project outputs."
+  ],
+  "assets": [
+    {
+      "file": "window-01.webp",
+      "node": "1111:2423",
+      "sourceName": "img1",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/3f57337e-ab22-439d-aa24-45bb982e2134.png"
+    },
+    {
+      "file": "window-02.webp",
+      "node": "1111:2423",
+      "sourceName": "img7",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/9f26d7f1-aafc-48ea-81cb-1e84977140d5.png"
+    },
+    {
+      "file": "window-03.webp",
+      "node": "1111:2423",
+      "sourceName": "img6",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/7c21c326-8588-47d8-9a61-49b7c6a06407.png"
+    },
+    {
+      "file": "window-04.webp",
+      "node": "1111:2423",
+      "sourceName": "img5",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/7a275c43-0c4c-477d-a810-b7238e7d48b1.png"
+    },
+    {
+      "file": "window-05.webp",
+      "node": "1111:2423",
+      "sourceName": "img9",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/feea360a-1568-4c99-baa3-fd5d7cf894ee.png"
+    },
+    {
+      "file": "window-06.webp",
+      "node": "1111:2423",
+      "sourceName": "img8",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/52b524ab-21de-49f4-9446-f9e8380c0cfc.png"
+    },
+    {
+      "file": "mood-geometric.webp",
+      "node": "1111:2124",
+      "sourceName": "img3Ca83568597F45B3Ba4ECf2B383A9525",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/4c1bc971-68e0-42c3-88c3-ae2734395584.png"
+    },
+    {
+      "file": "mood-bauhaus.webp",
+      "node": "1111:2124",
+      "sourceName": "imgCsmSchmidtJoostPlakatBauhausaustellungWeimar19232B44962907",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/d2b20a24-52d9-42de-ac11-ba83ea04ae7a.png"
+    },
+    {
+      "file": "mood-kandinsky.webp",
+      "node": "1111:2124",
+      "sourceName": "imgCsmKandinskyWassilyKleineWelten1922564A0B8B8E",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/1f68ce1f-b7d9-42be-ab57-9d068c3b2ed8.png"
+    },
+    {
+      "file": "mood-chair-black.webp",
+      "node": "1111:2124",
+      "sourceName": "imgA4583D49Abf241C1Bf38Ae959Cc83A6B",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/ae61024e-3456-48c3-8d0e-22714f96b355.png"
+    },
+    {
+      "file": "mood-chair-geometric.webp",
+      "node": "1111:2124",
+      "sourceName": "img4F5D3Cf217Eb4C3DA13C70E6Ffc24C1F",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/90c7261d-7d51-48cf-8e62-d9975d56048c.png"
+    },
+    {
+      "file": "sketch-elements.webp",
+      "node": "1111:2124",
+      "sourceName": "imgDcim2",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/fa1d1cc6-95c1-4045-99cf-0221bf1d1ec6.png"
+    },
+    {
+      "file": "mood-form.webp",
+      "node": "1111:2124",
+      "sourceName": "img95181Fc78B0543178825606909B97660",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/2af7facc-3b3b-4780-814d-7ff9b58cd4ba.png"
+    },
+    {
+      "file": "sun-window-reference.webp",
+      "node": "1111:2268",
+      "sourceName": "img10",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/cefc7ade-6683-42ed-ae93-31facd30acce.png"
+    },
+    {
+      "file": "grasshopper-definition.webp",
+      "node": "1111:2268",
+      "sourceName": "img16405104511964",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/5b305955-2d6b-429f-b469-8716b6acec69.png"
+    },
+    {
+      "file": "motif-white.webp",
+      "node": "1111:2268",
+      "sourceName": "imgD87512193A1446F380509B212F26E489",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/f2fe6999-821c-44c9-8766-b6febed89aac.png"
+    },
+    {
+      "file": "motif-green.webp",
+      "node": "1111:2293",
+      "sourceName": "imgBeauty",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/a8b556fc-661b-44a3-85ee-64007fd5b2dc.png"
+    },
+    {
+      "file": "process-laser.webp",
+      "node": "1111:2066",
+      "sourceName": "img02427Ac428F84422B3BcF1D7405Daf6A",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/5c160f1d-6f9d-4d15-8327-4ada25855735.png"
+    },
+    {
+      "file": "process-glue.webp",
+      "node": "1111:2066",
+      "sourceName": "img4937E8C786694C078D56Cf88Cfcc9555",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/21696157-9e06-4fa1-b952-35fbc741c458.png"
+    },
+    {
+      "file": "process-support.webp",
+      "node": "1111:2066",
+      "sourceName": "imgCf6852688Aa448528D77D4891Cf20777",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/4bb48c66-5738-4030-81b1-10bdad010e6c.png"
+    },
+    {
+      "file": "process-assembly.webp",
+      "node": "1111:2066",
+      "sourceName": "imgE736209A5Cd04707Bcd5F69Ad2Bf01Fd",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/5f2a0c54-dfd8-4d21-8ee4-c605f7abac01.png"
+    },
+    {
+      "file": "prototype-wood.webp",
+      "node": "1111:2066",
+      "sourceName": "imgDsc2005",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/51ea1827-6132-45fc-96c9-960a81e58ed2.png"
+    },
+    {
+      "file": "render-product.webp",
+      "node": "1111:2113",
+      "sourceName": "img2",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/9ac9141d-4a24-4827-b666-6dca4471f3d4.png",
+      "preferredLocalSource": "images/study/花架子/3.png"
+    },
+    {
+      "file": "render-in-use.webp",
+      "node": "1111:2118",
+      "sourceName": "img1",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/e2212aaa-ddd7-49ef-83de-8014dcb4cd9b.png"
+    },
+    {
+      "file": "prototype-front.webp",
+      "node": "1111:2099",
+      "sourceName": "imgDsc2021",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/e6b8cf27-4d85-4779-9e2d-0ecc9786e8f0.png"
+    },
+    {
+      "file": "prototype-angle.webp",
+      "node": "1111:2105",
+      "sourceName": "imgDsc2027",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/053e3f0a-a11a-403b-a742-cf2f035d9434.png"
+    },
+    {
+      "file": "sun-motif.svg",
+      "node": "1111:2293",
+      "sourceName": "img98",
+      "downloadSource": "https://www.figma.com/api/mcp/asset/4af841e8-7ec3-4742-949a-58b0be8567db.svg"
+    }
+  ]
+}

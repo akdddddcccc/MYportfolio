@@ -19,6 +19,10 @@ import ShakerStory from "../components/ShakerStory.js";
 import DriversStory from "../components/DriversStory.js";
 import MusicTableStory from "../components/MusicTableStory.js";
 import FlowStory from "../components/FlowStory.js";
+import MusicaLeisureStory from "../components/MusicaLeisureStory.js";
+import FlowerStandStory from "../components/FlowerStandStory.js";
+import RoadMachineStory from "../components/RoadMachineStory.js";
+import WebUpgradeStory from "../components/WebUpgradeStory.js";
 import "../styles/guandan-responsive.css";
 
 export default {
@@ -40,7 +44,7 @@ export default {
     FlowerStandCloudDemo,
     CloudFormDemo,
     YuanbaiExperience,
-    GuandanStory, ShakerStory, DriversStory, MusicTableStory, FlowStory
+    GuandanStory, ShakerStory, DriversStory, MusicTableStory, FlowStory, MusicaLeisureStory, FlowerStandStory, RoadMachineStory, WebUpgradeStory
   },
   props: {
     lang: {
@@ -110,6 +114,7 @@ export default {
       return this.project?.legacy?.[this.lang] || "";
     },
     outputImages() {
+      if (this.project?.slug === "flower-stand") return [];
       return this.detail.images || [];
     },
     pdfs() {
@@ -128,7 +133,7 @@ export default {
       return this.lang === "zh" ? "进入正式版工作台" : "Open full workbench";
     },
     embeds() {
-      return (this.detail.iframes || []).filter(src => !(['guandan-poker', 'shaker', 'drivers-handle', 'music-side-table', 'flow'].includes(this.project?.slug) && src.includes('figma.com'))).map((src, index) => ({
+      return (this.detail.iframes || []).filter(src => !(['guandan-poker', 'shaker', 'drivers-handle', 'music-side-table', 'flow', 'musica-leisure', 'flower-stand', 'road-machine', 'web-upgrade'].includes(this.project?.slug) && src.includes('figma.com'))).map((src, index) => ({
         title: this.embedTitle(src, index),
         platform: this.embedPlatform(src),
         src: src.startsWith("//") ? `https:${src}` : src,
@@ -427,6 +432,10 @@ export default {
       <DriversStory v-if="project.slug === 'drivers-handle'" :lang="lang" />
       <MusicTableStory v-if="project.slug === 'music-side-table'" :lang="lang" />
       <FlowStory v-if="project.slug === 'flow'" :lang="lang" />
+      <MusicaLeisureStory v-if="project.slug === 'musica-leisure'" :lang="lang" />
+      <FlowerStandStory v-if="project.slug === 'flower-stand'" :lang="lang" />
+      <RoadMachineStory v-if="project.slug === 'road-machine'" :lang="lang" />
+      <WebUpgradeStory v-if="project.slug === 'web-upgrade'" :lang="lang" />
           <GuandanTableDemo v-if="demoType === 'guandan-table'" :lang="lang" />
           <GuandanPackagingExplorer v-if="demoType === 'guandan-table'" :lang="lang" />
           <SenseOfTimeDemo v-if="project.slug === 'sense-of-time'" :lang="lang" :detail="detail" :title="title" />

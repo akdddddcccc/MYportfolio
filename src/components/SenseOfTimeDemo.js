@@ -659,8 +659,7 @@ export default {
         <label class="sense-time-demo__slider"><span class="sense-time-demo__slider-title">{{ copy.slider }}</span><span>{{ copy.everyday }}</span><input v-model.number="depressionLevel" type="range" min="0" max="100" step="1" :aria-label="copy.slider" @pointerdown.stop @pointermove.stop @pointerup.stop><span>{{ copy.severe }}</span></label>
       </div>
       <TimeStory :lang="lang" />
-      <section class="sense-time-demo__archive" :aria-label="lang === 'zh' ? '项目档案' : 'Project archive'">
-        <img v-if="detail.hero" :src="detail.hero" :alt="title" />
+      <section class="sense-time-demo__archive sense-time-demo__archive--text" :aria-label="lang === 'zh' ? '项目档案' : 'Project archive'">
         <div>
           <p>{{ lang === 'zh' ? '项目档案 / 原始材料' : 'Project archive / original material' }}</p>
           <h3>{{ title }}</h3>

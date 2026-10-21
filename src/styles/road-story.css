@@ -1,0 +1,132 @@
+body:has(.project-detail--road-machine), body:has(.project-detail--web-upgrade) { min-width:0; }
+.road-story { --road-accent:#b74940; color:#24282a; }
+.road-story *, .road-story *::before, .road-story *::after { box-sizing:border-box; }
+.road-story h2 { font-weight:500; letter-spacing:-.035em; }
+.road-story h3 { font-size:20px; line-height:1.5; font-weight:550; margin:0 0 12px; }
+.road-story .road-note { font-size:12px; line-height:1.8; color:#7a7e81; margin:18px 0 0; }
+.road-photo { margin:0; min-width:0; }
+.road-story .road-photo>button { display:flex; align-items:center; justify-content:center; width:100%; border:0; padding:24px; background:#f3f3f0; overflow:hidden; cursor:zoom-in; }
+.road-photo img { display:block; width:100%; height:auto; max-height:600px; object-fit:contain; }
+.road-photo figcaption { font-size:12px; line-height:1.6; gap:12px; }
+.road-photo figcaption>span { flex-shrink:0; color:var(--road-accent); }
+.road-story button:focus-visible, .road-story a:focus-visible, .road-story summary:focus-visible { outline:2px solid var(--road-accent); outline-offset:4px; }
+.road-brand-review { display:grid; grid-template-columns:1fr 1fr; gap:52px; align-items:center; }
+.road-original-brand { margin:0; }
+.road-brand-lockup { background:#f5f3ee; min-height:330px; padding:40px; display:flex; align-items:center; gap:24px; }
+.road-brand-lockup .road-brand-symbol { width:70px; height:130px; object-fit:contain; }
+.road-brand-lockup>div { flex:1; display:grid; gap:16px; }
+.road-brand-lockup>div img { display:block; width:100%; height:auto; }
+.road-review-copy { display:grid; gap:30px; }
+.road-review-copy small, .road-structure small, .road-result small { font-size:10px; color:var(--road-accent); letter-spacing:.15em; }
+.road-review-copy h3 { margin-top:10px; }
+.road-review-copy p, .road-palette p { font-size:14px; }
+.road-palette { display:grid; grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,.6fr)); align-items:center; gap:30px; margin-top:42px; padding:32px 0; border-block:1px solid #dedfdd; }
+.road-palette>div:first-child { max-width:560px; }
+.road-swatch { display:grid; gap:10px; }
+.road-swatch>span { display:block; height:76px; background:var(--swatch); }
+.road-swatch strong { font-size:13px; font-weight:500; }
+.road-swatch code { font-size:11px; color:#888; }
+.road-fold { border-bottom:1px solid #dedfdd; margin-top:30px; }
+.road-fold summary { display:flex; justify-content:space-between; gap:20px; padding:22px 0; font-size:14px; cursor:pointer; list-style:none; }
+.road-fold summary::-webkit-details-marker { display:none; }
+.road-fold[open] summary>span { transform:rotate(45deg); }
+.road-reference-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px; padding:20px 0 28px; }
+.road-reference-grid .road-photo>button { height:190px; background:white; }
+.road-reference-grid img { height:100%; }
+.road-direction-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-bottom:1px solid #d9d6d1; }
+.road-direction-tabs button { display:flex; align-items:center; gap:16px; border:0; border-bottom:3px solid transparent; padding:20px; text-align:left; cursor:pointer; font:inherit; background:#f4f2ee; color:#89847e; }
+.road-direction-tabs button[aria-pressed="true"] { color:#9b3a32; border-bottom-color:var(--road-accent); background:#ebe4db; }
+.road-direction-tabs small { font-size:11px; }
+.road-direction-panel { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) minmax(0,.65fr); gap:26px; padding:30px; background:#f7f5f1; min-height:620px; }
+.road-direction-panel .road-photo>button { background:transparent; }
+.road-direction-construction .road-photo>button { height:290px; }
+.road-direction-construction img { height:100%; }
+.road-direction-construction p { font-size:14px; margin-top:25px; }
+.road-direction-lockups { display:flex; flex-direction:column; justify-content:center; gap:26px; }
+.road-direction-lockups .road-photo>button { height:160px; padding:14px 0; }
+.road-direction-lockups img { height:100%; }
+.road-direction-application .road-photo>button { height:515px; padding:0; }
+.road-direction-application img { height:100%; }
+.road-improvements { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.8fr); gap:70px; align-items:center; }
+.road-original-product .road-photo>button { height:440px; }
+.road-original-product img { width:186px; height:400px; }
+.road-change-list { list-style:none; padding:0; margin:0; display:grid; gap:22px; }
+.road-change-list li { display:flex; gap:25px; border-bottom:1px solid #dedfdd; padding-bottom:20px; }
+.road-change-list li>span { font:13px ui-monospace,monospace; color:var(--road-accent); padding-top:6px; }
+.road-change-list h3 { font-size:18px; margin-bottom:6px; }
+.road-change-list p { font-size:14px; }
+.road-traditional-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:20px; padding:20px 0; }
+.road-traditional-grid .road-photo>button { height:230px; padding:10px; }
+.road-traditional-grid img { height:100%; }
+.road-structure { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); gap:60px; align-items:center; margin-top:60px; }
+.road-structure .road-photo>button { height:550px; padding:35px; background:#faf9f5; }
+.road-structure img { height:100%; }
+.road-structure h3 { font-size:26px; margin-top:22px; }
+.road-structure p { font-size:15px; }
+.road-process-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; padding:20px 0 28px; }
+.road-process-grid .road-photo:first-child { grid-column:1/-1; }
+.road-process-grid .road-photo>button { padding:0; }
+.road-process-grid .road-photo:first-child img { max-height:480px; }
+.road-patterns { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.road-story .road-patterns .road-photo>button { background:#272b2b; height:230px; padding:30px; }
+.road-story .road-patterns img { width:auto; height:auto; max-width:100%; max-height:100%; }
+.road-result { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:50px; align-items:center; margin-top:50px; }
+.road-result .road-photo>button { padding:0; background:#f3f3f0; }
+.road-result-copy h3 { font-size:27px; margin-top:18px; }
+.road-result-copy p { font-size:15px; }
+.road-detail-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; margin-top:40px; }
+.road-detail-grid .road-photo>button { height:300px; padding:16px; background:#fff; }
+.road-story .road-detail-grid img { width:auto; height:auto; max-width:100%; max-height:100%; }
+.road-viewer { width:min(1320px,94vw); max-width:94vw; max-height:94dvh; padding:48px 24px 20px; border:0; background:#f3f3f0; color:#343a3b; }
+.road-viewer::backdrop { background:#111b; backdrop-filter:blur(8px); }
+.road-viewer--dark { background:#272b2b; color:#e5e5e0; }
+.road-viewer figure { margin:0; }
+.road-viewer img { display:block; width:auto; height:auto; max-width:100%; max-height:74dvh; margin-inline:auto; object-fit:contain; }
+.road-viewer figcaption { color:inherit; gap:18px; align-items:center; }
+.road-viewer a { color:inherit; flex-shrink:0; font-size:12px; }
+.road-viewer-close { position:absolute; top:6px; right:10px; height:40px; width:40px; font-size:30px; border:0; background:transparent; color:inherit; cursor:pointer; }
+@media(max-width:1000px) {
+  .road-brand-review { gap:30px; }
+  .road-brand-lockup { padding:26px; gap:18px; }
+  .road-brand-lockup .road-brand-symbol { width:52px; }
+  .road-direction-panel { gap:16px; padding:20px; }
+  .road-structure { gap:30px; }
+  .road-improvements { gap:35px; }
+}
+@media(max-width:750px) {
+  .road-story { margin-top:30px; }
+  .road-brand-review, .road-improvements, .road-structure, .road-result { grid-template-columns:1fr; gap:28px; }
+  .road-brand-lockup { min-height:240px; padding:30px; }
+  .road-palette { grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin-top:28px; }
+  .road-palette>div:first-child { grid-column:1/-1; }
+  .road-reference-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+  .road-reference-grid .road-photo>button { height:140px; padding:15px; }
+  .road-direction-tabs button { flex-direction:column; align-items:flex-start; gap:7px; padding:14px 8px; font-size:13px; }
+  .road-direction-panel { grid-template-columns:minmax(0,1fr) minmax(0,.75fr); padding:20px 14px; gap:20px 12px; min-height:0; }
+  .road-direction-construction { grid-column:1/-1; }
+  .road-direction-construction .road-photo>button { height:260px; }
+  .road-direction-construction .road-photo figcaption { min-height:50px; }
+  .road-direction-construction p { min-height:140px; margin-top:15px; }
+  .road-story--en .road-direction-construction p { min-height:220px; }
+  .road-direction-lockups { justify-content:center; gap:22px; min-height:420px; }
+  .road-direction-lockups .road-photo>button { height:120px; }
+  .road-direction-application .road-photo>button { height:375px; }
+  .road-direction-application .road-photo figcaption { min-height:80px; }
+  .road-direction-panel .road-photo figcaption { font-size:11px; }
+  .road-change-list li { gap:18px; }
+  .road-traditional-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px 12px; }
+  .road-traditional-grid .road-photo>button { height:220px; }
+  .road-structure { margin-top:36px; }
+  .road-structure .road-photo>button { height:auto; aspect-ratio:1; padding:20px; }
+  .road-structure h3 { font-size:24px; }
+  .road-process-grid { grid-template-columns:1fr; }
+  .road-patterns { grid-template-columns:1fr; gap:24px; }
+  .road-story .road-patterns .road-photo>button { height:210px; padding:28px; }
+  .road-result { margin-top:34px; }
+  .road-detail-grid { grid-template-columns:1fr; margin-top:28px; }
+  .road-detail-grid .road-photo>button { height:330px; }
+  .road-viewer { width:96vw; max-width:96vw; padding:48px 12px 16px; }
+  .road-viewer img { max-height:70dvh; }
+  .road-viewer figcaption { flex-wrap:wrap; font-size:12px; }
+}
+@media(prefers-reduced-motion:reduce) { .road-story * { scroll-behavior:auto !important; } }

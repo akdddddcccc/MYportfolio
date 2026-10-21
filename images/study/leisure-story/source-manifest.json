@@ -1,0 +1,126 @@
+{
+  "sourceFileKey": "5tIz6mwR7uarGjbtAGxpga",
+  "sourcePageId": "1111:528",
+  "sourcePageName": "乐憩",
+  "exportedAt": "2026-10-19",
+  "method": "Original Figma raster assets, proportional WebP conversion at quality 92; longest side at most 2200px, no upscaling.",
+  "originalDownloads": "D:/Codex/MYportfolio/tmp/leisure-source-20261019",
+  "derivativeManifest": "renders-v2/manifest.json",
+  "assets": [
+    {
+      "asset": "966-imgImg20220605224748.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgImg20220605224748"
+    },
+    {
+      "asset": "966-imgImg20220605224759.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgImg20220605224759"
+    },
+    {
+      "asset": "966-imgImg20220605225119.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgImg20220605225119"
+    },
+    {
+      "asset": "966-imgImg20220605225223.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgImg20220605225223"
+    },
+    {
+      "asset": "966-img3A17Ee2Abed8D53B2C336619940D42801.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "img3A17Ee2Abed8D53B2C336619940D42801"
+    },
+    {
+      "asset": "966-imgB65A3342402971Aed009348B7E9Be7301.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgB65A3342402971Aed009348B7E9Be7301"
+    },
+    {
+      "asset": "966-imgDcim41.webp",
+      "figmaContextNode": "1111:966",
+      "sourceName": "imgDcim41"
+    },
+    {
+      "asset": "1156-imgDcim61.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgDcim61"
+    },
+    {
+      "asset": "1156-img65Z4I09G4FEjpfJ1.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img65Z4I09G4FEjpfJ1"
+    },
+    {
+      "asset": "1156-imgImage123.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgImage123"
+    },
+    {
+      "asset": "1156-img165640972971802.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img165640972971802"
+    },
+    {
+      "asset": "1156-img165640649173591.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img165640649173591"
+    },
+    {
+      "asset": "1156-imgCQlcwA0VdbErryy1N1.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgCQlcwA0VdbErryy1N1"
+    },
+    {
+      "asset": "1156-imgOh917RUQBDhP68Pw1.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgOh917RUQBDhP68Pw1"
+    },
+    {
+      "asset": "1156-img9E3A7Ff4D4794Ea6B77B2B9574C4E69B1.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img9E3A7Ff4D4794Ea6B77B2B9574C4E69B1"
+    },
+    {
+      "asset": "1156-img61.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img61"
+    },
+    {
+      "asset": "1156-imgUntitled6.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgUntitled6"
+    },
+    {
+      "asset": "1156-imgUntitled7.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "imgUntitled7"
+    },
+    {
+      "asset": "1156-img16564803898452.webp",
+      "figmaContextNode": "1111:1156",
+      "sourceName": "img16564803898452"
+    },
+    {
+      "asset": "1292-imgImage183.webp",
+      "figmaContextNode": "1111:1292",
+      "sourceName": "imgImage183"
+    },
+    {
+      "asset": "1293-imgUntitled9.webp",
+      "figmaContextNode": "1111:1293",
+      "sourceName": "imgUntitled9"
+    },
+    {
+      "asset": "1294-imgUntitled4.webp",
+      "figmaContextNode": "1111:1294",
+      "sourceName": "imgUntitled4"
+    },
+    {
+      "asset": "1287-imgUntitled11.webp",
+      "figmaContextNode": "1111:1287",
+      "sourceName": "imgUntitled11"
+    }
+  ]
+}
