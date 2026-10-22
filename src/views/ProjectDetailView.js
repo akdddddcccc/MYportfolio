@@ -466,6 +466,10 @@ export default {
             <img class="output-gallery__image" :src="image" :alt="title" />
           </button>
           <img v-else class="output-gallery__image" :src="image" :alt="title" />
+          <figcaption v-if="detail.imageReferences?.[image]" class="output-gallery__reference">
+            <span>{{ detail.imageReferences[image].note }}</span>
+            <button type="button" @click="openOutputLightbox(detail.imageReferences[image].source)">{{ detail.imageReferences[image].label }} ↗</button>
+          </figcaption>
         </figure>
       </section>
 

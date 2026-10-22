@@ -848,6 +848,29 @@ a {
   outline-offset: -6px;
 }
 
+.output-gallery__reference {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px 24px;
+  width: 100%;
+  padding-top: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #626262;
+}
+
+.output-gallery__reference button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .project-detail:not(.project-detail--takeaway-logo) .output-gallery__item {
   min-height: min(72vh, 860px);
   padding: clamp(12px, 2vw, 24px);

@@ -301,8 +301,15 @@ export const projects = [
         "hero": "/images/study/日晷/压缩版.gif",
         "images": [
           "/images/study/日晷/sundial-relief-capped-v2.png",
-          "/images/study/日晷/日晷渲染带环境.37.webp"
+          "/images/approved-renders-20261022/space08.png"
         ],
+        "imageReferences": {
+          "/images/approved-renders-20261022/space08.png": {
+            "source": "/images/study/日晷/日晷渲染带环境.37.webp",
+            "note": "AI-assisted environment study. Refer to the original artwork for exact dial lettering.",
+            "label": "View original artwork"
+          }
+        },
         "iframes": [],
         "pdfs": [],
         "sectionLabels": []
@@ -313,8 +320,15 @@ export const projects = [
         "hero": "/images/study/日晷/压缩版.gif",
         "images": [
           "/images/study/日晷/sundial-relief-capped-v2.png",
-          "/images/study/日晷/日晷渲染带环境.37.webp"
+          "/images/approved-renders-20261022/space08.png"
         ],
+        "imageReferences": {
+          "/images/approved-renders-20261022/space08.png": {
+            "source": "/images/study/日晷/日晷渲染带环境.37.webp",
+            "note": "AI 辅助环境效果展示，字盘文字与细节以原始设计为准。",
+            "label": "查看原始设计"
+          }
+        },
         "iframes": [],
         "pdfs": [],
         "sectionLabels": []
@@ -429,11 +443,11 @@ export const projects = [
       "en": {
         "title": "chill lamps",
         "description": "Combining several anime images, the hand-pulled lamp is animated to give people a warm feeling, with smooth and sleek curves, catering for female consumers, and the light effect adopts dispersion to improve emotional interactivity. Simple Design Exercise",
-        "hero": "/images/study/小清新灯具/1.png",
+        "hero": "/images/approved-renders-20261022/product06.png",
         "images": [
           "/images/study/小清新灯具/2.png",
           "/images/study/小清新灯具/3.png",
-          "/images/study/小清新灯具/4.png"
+          "/images/approved-renders-20261022/product08.png"
         ],
         "iframes": [],
         "pdfs": [],
@@ -445,11 +459,11 @@ export const projects = [
       "zh": {
         "title": "小清新灯具",
         "description": "结合多个动漫形象，将手拉灯动漫化，给人以温馨的感受，用流畅顺滑的曲线，迎合女性消费者，灯效采用色散提高情感交互性。简单的设计小练习",
-        "hero": "/images/study/小清新灯具/1.png",
+        "hero": "/images/approved-renders-20261022/product06.png",
         "images": [
           "/images/study/小清新灯具/2.png",
           "/images/study/小清新灯具/3.png",
-          "/images/study/小清新灯具/4.png"
+          "/images/approved-renders-20261022/product08.png"
         ],
         "iframes": [],
         "pdfs": [],
@@ -750,9 +764,9 @@ export const projects = [
       "en": {
         "title": "pencil sharpener (blade)",
         "description": "Small Object Exercise",
-        "hero": "/images/work/削笔刀/1.png",
+        "hero": "/images/approved-renders-20261022/product09.png",
         "images": [
-          "/images/work/削笔刀/2.png"
+          "/images/approved-renders-20261022/product10.png"
         ],
         "iframes": [],
         "pdfs": [],
@@ -763,9 +777,9 @@ export const projects = [
       "zh": {
         "title": "削笔刀",
         "description": "小物件练习",
-        "hero": "/images/work/削笔刀/1.png",
+        "hero": "/images/approved-renders-20261022/product09.png",
         "images": [
-          "/images/work/削笔刀/2.png"
+          "/images/approved-renders-20261022/product10.png"
         ],
         "iframes": [],
         "pdfs": [],

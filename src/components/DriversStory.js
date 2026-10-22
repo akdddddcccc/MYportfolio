@@ -1,6 +1,8 @@
 import '../styles/shaker-story.css';
 import '../styles/drivers-story.css';
 const root='/images/study/drivers-story/';
+const approvedRoot='/images/approved-renders-20261022/';
+const improved={'p6-7':root+'system-hud-v2.webp','p5-0':approvedRoot+'hardware01.png','p5-1':approvedRoot+'hardware02.png','p6-0':approvedRoot+'hardware03.png','p6-1':approvedRoot+'hardware04.png','p6-2':approvedRoot+'hardware05.png','p6-5':approvedRoot+'hardware06.png','p6-6':approvedRoot+'hardware07.png'};
 export default {
   name:'DriversStory', props:['lang'],
   data(){return{enlarged:null,opener:null,angle:0,original:false};},
@@ -17,7 +19,7 @@ export default {
     views(){return [['p6-7','完整系统','Complete system'],['p6-6','驾驶场景','Driving scene'],['p6-5','操作角度','Interaction angle'],['p6-2','后侧结构','Rear structure'],['p6-1','局部细节','Close-up']];}
   },
   methods:{
-    t(v){return v[this.zh?0:1];}, src(n){const improved={'p6-7':'system-hud-v2'};return root+(!this.original&&improved[n]?improved[n]:n)+'.webp';},
+    t(v){return v[this.zh?0:1];}, src(n){return !this.original&&improved[n]?improved[n]:root+n+'.webp';},
     go(i){this.$el.querySelector('#drivers-part-'+i)?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});},
     open(item,event){this.enlarged=item;this.opener=event.currentTarget;this.$nextTick(()=>this.$refs.viewer.showModal());},
     close(){this.$refs.viewer.close();this.enlarged=null;this.opener?.focus();}
@@ -30,7 +32,7 @@ export default {
       <div class="shaker-figures"><figure v-for="item in part.images" :key="item[0]"><button @click="open(item,$event)" :aria-label="(zh?'放大查看：':'Enlarge: ')+item[zh?1:2]"><img :src="src(item[0])" :alt="item[zh?1:2]" loading="lazy"></button><figcaption>{{item[zh?1:2]}}<span>↗</span></figcaption></figure></div>
       <dl v-if="i===4" class="drivers-materials"><div v-for="row in (zh?[['主体','高光白色塑料'],['握持与局部透光','磨砂亚克力与透明材料'],['连接部位','金属包边与茶色透明轴体']]:[['Body','Gloss white plastic'],['Grip and optical areas','Frosted acrylic and transparent materials'],['Connection','Metal trim and tinted transparent shaft']])" :key="row[0]"><dt>{{row[0]}}</dt><dd>{{row[1]}}</dd></div></dl>
     </section>
-    <section id="drivers-part-5" class="shaker-part"><header><small>PART 06 / PRODUCT GALLERY</small><h2>{{zh?'回到真实的使用空间。':'Back in the living space.'}}</h2><p>{{zh?'切换视角，查看固定台、手柄与 HUD 的组合关系。仅正视图保留 AI 画质与驾驶 HUD 优化，可切换原稿对照；其余角度均使用原始渲染。':'Explore the console, controller and HUD. Only the front view includes AI refinement and a conceptual driving HUD, with the original available for comparison. All other angles use original renders.'}}</p></header><div class="drivers-view-controls"><button v-for="(item,i) in views" :key="item[0]" :aria-pressed="angle===i" @click="angle=i">{{item[zh?1:2]}}</button></div><div v-if="angle===0" class="drivers-view-controls" :aria-label="zh?'图像版本':'Image version'"><button :aria-pressed="!original" @click="original=false">{{zh?'优化展示':'Refined'}}</button><button :aria-pressed="original" @click="original=true">{{zh?'原始渲染':'Original'}}</button></div><figure class="drivers-gallery"><button @click="open(views[angle],$event)" :aria-label="zh?'放大当前视角':'Enlarge current view'"><img :src="src(views[angle][0])" :alt="views[angle][zh?1:2]"></button><figcaption>{{views[angle][zh?1:2]}} ↗</figcaption></figure></section>
+    <section id="drivers-part-5" class="shaker-part"><header><small>PART 06 / PRODUCT GALLERY</small><h2>{{zh?'回到真实的使用空间。':'Back in the living space.'}}</h2><p>{{zh?'切换视角，查看固定台、手柄与 HUD 的组合关系。展示图已完成材质与光照优化，可切换原始渲染对照；仅正视图采用概念驾驶 HUD，其余视角保留原屏幕方案。':'Explore the console, controller and HUD with refined materials and lighting, or compare the original renders. Only the front view uses a conceptual driving HUD; other angles retain the original screen concept.'}}</p></header><div class="drivers-view-controls"><button v-for="(item,i) in views" :key="item[0]" :aria-pressed="angle===i" @click="angle=i">{{item[zh?1:2]}}</button></div><div class="drivers-view-controls" :aria-label="zh?'图像版本':'Image version'"><button :aria-pressed="!original" @click="original=false">{{zh?'优化展示':'Refined'}}</button><button :aria-pressed="original" @click="original=true">{{zh?'原始渲染':'Original'}}</button></div><figure class="drivers-gallery"><button @click="open(views[angle],$event)" :aria-label="zh?'放大当前视角':'Enlarge current view'"><img :src="src(views[angle][0])" :alt="views[angle][zh?1:2]"></button><figcaption>{{views[angle][zh?1:2]}} ↗</figcaption></figure></section>
     <dialog ref="viewer" class="shaker-viewer" @cancel.prevent="close" @click="($event.target===$refs.viewer)&&close()"><button class="shaker-viewer-close" @click="close">{{zh?'关闭':'Close'}} ×</button><template v-if="enlarged"><img :src="src(enlarged[0])" :alt="enlarged[zh?1:2]"><p>{{enlarged[zh?1:2]}}</p></template></dialog>
   </section>`
 };
