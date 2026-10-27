@@ -54,6 +54,10 @@ export default {
     project: {
       type: Object,
       default: null
+    },
+    returnKind: {
+      type: String,
+      default: "all"
     }
   },
   data() {
@@ -395,7 +399,7 @@ export default {
   },
   template: `
     <section v-if="project" class="project-detail" :class="'project-detail--' + project.slug">
-      <CloudFormDemo v-if="isCloudForm" :lang="lang" />
+      <CloudFormDemo v-if="isCloudForm" :lang="lang" :return-kind="returnKind" />
       <template v-else>
       <div v-if="!isSenseOfTime" class="project-hero">
         <img :src="hero" :alt="title" />
@@ -624,7 +628,7 @@ export default {
     </section>
     <section v-else class="project-detail project-detail--empty">
       <h1>{{ lang === 'zh' ? '作品未找到' : 'Project not found' }}</h1>
-      <a class="text-link" :href="'#/' + lang + '/projects/school'">
+      <a class="text-link" :href="'#/' + lang + '/projects/' + returnKind">
         {{ lang === 'zh' ? '返回作品列表' : 'Back to projects' }}
       </a>
     </section>

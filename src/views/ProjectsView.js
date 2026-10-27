@@ -1,4 +1,5 @@
 import { content, projects } from "../data/content.js";
+import { normalizeProjectKind, projectDetailHref } from "../utils/projectNavigation.js";
 
 export default {
   name: "ProjectsView",
@@ -25,7 +26,7 @@ export default {
   },
   computed: {
     activeKind() {
-      return ["all", "visual", "ui", "product", "others", "unpublished", "vibe-coding"].includes(this.kind) ? this.kind : "all";
+      return normalizeProjectKind(this.kind);
     },
     filters() {
       return content.projectFilters[this.lang];
@@ -74,7 +75,7 @@ export default {
       });
     },
     projectHref(project) {
-      return project.closed ? null : `#/${this.lang}/project/${project.slug}`;
+      return project.closed ? null : projectDetailHref(this.lang, project.slug, this.activeKind);
     }
   },
   template: `

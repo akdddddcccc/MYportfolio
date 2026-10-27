@@ -6,12 +6,11 @@ import AboutView from "./views/AboutView.js";
 import ContactView from "./views/ContactView.js";
 import ProjectsView from "./views/ProjectsView.js";
 import ProjectDetailView from "./views/ProjectDetailView.js";
+import { normalizeProjectKind, parsePortfolioRoute } from "./utils/projectNavigation.js";
 
-function getHashPath() {
-  return window.location.hash.replace(/^#/, "") || "/";
+function getRoute() {
+  return parsePortfolioRoute(window.location.hash);
 }
-
-const projectKinds = ["visual", "ui", "product", "others", "unpublished", "vibe-coding", "all"];
 
 export default {
   name: "App",
@@ -24,9 +23,9 @@ export default {
     ProjectDetailView
   },
   setup() {
-    const route = reactive({ path: getHashPath() });
+    const route = reactive(getRoute());
     const updateRoute = () => {
-      route.path = getHashPath();
+      Object.assign(route, getRoute());
     };
     const scrollPageTop = () => {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -38,17 +37,14 @@ export default {
     const parts = computed(() => route.path.split("/").filter(Boolean));
     const lang = computed(() => (["en", "zh"].includes(parts.value[0]) ? parts.value[0] : null));
     const page = computed(() => parts.value[1] || "home");
-    const kind = computed(() => {
-      const value = parts.value[2] || "all";
-      return projectKinds.includes(value) ? value : "all";
-    });
+    const kind = computed(() => normalizeProjectKind(parts.value[2]));
     const slug = computed(() => parts.value[2] || "");
     const project = computed(() => findProject(slug.value));
     const activeSection = computed(() => {
       if (page.value === "projects" || page.value === "project") return "artwork";
       return page.value;
     });
-    const returnKind = computed(() => project.value?.discipline || kind.value || "all");
+    const returnKind = computed(() => route.returnKind);
     const viewKey = computed(() => route.path);
 
     return {
@@ -89,6 +85,7 @@ export default {
               :key="viewKey"
               :lang="lang"
               :project="project"
+              :return-kind="returnKind"
             />
             <ProjectsView
               v-else
