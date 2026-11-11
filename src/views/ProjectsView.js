@@ -98,20 +98,24 @@ export default {
 
       <div class="project-grid">
         <article
-          v-for="project in projects"
+          v-for="(project, index) in projects"
           :key="project.slug"
           class="project-card"
           :class="{ 'project-card--closed': project.closed }"
         >
           <a v-if="projectHref(project)" :href="projectHref(project)" class="project-card__link">
-            <img class="project-card__image" :src="project.image" :alt="project.title[lang]" />
+            <img class="project-card__image" :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'" decoding="async"
+              :src="project.image" :alt="project.title[lang]" />
             <span class="project-card__title">{{ project.title[lang] }}</span>
             <span v-if="project.tags?.length" class="project-tags" aria-label="项目标签">
               <span v-for="tag in project.tags" :key="tag.key" class="project-tag">{{ tag[lang] }}</span>
             </span>
           </a>
           <div v-else class="project-card__link">
-            <img class="project-card__image" :src="project.image" :alt="project.title[lang]" />
+            <img class="project-card__image" :loading="index === 0 ? 'eager' : 'lazy'"
+              :fetchpriority="index === 0 ? 'high' : 'auto'" decoding="async"
+              :src="project.image" :alt="project.title[lang]" />
             <span class="project-card__title">{{ project.title[lang] }}</span>
           </div>
         </article>

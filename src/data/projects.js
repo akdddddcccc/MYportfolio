@@ -925,6 +925,28 @@ export const projects = [
     }
   },
   {
+    "slug": "focus-filter",
+    "sourceFile": "",
+    "category": "vibe-coding",
+    "discipline": "vibe-coding",
+    "image": "/apps/focus-filter/cover.jpg",
+    "title": {
+      "zh": "聚焦效果 · 离线照片滤镜",
+      "en": "Focus · Offline Photo Filter"
+    },
+    "details": {
+      "zh": {
+        "description": "从两张书画街样片中选一张，或打开自己的照片。点选焦点，用三个滑块调整清晰范围、边缘虚焦和边缘去色。对比原图后，可按原尺寸导出 PNG。",
+        "demo": { "type": "focus-filter", "productUrl": "/apps/focus-filter/index.html" }
+      },
+      "en": {
+        "description": "Choose one of two Shuhua Street photos or open your own. Click to set a focal point, then adjust the focus area, edge blur and edge desaturation with three sliders. Compare with the original and export a full-resolution PNG.",
+        "demo": { "type": "focus-filter", "productUrl": "/apps/focus-filter/index.html" }
+      }
+    },
+    "legacy": {}
+  },
+  {
     "slug": "task-map-prototype",
     "sourceFile": "task-map-prototype-understanding.md",
     "category": "vibe-coding",
