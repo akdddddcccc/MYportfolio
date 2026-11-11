@@ -23,6 +23,7 @@ import MusicaLeisureStory from "../components/MusicaLeisureStory.js";
 import FlowerStandStory from "../components/FlowerStandStory.js";
 import RoadMachineStory from "../components/RoadMachineStory.js";
 import WebUpgradeStory from "../components/WebUpgradeStory.js";
+import WaterCourtStory from "../components/WaterCourtStory.js";
 import "../styles/guandan-responsive.css";
 import "../styles/focus-filter-demo.css";
 
@@ -45,6 +46,7 @@ export default {
     FlowerStandCloudDemo,
     CloudFormDemo,
     YuanbaiExperience,
+    WaterCourtStory,
     GuandanStory, ShakerStory, DriversStory, MusicTableStory, FlowStory, MusicaLeisureStory, FlowerStandStory, RoadMachineStory, WebUpgradeStory
   },
   props: {
@@ -421,6 +423,7 @@ export default {
   template: `
     <section v-if="project" class="project-detail" :class="'project-detail--' + project.slug">
       <CloudFormDemo v-if="isCloudForm" :lang="lang" :return-kind="returnKind" />
+      <WaterCourtStory v-else-if="project.slug === 'water-court'" :lang="lang" />
       <template v-else-if="demoType === 'focus-filter'">
         <header class="focus-filter-intro">
           <div>

@@ -1,5 +1,22 @@
 export const projects = [
   {
+    slug: "water-court",
+    sourceFile: "",
+    category: "school",
+    discipline: "product",
+    image: "/images/study/water-court/day-cover.webp",
+    title: { zh: "水院球场 · 氛围艺术舞台篮球场", en: "Water Court Basketball" },
+    tags: [
+      { key: "spatial", zh: "空间设计", en: "Spatial design" },
+      { key: "product", zh: "产品设计", en: "Product design" }
+    ],
+    details: {
+      zh: { description: "从氛围艺术舞台篮球场到水院：一个轻对抗、重娱乐的半场设计。" },
+      en: { description: "A sculptural half court for informal play, reimagined in a water garden." }
+    },
+    legacy: {}
+  },
+  {
     slug: "yuanbai",
     tags: [
       { key: "ui", zh: "UI 设计", en: "UI Design" },

@@ -1,0 +1,57 @@
+.wc-story{--ink:#182b26;--muted:#53645c;--rule:#abb8b0;color:var(--ink);font-family:inherit}
+.wc-story *{box-sizing:border-box}
+.wc-story figure,.wc-story p,.wc-story h1,.wc-story h2,.wc-story h3{margin:0}
+.wc-story h1,.wc-story h2,.wc-story h3{font-weight:500;line-height:1.18;letter-spacing:-.045em;text-wrap:balance}
+.wc-story h1{font-size:clamp(3rem,7.7vw,6.9rem)}
+.wc-story h2{font-size:clamp(1.65rem,3.1vw,2.75rem)}
+.wc-story h3{font-size:clamp(1.4rem,2.2vw,2rem)}
+.wc-story p{line-height:1.8}
+.wc-meta,.wc-eyebrow,.wc-elevation figcaption b,.wc-credit b{font:500 .75rem/1.5 ui-monospace,"MiSans",monospace;letter-spacing:.07em}
+.wc-meta,.wc-title-row,.wc-scene-bar,.wc-elevation figcaption,.wc-credit{display:flex;justify-content:space-between;align-items:center;gap:1.5rem}
+.wc-meta{padding:.65rem 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--rule)}
+.wc-title-row{padding:clamp(1.8rem,4vw,3.8rem) 0;align-items:flex-end}
+.wc-title-row .wc-eyebrow{margin-bottom:.5rem}
+.wc-deck{max-width:22em;font-size:clamp(1rem,1.55vw,1.3rem)}
+.wc-photo-open{display:block;padding:0;margin:0;width:100%;background:none;border:0;color:inherit;cursor:zoom-in}
+.wc-photo-open img,.wc-dialog img{display:block;width:100%;height:auto}
+.wc-main-scene{background:#edf1ea}
+.wc-main-scene img{aspect-ratio:16/9;object-fit:contain;background:#152420}
+.wc-scene-bar{padding:.65rem clamp(.75rem,2.2vw,1.5rem);font-size:.85rem}
+.wc-mark{margin-right:.35em;font-size:1.12rem}
+.wc-switch{display:flex;border:1px solid #819289;border-radius:2rem;padding:2px}
+.wc-switch button{background:transparent;color:var(--ink);border:none;border-radius:2rem;min-height:40px;min-width:4em;padding:0 .95rem;cursor:pointer;font:inherit}
+.wc-switch button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.wc-story button:focus-visible{outline:3px solid #317960;outline-offset:3px}
+.wc-intent,.wc-detail{display:grid;gap:clamp(1.8rem,5.5vw,5.3rem);align-items:center}
+.wc-intent{grid-template-columns:1fr 1.1fr;margin:clamp(3rem,7vw,6.5rem) 0 clamp(1.8rem,4vw,3.5rem);align-items:start}
+.wc-intent h2,.wc-caption h2,.wc-pattern h3{margin:.5em 0}
+.wc-muted{color:var(--muted);margin-top:.8em!important}
+.wc-elevation{background:#fff;border:1px solid #d4dcd5}
+.wc-elevation .wc-photo-open{padding:1.3rem clamp(.75rem,5vw,4rem)}
+.wc-elevation img{max-height:21rem;object-fit:contain}
+.wc-elevation figcaption{padding:.8rem 1rem;border-top:1px solid #d4dcd5;font-size:.86rem}
+.wc-detail{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);margin-top:clamp(3rem,6.5vw,6rem)}
+.wc-detail--reverse{grid-template-columns:minmax(0,1fr) minmax(0,1.65fr)}
+.wc-detail--reverse .wc-photo-open{grid-column:2;grid-row:1}
+.wc-detail--reverse .wc-caption{grid-column:1;grid-row:1}
+.wc-caption p,.wc-pattern figcaption p{max-width:35em}
+.wc-pattern{display:grid;grid-template-columns:minmax(100px,.42fr) 1.3fr;align-items:center;gap:clamp(1rem,4vw,4rem);background:#e9efe9;padding:clamp(1rem,3.2vw,3rem);margin-top:clamp(2rem,4vw,4rem)!important}
+.wc-pattern img{max-height:17rem;object-fit:contain}
+.wc-credit{align-items:baseline;justify-content:flex-start;border-top:1px solid var(--rule);margin-top:clamp(3rem,6vw,6rem);padding:1rem 0;color:var(--muted);font-size:.86rem}
+.wc-credit b,.wc-elevation figcaption b{flex:none}
+.wc-dialog{position:fixed;inset:0;margin:auto;padding:0;max-width:96vw;max-height:94vh;border:0;background:#101613;color:#fff}
+.wc-dialog::backdrop{background:#101613e8}
+.wc-dialog img{max-width:94vw;max-height:91vh;object-fit:contain}
+.wc-dialog button{position:absolute;right:.65rem;top:.65rem;z-index:1;border:1px solid #fff8;border-radius:2rem;padding:.6rem 1rem;font:inherit;color:white;background:#16231fea;cursor:pointer}
+@media(max-width:720px){
+  .wc-title-row,.wc-credit,.wc-elevation figcaption{align-items:flex-start;flex-direction:column;gap:.65rem}
+  .wc-meta{gap:.5rem;font-size:.65rem}.wc-deck{max-width:100%}
+  .wc-intent,.wc-detail,.wc-detail--reverse{grid-template-columns:minmax(0,1fr);gap:1rem}
+  .wc-detail--reverse .wc-caption,.wc-detail--reverse .wc-photo-open{grid-column:auto;grid-row:auto}
+  .wc-pattern{grid-template-columns:minmax(68px,.48fr) 1fr}
+  .wc-main-scene img{background:transparent}.wc-scene-bar{gap:.5rem}
+}
+@media(max-width:320px){
+  body:has(.project-detail--water-court){min-width:0}
+  .wc-meta{flex-wrap:wrap}
+}
