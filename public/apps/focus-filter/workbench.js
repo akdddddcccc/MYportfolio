@@ -42,7 +42,7 @@ export function mountFocusFilter(host, {lang='zh', asset=file=>new URL(file,impo
         </section>
         <aside class="controls">
           <div class="controlsHead"><h2>${t.settings}</h2><span class="kicker" aria-hidden="true">FOCUS</span></div>
-          ${Object.entries(fields).map(([id,value])=>`<div class="field"><div class="row"><label for="${id}">${t[id][0]}</label><output for="${id}" id="v${id}">${value}%</output></div><input id="${id}" type="range" min="0" max="100" value="${value}" aria-describedby="help-${id}"><small id="help-${id}">${t[id][1]}</small></div>`).join('')}
+          ${Object.entries(fields).map(([id,value])=>`<div class="field"><div class="row"><label for="${id}">${t[id][0]}</label><output for="${id}" id="v${id}">${value}%</output></div><input id="${id}" type="range" min="${id==='width'?11:0}" max="100" value="${value}" aria-describedby="help-${id}"><small id="help-${id}">${t[id][1]}</small></div>`).join('')}
           <p class="hint" id="hint">${t.hint}</p>
           <div class="actions"><button id="open">${t.choose}</button><button id="save" class="primary" disabled>${t.save}</button><input type="file" id="file" accept="image/*" hidden></div>
           <div class="examples"><label for="example">${t.samples}</label><select id="example">${t.names.map((s,i)=>`<option value="${i}">${s}</option>`).join('')}</select></div>

@@ -8,7 +8,7 @@ export default {
   name: "FocusFilterWorkbench",
   props: { lang: { type: String, required: true } },
   data() {
-    return { phase: "loading" };
+    return { phase: "loading", savingOffline: false, offlineError: false };
   },
   mounted() {
     this.start();
@@ -17,6 +17,16 @@ export default {
     this.disposeWorkbench?.();
   },
   methods: {
+    async saveOffline() {
+      if (this.savingOffline) return;
+      this.savingOffline = true; this.offlineError = false;
+      try {
+        const url = new URL("./offline.js", workbenchUrl).href;
+        const { downloadOffline } = await import(/* @vite-ignore */ url);
+        await downloadOffline(this.lang);
+      } catch { this.offlineError = true; }
+      finally { this.savingOffline = false; }
+    },
     async start() {
       const host = this.$refs.surface;
       this.phase = "loading";
@@ -33,6 +43,10 @@ export default {
   template: `
     <div class="focus-filter-workbench" :aria-busy="phase === 'loading'">
       <div ref="surface"></div>
+      <div v-if="phase === 'ready'" class="focus-filter-offline">
+        <button type="button" :disabled="savingOffline" @click="saveOffline">{{ lang === 'zh' ? '保存离线版' : 'Save offline copy' }}</button>
+        <span v-if="offlineError" role="alert">{{ lang === 'zh' ? '打包失败，请联网后重试。' : 'Could not save. Reconnect and try again.' }}</span>
+      </div>
       <p v-if="phase === 'loading'" class="focus-filter-status" role="status">
         {{ lang === 'zh' ? '正在打开照片工具…' : 'Opening the photo tool…' }}
       </p>

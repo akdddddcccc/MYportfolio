@@ -29,19 +29,32 @@ function smootherstep(start,end,d){
   const t=clamp((d-start)/(end-start),0,1);
   return t*t*t*(10+t*(6*t-15));
 }
-function focusProfile(width){
+function focusProfile(width, short=1024){
+  width=clamp(width,.11,1);
   const core=.032+.20*width,blurEnd=.63+.45*width;
-  return {core,blurEnd,colorStart:core+.065+.045*width,colorEnd:.86+.41*width};
+  const colorStart=core+.065+.045*width,colorEnd=.86+.41*width;
+  if(width>=.26)return {core,blurEnd,colorStart,colorEnd};
+  // Keep the previously approved 11% core and shoulder distances;
+  // .01 is the origin of the calibration curve, not the slider minimum.
+  const t=smootherstep(.01,.26,width);
+  const mix=(px,end)=>Math.min(px/short,end)*(1-t)+end*t;
+  return {core:mix(.1,core),blurEnd:mix(5,blurEnd),colorStart:mix(.4,colorStart),colorEnd:mix(9,colorEnd)};
+}
+// Unequal concentric bands: three eased rises separated by two holds.
+// Apply in the radial lookup table, not as quantized blur levels per pixel.
+function blurRhythm(start,end,d){
+  const t=(d-start)/(end-start);
+  return .12*smootherstep(0,.27,t)+.41*smootherstep(.36,.61,t)+.47*smootherstep(.72,1,t);
 }
 function renderer(L,opt){
   const {w,h,bytes}=L[0],img=new ImageData(w,h),dst=img.data,short=Math.min(w,h);
-  const cx=opt.x*(w-1),cy=opt.y*(h-1),p=focusProfile(opt.width);
+  const cx=opt.x*(w-1),cy=opt.y*(h-1),p=focusProfile(opt.width,short);
   const maxSigma=short*.043*opt.blur**1.4,last=L.length-1;
   const n=4096,k=n/(short*p.colorEnd)**2;
   const levels=new Float32Array(n+2),loss=new Float32Array(n+2);
   for(let i=0;i<=n+1;i++){
     const d=Math.sqrt(i/n)*p.colorEnd;
-    const sigma=maxSigma*smootherstep(p.core,p.blurEnd,d);
+    const sigma=maxSigma*blurRhythm(p.core,p.blurEnd,d);
     levels[i]=Math.min(last,Math.log2(1+1.7*sigma));
     loss[i]=opt.fade*smootherstep(p.colorStart,p.colorEnd,d);
   }
@@ -76,4 +89,4 @@ function renderer(L,opt){
     }}
   }};
 }
-export {capture, pyramid, renderer, focusProfile, smootherstep};
+export {capture, pyramid, renderer, focusProfile, smootherstep, blurRhythm};

@@ -11,7 +11,8 @@
 .focus-filter-intro .project-kicker { margin-bottom: 8px; }
 .focus-filter-intro h1 { margin: 0; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.15; }
 .focus-filter-intro__description { max-width: 78ch; margin: 10px 0 0; line-height: 1.65; }
-.focus-filter-intro .download-link { white-space: nowrap; }
+.focus-filter-offline { padding-top: .65rem; color: #525650; font-size: .8rem; }
+.focus-filter-offline button { padding: 0; background: none; color: inherit; font: inherit; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 
 .focus-filter-workbench { min-width: 0; }
 .focus-filter-status { margin: 0; padding-block: 1rem; color: #525650; }

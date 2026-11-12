@@ -413,9 +413,6 @@ export default {
             <h1>{{ title }}</h1>
             <p class="focus-filter-intro__description">{{ description }}</p>
           </div>
-          <a class="download-link" :href="lang === 'en' ? productUrl + '?lang=en' : productUrl" target="_blank" rel="noopener noreferrer">
-            {{ lang === 'zh' ? '独立打开' : 'Open in new tab' }} ↗
-          </a>
         </header>
         <FocusFilterWorkbench :lang="lang" />
       </template>

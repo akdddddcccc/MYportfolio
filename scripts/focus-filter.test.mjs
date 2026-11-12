@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-import {pyramid,renderer,focusProfile,smootherstep} from '../public/apps/focus-filter/engine.js';
+import {pyramid,renderer,focusProfile,smootherstep,blurRhythm} from '../public/apps/focus-filter/engine.js';
 globalThis.ImageData ??= class { constructor(w,h){this.data=new Uint8ClampedArray(w*h*4)} };
 // Opt-in integration check against a running static build. No browser/install needed for unit tests.
 test('downloaded HTML works offline under file:// and never uploads a local photo', {skip:!process.env.FOCUS_TOOL_URL}, async()=>{
@@ -70,6 +70,19 @@ test('no-op and focus core are byte-identical, including original alpha',()=>{
   }
   for(let i=3;i<bytes.length;i+=4)assert.equal(bytes[i],src.bytes[i]);
 });
+test('minimum matches the old 11% setting, in preview and at export resolution',()=>{
+  for(const short of [128,576,4096]){
+    const t=.31744; // quintic smootherstep(.01,.26,.11)
+    assert.ok(Math.abs(focusProfile(.11,short).core-(.1/short*(1-t)+.054*t))<1e-10);
+    assert.deepEqual(focusProfile(0,short),focusProfile(.11,short));
+    assert.equal(focusProfile(.26,short).blurEnd,.63+.45*.26);
+  }
+});
+test('blur holds two distinct intermediate strengths without reversing',()=>{
+  assert.equal(blurRhythm(0,1,.28),blurRhythm(0,1,.35));
+  assert.equal(blurRhythm(0,1,.62),blurRhythm(0,1,.71));
+  assert.ok(blurRhythm(0,1,.62)>blurRhythm(0,1,.35));
+});
 test('a flat photo does not acquire a bright focus disc, a halo or banding from blur',()=>{
   const src=source(180,79,()=>[186,34,193,255]);
   assert.deepEqual(render(src,{blur:1,fade:0}).bytes,src.bytes);
@@ -94,7 +107,7 @@ test('desaturation preserves linear luminance; channels become equal at full dis
 test('independent, monotone responses: blur starts first and colour finishes later',()=>{
   for(const width of [0,.34,1]){
     const p=focusProfile(width);assert.ok(p.core<p.colorStart && p.blurEnd<p.colorEnd);
-    const a=d=>smootherstep(p.core,p.blurEnd,d), b=d=>smootherstep(p.colorStart,p.colorEnd,d);
+    const a=d=>blurRhythm(p.core,p.blurEnd,d), b=d=>smootherstep(p.colorStart,p.colorEnd,d);
     assert.equal(a(p.core),0);assert.equal(b(p.colorStart),0);assert.ok(a(p.colorStart)>0);
     assert.equal(a(p.blurEnd),1);assert.ok(b(p.blurEnd)<1);assert.equal(b(p.colorEnd),1);
     let prevA=0,prevB=0;
