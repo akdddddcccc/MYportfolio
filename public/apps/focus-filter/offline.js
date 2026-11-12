@@ -1,6 +1,6 @@
 // Package only these shipped assets, never the photo or settings currently in the editor.
 const formats = {
-  'engine.mjs':'text/javascript', 'workbench.css':'text/css',
+  'engine.js':'text/javascript', 'workbench.css':'text/css',
   'materials.jpg':'image/jpeg', 'angles.jpg':'image/jpeg',
 };
 async function read(name) {
@@ -18,7 +18,7 @@ async function dataURL(name,type) {
 export async function downloadOffline(lang) {
   const [shell, code, entries]=await Promise.all([
     read('index.html').then(r=>r.text()),
-    read('workbench.mjs').then(r=>r.text()),
+    read('workbench.js').then(r=>r.text()),
     Promise.all(Object.entries(formats).map(async ([name,type])=>[name,await dataURL(name,type)])),
   ]);
   const assets=Object.fromEntries(entries),doc=new DOMParser().parseFromString(shell,'text/html');
@@ -30,8 +30,8 @@ export async function downloadOffline(lang) {
   // An inline module shares the HTML file's base URL. Import maps let the exact
   // original workbench import the exact original engine with no file:// fetch.
   const imports=doc.createElement('script'); imports.type='importmap';
-  imports.textContent=JSON.stringify({imports:{'./engine.mjs':assets['engine.mjs']}});
-  delete assets['engine.mjs']; doc.head.append(imports);
+  imports.textContent=JSON.stringify({imports:{'./engine.js':assets['engine.js']}});
+  delete assets['engine.js']; doc.head.append(imports);
   const app=doc.createElement('script'); app.type='module';
   app.textContent=code+'\nconst offlineAssets='+JSON.stringify(assets)+';\nmountFocusFilter(document.getElementById("tool"),{lang:'+JSON.stringify(lang==='en'?'en':'zh')+',asset:file=>offlineAssets[file]});';
   doc.body.append(app);

@@ -22,7 +22,7 @@
   <footer><button id="offline" type="button">保存离线版</button> <span role="status" id="offline-status"></span></footer>
 </main>
 <script type="module">
-  import {mountFocusFilter} from './workbench.mjs';
+  import {mountFocusFilter} from './workbench.js';
   const lang=new URLSearchParams(location.search).get('lang')==='en'?'en':'zh';
   if(lang==='en') {
     document.documentElement.lang='en';
@@ -34,7 +34,7 @@
   button.addEventListener('click',async()=>{
     button.disabled=true; status.textContent=en?'Preparing…':'正在打包…';
     try {
-      const {downloadOffline}=await import('./offline.mjs');
+      const {downloadOffline}=await import('./offline.js');
       await downloadOffline(lang);
       status.textContent=en?'Open the saved HTML file without a connection.':'下载后双击 HTML 文件即可断网使用。';
     } catch {

@@ -2,7 +2,7 @@
 // portfolio's initial bundle: no canvas or sample photo is needed on the grid.
 // A fully qualified same-origin URL keeps the dev server from rewriting this
 // public ESM entry to a bundled "?import" request that won't exist on disk.
-const workbenchUrl = new URL("/apps/focus-filter/workbench.mjs", window.location.origin).href;
+const workbenchUrl = new URL("/apps/focus-filter/workbench.js", window.location.origin).href;
 
 export default {
   name: "FocusFilterWorkbench",

@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-import {pyramid,renderer,focusProfile,smootherstep} from '../public/apps/focus-filter/engine.mjs';
+import {pyramid,renderer,focusProfile,smootherstep} from '../public/apps/focus-filter/engine.js';
 globalThis.ImageData ??= class { constructor(w,h){this.data=new Uint8ClampedArray(w*h*4)} };
 // Opt-in integration check against a running static build. No browser/install needed for unit tests.
 test('downloaded HTML works offline under file:// and never uploads a local photo', {skip:!process.env.FOCUS_TOOL_URL}, async()=>{
@@ -42,8 +42,8 @@ test('downloaded HTML works offline under file:// and never uploads a local phot
 test('the standalone entry uses the same local workbench without a nested document or inline photos',()=>{
   const base = new URL('../public/apps/focus-filter/', import.meta.url);
   const html = fs.readFileSync(new URL('index.html',base),'utf8');
-  const workbench = fs.readFileSync(new URL('workbench.mjs',base),'utf8');
-  assert.match(html,/import \{mountFocusFilter\} from '.\/workbench\.mjs'/);
+  const workbench = fs.readFileSync(new URL('workbench.js',base),'utf8');
+  assert.match(html,/import \{mountFocusFilter\} from '.\/workbench\.js'/);
   assert.doesNotMatch(html+workbench,/<iframe|data:image\/\w+;base64,/i);
   for(const name of ['materials.jpg','angles.jpg']){
     const photo=fs.readFileSync(new URL(name,base));

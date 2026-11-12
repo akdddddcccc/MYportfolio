@@ -1,4 +1,4 @@
-import {capture, clamp, pyramid, renderer} from './engine.mjs';
+import {capture, clamp, pyramid, renderer} from './engine.js';
 
 // Only the photo currently being used is requested. Imported photos never leave the browser.
 const samples = [

@@ -1,3 +1,4 @@
+// A .js suffix keeps native ESM executable on the static production host.
 export const clamp=(x,a,b)=>Math.min(Math.max(x,a),b);
 function capture(img,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const cx=c.getContext('2d',{willReadFrequently:true});cx.imageSmoothingQuality='high';cx.drawImage(img,0,0,w,h);const d=cx.getImageData(0,0,w,h);c.width=c.height=1;return {w,h,bytes:d.data}}
 // Keep the demo self-contained for offline use. All filtering and colour mixing
