@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  min-width: 0;
+  color-scheme: light;
+  color: #262724;
+  font: 400 15px/1.5 var(--font-ui, system-ui, "Microsoft YaHei", sans-serif);
+  --rule: #dadbd6;
+  --soft: #f4f4f1;
+  --quiet: #64655f;
+  --accent: #32372e;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.workbench { container: focus-tool / inline-size; min-width: 0; }
+.workspace { display: grid; grid-template-columns: minmax(0,1fr) minmax(240px,28%); gap: clamp(24px,3.6%,56px); align-items: start; }
+.viewer,.controls { min-width: 0; border-top: 1px solid var(--rule); }
+.panelHead,.stageMeta,.controlsHead,.row,.actions,.examples,.foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panelHead,.controlsHead { min-height: 56px; }
+.source,.controlsHead h2 { font-size: 1rem; font-weight: 600; margin: 0; }
+.source { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stage {
+  display: grid; grid-template: minmax(0,1fr) / minmax(0,1fr); place-items: center; position: relative; overflow: hidden;
+  height: clamp(200px,min(60cqw,60vh),680px); background: var(--soft);
+}
+.stage.drag { outline: 2px dashed var(--accent); outline-offset: -4px; }
+canvas { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; cursor: pointer; touch-action: manipulation; }
+.stageMeta,.mono,.kicker,output { font-family: ui-monospace,Consolas,monospace; font-variant-numeric: tabular-nums; }
+.stageMeta,.foot,.examples label,.field small,.hint { color: var(--quiet); font-size: .8rem; }
+.stageMeta { padding: 10px 0; }
+.kicker { font-size: .68rem; letter-spacing: .14em; color: var(--quiet); }
+.controlsHead { border-bottom: 1px solid var(--rule); }
+.field { margin: 18px 0; }
+.row label { font-size: .92rem; font-weight: 550; }
+output { font-size: .83rem; }
+input[type=range] { width: 100%; height: 24px; margin: 2px 0 0; display: block; accent-color: var(--accent); cursor: pointer; }
+.field small { display: block; line-height: 1.5; }
+button,select { font: inherit; font-size: .84rem; color: inherit; background: #fff; border: 1px solid #bfc1ba; border-radius: 2px; padding: 8px 12px; min-height: 38px; cursor: pointer; }
+button:hover,select:hover { background: var(--soft); border-color: var(--quiet); }
+:focus-visible { outline: 2px solid #395faa; outline-offset: 3px; }
+canvas:focus-visible { outline-offset: -3px; }
+button:disabled { opacity: .55; cursor: wait; }
+.subbtn { min-height: 30px; padding: 3px 9px; white-space: nowrap; }
+.subbtn[aria-pressed=true] { background: #e9eae5; border-color: var(--quiet); }
+.hint { border-top: 1px solid var(--rule); padding-top: 16px; }
+.actions { align-items: stretch; gap: 8px; }
+.actions button { flex: 1; }
+.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+.primary:hover { color: #fff; background: #454a40; }
+.examples { margin-top: 10px; }
+.examples select { min-width: 0; flex: 1; }
+.foot { align-items: baseline; border-top: 1px solid var(--rule); margin-top: 18px; padding-top: 12px; }
+#notice[data-error=true] { color: #9a3728; }
+.focus-cursor { position: absolute; top: 0; left: 0; width: 0; height: 0; pointer-events: none; z-index: 1; color: white; }
+.focus-cursor::before,.focus-cursor::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.focus-cursor::before { width: 32px; height: 32px; left: -16px; top: -16px; border: 1.5px solid currentColor; box-shadow: 0 0 0 1px #25272299,inset 0 0 0 1px #25272270; animation: focus-in 1.4s ease-out infinite; }
+.focus-cursor::after { width: 4px; height: 4px; left: -2px; top: -2px; background: white; box-shadow: 0 0 0 1px #252722,0 0 4px #25272290; }
+.stage.has-focus-cursor canvas { cursor: none; }
+@keyframes focus-in { 0% { transform: scale(1); opacity: 0; } 16% { opacity: 1; } 82% { transform: scale(.38); opacity: .9; } 100% { transform: scale(.32); opacity: 0; } }
+@media(prefers-reduced-motion:reduce) { .focus-cursor::before { animation: none; transform: scale(.7); } }
+@container focus-tool (max-width: 700px) {
+  .workspace { grid-template-columns: minmax(0,1fr); gap: 12px; }
+  .stage { height: clamp(190px,72cqw,470px); }
+  .stage[data-portrait=true] { height: clamp(250px,min(110cqw,65svh),560px); }
+  .field { margin: 14px 0; }
+  .foot { display: grid; gap: 4px; }
+}

@@ -24,6 +24,7 @@ import FlowerStandStory from "../components/FlowerStandStory.js";
 import RoadMachineStory from "../components/RoadMachineStory.js";
 import WebUpgradeStory from "../components/WebUpgradeStory.js";
 import WaterCourtStory from "../components/WaterCourtStory.js";
+import FocusFilterWorkbench from "../components/FocusFilterWorkbench.js";
 import "../styles/guandan-responsive.css";
 import "../styles/focus-filter-demo.css";
 
@@ -47,6 +48,7 @@ export default {
     CloudFormDemo,
     YuanbaiExperience,
     WaterCourtStory,
+    FocusFilterWorkbench,
     GuandanStory, ShakerStory, DriversStory, MusicTableStory, FlowStory, MusicaLeisureStory, FlowerStandStory, RoadMachineStory, WebUpgradeStory
   },
   props: {
@@ -89,7 +91,6 @@ export default {
     this.syncSenseOfTimeImmersion();
   },
   beforeUnmount() {
-    this.stopFilterFrameSizing?.();
     window.clearInterval(this.loadingTimer);
     window.removeEventListener("keydown", this.handleLightboxKeydown);
     window.removeEventListener("message", this.handleFlowFrameMessage);
@@ -190,25 +191,6 @@ export default {
     }
   },
   methods: {
-    fitFilterFrame(event) {
-      this.stopFilterFrameSizing?.();
-      const frame = event.currentTarget;
-      const main = frame.contentDocument?.querySelector('main');
-      if (!main) return;
-      const fit = () => { frame.style.height = `${Math.ceil(main.getBoundingClientRect().height)}px`; };
-      fit();
-      if (typeof ResizeObserver === 'undefined') return;
-      let tick = 0;
-      const observer = new ResizeObserver(() => {
-        cancelAnimationFrame(tick);
-        tick = requestAnimationFrame(fit);
-      });
-      observer.observe(main);
-      this.stopFilterFrameSizing = () => {
-        observer.disconnect();
-        cancelAnimationFrame(tick);
-      };
-    },
     syncSenseOfTimeImmersion() {
       document.body.classList.toggle("sense-of-time-immersive", this.isSenseOfTime);
     },
@@ -431,11 +413,11 @@ export default {
             <h1>{{ title }}</h1>
             <p class="focus-filter-intro__description">{{ description }}</p>
           </div>
-          <a class="download-link" :href="productUrl" target="_blank" rel="noopener noreferrer">
+          <a class="download-link" :href="lang === 'en' ? productUrl + '?lang=en' : productUrl" target="_blank" rel="noopener noreferrer">
             {{ lang === 'zh' ? '独立打开' : 'Open in new tab' }} ↗
           </a>
         </header>
-        <iframe class="focus-filter-frame" :src="productUrl" :title="title" @load="fitFilterFrame"></iframe>
+        <FocusFilterWorkbench :lang="lang" />
       </template>
       <template v-else>
       <div v-if="!isSenseOfTime" class="project-hero">

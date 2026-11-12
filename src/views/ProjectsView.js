@@ -101,7 +101,7 @@ export default {
           v-for="(project, index) in projects"
           :key="project.slug"
           class="project-card"
-          :class="{ 'project-card--closed': project.closed }"
+          :class="{ 'project-card--closed': project.closed, 'project-card--original-color': project.preserveCoverColor }"
         >
           <a v-if="projectHref(project)" :href="projectHref(project)" class="project-card__link">
             <img class="project-card__image" :loading="index === 0 ? 'eager' : 'lazy'"

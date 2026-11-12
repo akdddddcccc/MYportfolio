@@ -491,6 +491,11 @@ a {
   transform: scale(1.02);
 }
 
+/* Keep authored color on covers where color itself demonstrates the work. */
+.project-card--original-color .project-card__image {
+  filter: none;
+}
+
 .project-card:hover .project-card__title {
   opacity: 1;
   transform: translateY(0);

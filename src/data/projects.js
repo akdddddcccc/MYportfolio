@@ -946,7 +946,8 @@ export const projects = [
     "sourceFile": "",
     "category": "vibe-coding",
     "discipline": "vibe-coding",
-    "image": "/apps/focus-filter/cover.jpg",
+    "image": "/apps/focus-filter/cover-photo.webp",
+    "preserveCoverColor": true,
     "title": {
       "zh": "聚焦效果 · 离线照片滤镜",
       "en": "Focus · Offline Photo Filter"
