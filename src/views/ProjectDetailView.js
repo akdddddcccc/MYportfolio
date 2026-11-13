@@ -147,6 +147,7 @@ export default {
         platform: this.embedPlatform(src),
         src: src.startsWith("//") ? `https:${src}` : src,
         isFlowApp: this.isFlowApp(src),
+        isYuanbaiApp: this.isYuanbaiApp(src),
         requiresVpn: this.embedRequiresVpn(src),
         figmaUrl: this.figmaUrl(src)
       }));
@@ -196,6 +197,7 @@ export default {
     },
     embedPlatform(src) {
       if (this.isFlowApp(src)) return this.lang === "zh" ? "在线体验" : "Live demo";
+      if (this.isYuanbaiApp(src)) return this.lang === "zh" ? "在线体验" : "Live demo";
       if (src.includes("figma.com")) return "Figma";
       if (src.includes("bilibili.com")) return "哔哩哔哩";
       if (src.includes("vimeo.com")) return "Vimeo";
@@ -204,6 +206,7 @@ export default {
     },
     embedTitle(src, index) {
       if (this.isFlowApp(src)) return this.lang === "zh" ? "可交互产品体验" : "Interactive product experience";
+      if (this.isYuanbaiApp(src)) return this.lang === "zh" ? "元白语音交互体验" : "Yuanbai voice experience";
       if (src.includes("figma.com")) return this.lang === "zh" ? "完整项目设计方案" : "Complete project design";
       if (src.includes("bilibili.com")) return this.lang === "zh" ? "交互原型演示" : "Interactive prototype demo";
       if (src.includes("vimeo.com") || src.includes("youtube.com")) {
@@ -213,6 +216,9 @@ export default {
     },
     isFlowApp(src) {
       return src.includes("apps-demo.muyang23333.top/flow/");
+    },
+    isYuanbaiApp(src) {
+      return src.includes("apps-demo.muyang23333.top/yuanbai/");
     },
     embedRequiresVpn(src) {
       return ["youtube.com", "youtu.be", "vimeo.com"].some((domain) => src.includes(domain));
@@ -569,6 +575,7 @@ export default {
           :class="{
             'embed-panel--figma': embed.platform === 'Figma',
             'embed-panel--flow': embed.isFlowApp,
+            'embed-panel--yuanbai': embed.isYuanbaiApp,
             'embed-panel--loading': embed.platform === 'Figma' && isEmbedLoading(embed.src)
           }"
         >
@@ -610,7 +617,7 @@ export default {
                 :src="embed.src"
                 :title="embed.title"
                 loading="lazy"
-                allow="fullscreen; autoplay"
+                allow="microphone; fullscreen; autoplay"
                 referrerpolicy="strict-origin-when-cross-origin"
                 @load="markEmbedLoaded(embed.src)"
               ></iframe>
@@ -630,7 +637,7 @@ export default {
               :title="embed.title"
               :class="{ 'flow-experience-frame__iframe': embed.isFlowApp }"
               loading="lazy"
-              allow="fullscreen; autoplay"
+              allow="microphone; fullscreen; autoplay"
               referrerpolicy="strict-origin-when-cross-origin"
               @load="markEmbedLoaded(embed.src)"
             ></iframe>
